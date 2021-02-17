@@ -21,7 +21,7 @@ class KafkaLoggingHandler(logging.Handler):
                 self.producer = KafkaProducer(bootstrap_servers=endpoint)
             except NoBrokersAvailable as nba:
                 logger.error("No broker was found. Retrying...")
-                time.sleep(1)
+                time.sleep(3)
         self.key = str.encode(key) if key is not None else b"default"
         logging.Handler.__init__(self)
 

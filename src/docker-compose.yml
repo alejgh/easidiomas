@@ -72,6 +72,7 @@ services:
         read_only: true
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
     networks:
       - elk
       - event_bus
@@ -87,6 +88,8 @@ services:
         source: ./config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
         read_only: true
+    environment:
+      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
     networks:
       - elk
     depends_on:
