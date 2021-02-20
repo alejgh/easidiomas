@@ -2,7 +2,7 @@
 Easidiomas es una ecosistema para aprender idiomas de forma social. Esto significa que aprendes idiomas al mismo tiempo que conoces gente. El ecosistema está compuesto por una aplicación móvil para los usuarios y dos aplicaciones de administración, una web y otra CLI.
 
 ## ¿Qué puedo hacer en easidiomas?
-Actualmente estamos trabajando en conseguir que asidiomas ofreazca las siguientes funcionalidades:
+Actualmente estamos trabajando en conseguir que easidiomas ofrezca las siguientes funcionalidades:
 
 ### Como usuario, dentro de easidiomas, podrás:
 - Registrarte.
@@ -18,7 +18,7 @@ Actualmente estamos trabajando en conseguir que asidiomas ofreazca las siguiente
 - Publicar posts que las personas que te siguen verán en su feed.
 - Establecer conversaciones privadas con otros usuarios.
 
-### Como administrados, dentro de easidiomas, podras:
+### Como administrador, dentro de easidiomas, podras:
 - Ver las estadísticas del ecosistema:
   * Número de usuarios registrados en las últimas 24h.
   * Número de posts realizados en las últimas 24h.
@@ -26,7 +26,7 @@ Actualmente estamos trabajando en conseguir que asidiomas ofreazca las siguiente
   * Número de mensajes personales enviados en las últimas 24h.
 - Ver los usuarios registrados y sus datos.
 
-### A demás de todo esto, el sistema, automaticamente, realiza las siguientes acciones:
+### Además de todo esto, el sistema, automaticamente, realiza las siguientes acciones:
 - Identifica el idioma de los posts.
 - Traduce los mensajes de las conversaciones a demanda del usuario.
 - Identifica y alerta de los posts que puedan contener texto ofensivo.
