@@ -3,9 +3,9 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import HomeScreen from '../HomeScreen';
 import MessagesStackNavigator from './MessagesStackNavigator';
 import SearchScreen from '../SearchScreen';
+import HomeStackNavigator from './HomeStackNavigator';
 
 
 const Tab = createBottomTabNavigator();
@@ -13,8 +13,8 @@ const Tab = createBottomTabNavigator();
   
 export  function TabMenuNavigator({ navigation }) {
     return (
-    <NavigationContainer independent>
-        <Tab.Navigator screenOptions={({ route }) => ({
+    <NavigationContainer independent  >
+        <Tab.Navigator initialRouteName="Search" screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -57,10 +57,10 @@ export  function TabMenuNavigator({ navigation }) {
           },
         }}
       >
-          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Home" component={HomeStackNavigator} />
           <Tab.Screen name="Search" component={SearchScreen} />
           <Tab.Screen name="Mesagges" component={MessagesStackNavigator} />
-          <Tab.Screen name="Profile" component={HomeScreen} />
+          <Tab.Screen name="Profile" component={HomeStackNavigator} />
         </Tab.Navigator>
     </NavigationContainer>
     );

@@ -41,8 +41,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    backgroundColor: '#fff',
+    backgroundColor: '#1b2836',
     justifyContent: 'center',
   },
   item: {
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 24,
     padding: 30,
-    backgroundColor: 'pink',
+    backgroundColor: '#1b2836',
     fontSize: 24,
   },
 });

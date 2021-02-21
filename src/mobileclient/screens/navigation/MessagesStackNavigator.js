@@ -13,7 +13,10 @@ export default function MessagesStackNavigator({navigation}){
     <NavigationContainer independent  initialRouteName="Messages">
         <Stack.Navigator
          screenOptions={{
-            headerTintColor: 'white',
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
             headerStyle: { 
                 backgroundColor: '#1b2836',
                 borderBottomColor: '#435060',

@@ -1,54 +1,67 @@
 
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList,BackHandler,Keyboard } from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import React, { useEffect, useState,useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import SearchTabNavigator from './navigation/SearchTabNavigator';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import FiltersScreen from './FiltersScreen';
+
+export const navigationRef = React.createRef();
+
+export function navigate(name, params) {
+    navigationRef.current?.navigate(name, params);
+}
+
 
 export default function SearchScreen({navigation}) {
 
-    const [search,setSearch] = useState('')
+    const [search,setSearch] = useState('');
+    const [lupa,setLupa] = useState(styles.leftIconContainerStyle);
+    const inputEl = useRef(null);
 
     const updateSearch = (search) => {
        setSearch(search)
     };
 
-    const handleFocus = function(){
-        navigation.setOptions({
-            tabBarVisible: false
-        });
+
+    const Stack = createStackNavigator();
+
+    function FiltersBtn() {
+        return (
+            <TouchableOpacity onPress={() => navigate('Search Options')}>
+                <Ionicons name={'settings-outline'} size={20} color={'white'} style={styles.configBtn}/>
+            </TouchableOpacity>
+        );
     }
 
-    const handleCancel = function(){
-        navigation.setOptions({
-            tabBarVisible: true
-        });
-    }
+
     
-
-    useEffect(()=>{
-       Keyboard.addListener('keyboardDidShow', handleFocus); 
-       Keyboard.addListener('keyboardDidHide', handleCancel);
-        return ()=>{
-            Keyboard.removeListener('keyboardDidShow', handleFocus); 
-            Keyboard.removeListener('keyboardDidHide', handleCancel);
-        }
-    },[])
 
   return (
     <View style={styles.container}>
-        <SearchBar
-                placeholder="Search Easidiomas"
-                onChangeText={updateSearch}
-                value={search}
-                containerStyle={styles.searchContainer}
-                inputContainerStyle={styles.inputContainerStyle}
-                leftIconContainerStyle={styles.leftIconContainerStyle}
-                style={styles.search}
 
-            />
-     
-        <SearchTabNavigator/>
+        <NavigationContainer independent  initialRouteName="Search" ref={navigationRef}>
+            <Stack.Navigator screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#1b2836',
+                    elevation:0,
+                    borderBottomWidth:0
 
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                }
+            }}>                
+                <Stack.Screen name="Search" component={SearchTabNavigator}  options={{
+                    headerRight: () => (
+                        <FiltersBtn/>
+                    )
+                }}/>
+                <Stack.Screen name="Search Options" component={FiltersScreen}/>
+            </Stack.Navigator>
+        </NavigationContainer>
     </View>
   );
 }
@@ -73,8 +86,11 @@ const styles = StyleSheet.create({
         paddingLeft:15
     },
     leftIconContainerStyle:{
-        display:"none",
+        display:'none',
         backgroundColor: '#435060',
+    },
+    configBtn:{
+        paddingRight:15
     }
   });
 
