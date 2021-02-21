@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import Post from './items/Post';
+import Conversation from './items/Conversation';
 import randomWords from 'random-words'
 
-
-export default function Home() {
+export default function MessagesScreen({navigation}) {
   const [people, setPeople] = useState([
     { name: 'shaun', id: '1' },
     { name: 'yoshi', id: '2' },
@@ -22,16 +21,16 @@ export default function Home() {
     { name: 'bowser', id: '14' },
   ]);
 
+  
 
   return (
     <View style={styles.container}>
-
       <FlatList 
         numColumns={1}
         keyExtractor={(item) => item.id} 
         data={people} 
         renderItem={({ item }) => ( 
-            <Post name={item.name} handle={"@"+item.name} post={randomWords({min: 18, max: 40}).join(" ")}/>
+            <Conversation name={item.name} handle={"@"+item.name} navigation={navigation}/>
         )}
       />
 
@@ -42,16 +41,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-  },
-  item: {
-    flex: 1,
-    marginHorizontal: 10,
-    marginTop: 24,
-    padding: 30,
-    backgroundColor: 'pink',
-    fontSize: 24,
-  },
+    backgroundColor: '#1b2836',
+    justifyContent: 'center'
+  }
 });
