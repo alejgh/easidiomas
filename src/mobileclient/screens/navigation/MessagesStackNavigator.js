@@ -15,7 +15,7 @@ export default function MessagesStackNavigator({navigation}){
          screenOptions={{
             headerTintColor: 'white',
             headerStyle: { 
-                backgroundColor: 'rgb(27, 42, 51)',
+                backgroundColor: '#1b2836',
                 borderBottomColor: '#435060',
                 borderBottomWidth:1
             },

@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Post from './items/Post';
 import randomWords from 'random-words'
 
-
 export default function Home() {
   const [people, setPeople] = useState([
     { name: 'shaun', id: '1' },

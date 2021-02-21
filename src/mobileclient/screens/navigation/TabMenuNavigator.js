@@ -5,23 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import HomeScreen from '../HomeScreen';
 import MessagesStackNavigator from './MessagesStackNavigator';
-import SearchStackNavigation from './SearchStackNavigation';
 import SearchScreen from '../SearchScreen';
-
-
 
 
 const Tab = createBottomTabNavigator();
 
-  function SettingsScreen() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-      </View>
-    );
-  }
   
-
 export  function TabMenuNavigator({ navigation }) {
     return (
     <NavigationContainer independent>
@@ -49,8 +38,8 @@ export  function TabMenuNavigator({ navigation }) {
         tabBarOptions={{
           showIcon: true,
           showLabel:false,
-          activeBackgroundColor: 'rgb(27, 42, 51)',
-          inactiveBackgroundColor: 'rgb(27, 42, 51)',
+          activeBackgroundColor: '#1b2836',
+          inactiveBackgroundColor: '#1b2836',
           iconStyle:{
             marginBottom:5,
             marginTop:5

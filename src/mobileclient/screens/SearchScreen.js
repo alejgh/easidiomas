@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList,BackHandler,Keyboard } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-
+import SearchTabNavigator from './navigation/SearchTabNavigator';
 
 export default function SearchScreen({navigation}) {
 
@@ -13,44 +13,41 @@ export default function SearchScreen({navigation}) {
     };
 
     const handleFocus = function(){
-        console.log('focus')
         navigation.setOptions({
             tabBarVisible: false
         });
     }
 
     const handleCancel = function(){
-        console.log('cancel')
         navigation.setOptions({
             tabBarVisible: true
         });
     }
     
 
-
     useEffect(()=>{
-       // BackHandler.addEventListener('hardwareBackPress', handleCancel);
        Keyboard.addListener('keyboardDidShow', handleFocus); 
        Keyboard.addListener('keyboardDidHide', handleCancel);
         return ()=>{
-            //BackHandler.removeEventListener('hardwareBackPress', handleCancel);
             Keyboard.removeListener('keyboardDidShow', handleFocus); 
             Keyboard.removeListener('keyboardDidHide', handleCancel);
         }
     },[])
 
   return (
-    <View>
+    <View style={styles.container}>
         <SearchBar
-                placeholder="Type Here..."
+                placeholder="Search Easidiomas"
                 onChangeText={updateSearch}
-                cancelButtonProps={
-                    {disabled:true}
-                }
                 value={search}
                 containerStyle={styles.searchContainer}
+                inputContainerStyle={styles.inputContainerStyle}
+                leftIconContainerStyle={styles.leftIconContainerStyle}
                 style={styles.search}
+
             />
+     
+        <SearchTabNavigator/>
 
     </View>
   );
@@ -59,13 +56,26 @@ export default function SearchScreen({navigation}) {
 
 
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        backgroundColor: '#1b2836'
+    },
     searchContainer: {
         paddingTop:30,
         backgroundColor: '#1b2836'
     },
-    search: {
+    inputContainerStyle:{
         backgroundColor: '#1b2836'
     },
+    search: {
+        borderRadius:50,
+        backgroundColor: '#435060',
+        paddingLeft:15
+    },
+    leftIconContainerStyle:{
+        display:"none",
+        backgroundColor: '#435060',
+    }
   });
 
 

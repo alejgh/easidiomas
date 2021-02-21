@@ -80,7 +80,7 @@ export default function Post(props){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderBottomColor: "black",
+    borderBottomColor: "#435060",
     borderBottomWidth: 0.5,
     flexDirection: "column",
     backgroundColor: "#1b2836"
