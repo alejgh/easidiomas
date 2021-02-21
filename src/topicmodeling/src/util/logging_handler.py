@@ -8,21 +8,23 @@ from kafka.errors import NoBrokersAvailable
 
 
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
+
 
 class KafkaLoggingHandler(logging.Handler):
     """ Custom logging handler that redirects logs to a kafka queue
 
     Logs will be sent under the 'service_logs' topic.
     """
-    def __init__(self, endpoint, key=None):
+    def __init__(self, endpoint, key="default", topic="default"):
         while not hasattr(self, 'producer'):
             try:
                 self.producer = KafkaProducer(bootstrap_servers=endpoint)
             except NoBrokersAvailable as nba:
                 logger.error("No broker was found. Retrying...")
                 time.sleep(3)
-        self.key = str.encode(key) if key is not None else b"default"
+        self.key = str.encode(key)
+        self.topic = topic
         logging.Handler.__init__(self)
 
     def emit(self, record):
