@@ -24,7 +24,7 @@ services:
       - event_bus
   
   topicmodeling:
-    build: ../src/topicmodeling/
+    build: ../src/topicmodelingservice/
     ports:
       - "5001:5001"
     depends_on:

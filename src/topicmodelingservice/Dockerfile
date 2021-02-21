@@ -4,6 +4,6 @@ RUN mkdir app
 COPY . app
 WORKDIR app
 RUN pip install -r requirements.txt
-RUN python -m nltk.downloader all
+RUN python -m nltk.downloader stopwords punkt averaged_perceptron_tagger
 
 ENTRYPOINT ["python", "main.py"]

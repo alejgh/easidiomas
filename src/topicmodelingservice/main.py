@@ -1,4 +1,6 @@
-from src.config import KAFKA_ENDPOINT, KAFKA_INPUT_TOPIC, KAFKA_LOGGING_TOPIC, SERVICE_KEY
+from src.client.soap_client import SoapClient
+from src.config import KAFKA_ENDPOINT, KAFKA_INPUT_TOPIC, \
+    KAFKA_LOGGING_TOPIC, POSTS_ENDPOINT, SERVICE_KEY
 from src.model.topic_extractor import TopicExtractor
 from src.util.kafka_consumer import Consumer
 from src.util.logging_handler import KafkaLoggingHandler
@@ -48,9 +50,15 @@ def _on_message_received(message):
 
 def _send_topics_to_service(post_id, topics):
     logger.info(f"Send topics to service: {topics}")
-    # TODO: enviar los resultados al servicio de posts
-    #soap_client = SoapClient()
-    #soap_client.send_topics(post_id, topics)
+    # TODO: enviar los resultados al servicio de posts cuando esté listo
+    """
+    soap_client = SoapClient(POSTS_ENDPOINT)
+    soap_result = soap_client.send_topics(post_id, topics)
+    if soap_result.successful:
+        logger.debug("SOAP request was successful")
+    else:
+        logger.warning("SOAP request was unsuccessful")
+    """ 
 
 def _setup_logging():
     if len(logger.handlers) == 0:
