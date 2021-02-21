@@ -17,7 +17,7 @@ export function CustomDrawerContent({ navigation }) {
         <View style={styles.top}>
           <Image
             onPress={() => this.props.navigation.navigate('Profile')}
-            source={require('../assets/avatar.png')}
+            source={require('../../assets/avatar.png')}
             style={styles.photo}/>
           <Text style={styles.userName}>Pablo Menéndez 🐼 </Text>
           <Text style={styles.userHandle}>@mistermboy </Text>

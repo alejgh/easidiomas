@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,77 +8,40 @@ import {
   TouchableHighlight,
   TouchableOpacity, 
 } from 'react-native'
-import PropTypes from 'prop-types';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 
-import randomWords from 'random-words'
+export default function Post(props){
+
+    const {post, name, handle, picture} = props
+    const [photo,setPhoto] = useState({ uri: 'https://reactnative.dev/img/tiny_logo.png'});
+    const [touched,setTouched] = useState(false);
+    const [likes,setLikes] = useState(0);
+    const [time,setTime] = useState('1hr');
+    const [liked,setLiked] = useState(false);
 
 
-const userImage = {uri : 'https://pbs.twimg.com/profile_images/951903664809050114/Grfd40ih_400x400.jpg'}
-Array.prototype.random = function () {
-  return this[Math.floor((Math.random()*this.length))];
-}
-String.prototype.capitalizeFirstLetter = function() {
-  return `${this.substr(0,1).toUpperCase()}${this.substr(1)}`;
-}
-export default class Tweet extends React.Component {
-
-  constructor(props) {
-    super(props)
-    const {tweet, name, handle, time, retweeted, liked, picture} = this.props
-    const twit = randomWords({min: 18, max: 40}).join(" ");
-    this.state = {
-      photo: {uri :  picture.thumbnail},
-      touched: false,
-      tweet: twit,
-      retweets:Math.floor((Math.random() * 100) + 1),
-      likes:Math.floor((Math.random() * 10) + 1),
-      name: `${name.first.capitalizeFirstLetter()} ${name.last.capitalizeFirstLetter()}`,
-      handle: `@${name.first}`,
-      time: "1hr",
-      retweeted: [true, false].random(),
-      liked: [true, false].random(),
-      retweetedBy:["Sandra", "Hannit","Michael", "Jason", "Queen"][Math.floor(Math.random()*["Sandra", "Hannit","Michael", "Jason", "Queen"].length)]
+    const postPressed = function(pressed = false){
+        setTouched(pressed)
     }
-    this.tweetPressed = this
-      .tweetPressed
-      .bind(this)
 
-    this.like = this.like.bind(this)
-  }
-
-  tweetPressed(pressed = false) {
-    
-    this.setState({touched: pressed})
-  }
-
- 
-  like(){
-    const {liked, likes} = this.state
-  
-
-    if (liked) 
-      this.setState({liked: false, likes: likes-1})
-    
-
-    else this.setState({liked: true, likes: likes+1})
-  }
-
-  render() {
-
-    const {navigation, thekey, isReply} = this.props
-    const {touched, tweet, retweets, likes, name, handle, time, retweetedBy, retweeted, liked, photo} = this.state
-
+    const like = function(pressed = false){
+        if (liked){ 
+          setLiked(false)
+          setLikes(likes-1)
+        }else{
+          setLiked(true)
+          setLikes(likes+1)
+        }
+    }
 
     return(
-      <TouchableHighlight onPressIn={() => this.tweetPressed(true)} onPressOut={() => this.tweetPressed()}>
-        <View key={thekey} style={styles.container}>
+      <TouchableHighlight onPressIn={() => postPressed(true)} onPressOut={() => postPressed()}>
+        <View style={styles.container}>
             <View style={styles.innerContainer}>
               <View style={styles.photoContainer}>
                 <View style={styles.innerPhotoContainer}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                  <TouchableOpacity>
                   <Image
                     source={photo}
                     style={styles.photo}/>
@@ -91,13 +54,13 @@ export default class Tweet extends React.Component {
                     <Text style={styles.userHandleAndTime}>{handle} · {time}</Text>
                   </Text>
                 </View>
-              <View style={styles.tweetTextContainer}>
-                <Text style={styles.tweetText}>{tweet}</Text>
+              <View style={styles.postTextContainer}>
+                <Text style={styles.postText}>{post}</Text>
 
               </View>
-              <View style={styles.tweetActionsContainer}>
+              <View style={styles.postActionsContainer}>
                
-                <TouchableOpacity onPress={()=> this.like()}  style={styles.likeButton}>
+                <TouchableOpacity onPress={()=> like()}  style={styles.likeButton}>
                 { liked ? 
                   <Entypo name={'heart'} size={18} style={{marginLeft:4}} color={liked ? "rgb(224, 36, 94)" : 'rgb(136, 153, 166)'}/>
                   :
@@ -112,10 +75,7 @@ export default class Tweet extends React.Component {
             </View>
         </View>
        </TouchableHighlight>
-
     )
-  }
-
 }
 const styles = StyleSheet.create({
   container: {
@@ -163,9 +123,9 @@ const styles = StyleSheet.create({
     color: "rgb(136, 153, 166)",
     marginLeft: 5
   },
-  tweetTextContainer: { flex: 1, borderColor: "blue", borderWidth: 0 },
-  tweetText: { color: "white", paddingRight: 10 },
-  tweetActionsContainer: {
+  postTextContainer: { flex: 1, borderColor: "blue", borderWidth: 0 },
+  postText: { color: "white", paddingRight: 10 },
+  postActionsContainer: {
     flex: 1,
     borderColor: "blue",
     borderWidth: 0,
@@ -187,13 +147,3 @@ const styles = StyleSheet.create({
     marginLeft: 3
   }
 });
-
-Tweet.propTypes = {
-  retweeted: PropTypes.string.isRequired
-};
-Tweet.defaultProps = {
-  name: "Anonymous",
-  tweet: "A tweet",
-  retweeted: false,
-  liked: false
-};
