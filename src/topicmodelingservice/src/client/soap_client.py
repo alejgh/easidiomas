@@ -1,3 +1,4 @@
+import logging
 import zeep
 
 from .soap_result import SoapResult
