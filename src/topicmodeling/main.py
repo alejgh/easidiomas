@@ -1,11 +1,12 @@
-from src.config import KAFKA_ENDPOINT, KAFKA_INPUT_TOPIC, KAFKA_LOGGING_TOPIC
+from src.config import KAFKA_ENDPOINT, KAFKA_INPUT_TOPIC, KAFKA_LOGGING_TOPIC, SERVICE_KEY
+from src.model.topic_extractor import TopicExtractor
 from src.util.kafka_consumer import Consumer
 from src.util.logging_handler import KafkaLoggingHandler
 
 import logging
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(SERVICE_KEY)
 logger.setLevel(logging.DEBUG)
 
 
@@ -24,19 +25,22 @@ def main():
     for message in consumer:
         logger.info(f"Message received from Kafka: {message.value}")
         _on_message_received(message)
-    logger.error("Connection to Kafka was lost. Stopping program")
+    logger.warning("Connection to Kafka was lost. Stopping program")
 
 
 def _on_message_received(message):
-    # TODO: procesar mensaje
-    #post_id = message.key
-    #post_content = message.value
-    #topics = extract_topics(post_content)
+    post_id = message.key
+    post_content = message.value.decode('utf-8')
+
+    # we could obtain information about the language of a post.
+    # for now, we expect it to come in english
+    extractor = TopicExtractor()
+    topics = extractor.extract_topics_from(post_content)
+
     _send_topics_to_service(post_id, topics)
-    pass
 
 def _send_topics_to_service(post_id, topics):
-    logger.info("Send topics to service: ", topics)
+    logger.info(f"Send topics to service: {topics}")
     # TODO: enviar los resultados al servicio de posts
     #soap_client = SoapClient()
     #soap_client.send_topics(post_id, topics)

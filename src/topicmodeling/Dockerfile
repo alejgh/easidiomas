@@ -4,5 +4,6 @@ RUN mkdir app
 COPY . app
 WORKDIR app
 RUN pip install -r requirements.txt
+RUN python -m nltk.downloader all
 
 ENTRYPOINT ["python", "main.py"]

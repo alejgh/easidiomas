@@ -6,6 +6,8 @@ import time
 from kafka import KafkaConsumer, TopicPartition
 from kafka.errors import NoBrokersAvailable
 
+from ..config import SERVICE_KEY
+
 logger = logging.getLogger(SERVICE_KEY)
 logger.setLevel(logging.DEBUG)
 
