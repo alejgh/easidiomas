@@ -2,6 +2,7 @@ from src.config import KAFKA_ENDPOINT, KAFKA_INPUT_TOPIC, KAFKA_LOGGING_TOPIC, S
 from src.model.topic_extractor import TopicExtractor
 from src.util.kafka_consumer import Consumer
 from src.util.logging_handler import KafkaLoggingHandler
+from src.util.decorators import background
 
 import logging
 
@@ -28,7 +29,14 @@ def main():
     logger.warning("Connection to Kafka was lost. Stopping program")
 
 
+@background
 def _on_message_received(message):
+    """ Logic to process a kafka message
+
+    This function runs in the background (see decorator implementation at utils package).
+    The topics from the post are extracted, and then they are sent to the Posts service
+    through a SOAP request.
+    """
     post_id = message.key
     post_content = message.value.decode('utf-8')
 
@@ -36,7 +44,6 @@ def _on_message_received(message):
     # for now, we expect it to come in english
     extractor = TopicExtractor()
     topics = extractor.extract_topics_from(post_content)
-
     _send_topics_to_service(post_id, topics)
 
 def _send_topics_to_service(post_id, topics):
