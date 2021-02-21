@@ -1,6 +1,11 @@
 import zeep
 
 from .soap_result import SoapResult
+from ..config import SERVICE_KEY
+
+
+logger = logging.getLogger(SERVICE_KEY)
+logger.setLevel(logging.DEBUG)
 
 
 class SoapClient:
