@@ -52,7 +52,7 @@ En el diagrama anterior se puede ver que el sistema consta de 3 grandes segmento
 | [statisticsservice](./src/statisticsservice) | Java        | Permite centralizar todas las estadísticas relativas a las entidades del sistema en un mismo sitio. No es un sistema de monitorización del sistema si no más bien una caché de estadística. En este sistema se pueden encontrar datos como el número de mensajes por usuario, el número de usuarios registrados en las últimas 24h, etc.                                                                      |
 | [offensivetextdetectionservice](./src/offensivetextdetectionservice)                         | Python          | Continuamente busca texto que puea ser ofensivo dentro de los posts nuevos.                                                                                   |
 | [languageidentservice](./src/languageidentservice)                 | Java | Para los posts nuevos identifica el lenguaje en el que están escritos y etiqueta dichos posts.                                              |
-| [topicmodellingservice](./src/topicmodellingservice)                 | Python | Para los posts nuevos se identifican los posibles tópicos que contenga el post.                                              |
+| [topicmodelingservice](./src/topicmodelingservice)                 | Python | Para los posts nuevos se identifican los posibles tópicos que contenga el post.                                              |
 
 Una vez vistos los servicios que componen el ecosistema para acceder a ellos se emplea un servicio oculto, una API Gateway que expone los siguientes endpoints:
 

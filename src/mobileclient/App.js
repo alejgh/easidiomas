@@ -1,19 +1,8 @@
 import * as React from 'react';
-import { Button, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import { CustomDrawerContent } from './screens/CustomDrawerContent';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {TabMenuNavigator} from './screens/TabMenuNavigator';
-
-
-function NotificationsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
+import { CustomDrawerContent } from './screens/navigation/CustomDrawerContent'
+import { TabMenuNavigator } from './screens/navigation/TabMenuNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,10 +10,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />} initialRouteName="Profile">
-          <Drawer.Screen name="Profile" component={TabMenuNavigator} />
-          <Drawer.Screen name="Search" component={NotificationsScreen} />
-          <Drawer.Screen name="Posts" component={NotificationsScreen} />
-          <Drawer.Screen name="Messages" component={NotificationsScreen} />
+          <Drawer.Screen name="Home" component={TabMenuNavigator} />
         </Drawer.Navigator>
       </NavigationContainer>
   );
