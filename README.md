@@ -74,6 +74,5 @@ Una vez vistos los servicios que componen el ecosistema para acceder a ellos se 
 |||||||
 |`/api/v1/statistics`|GET|Token||200 Statistics, 404|Devuelve todas las estadísticas del ecosistema.|
 |`/api/v1/users/{id}/statistics`|GET|Token||200 Statistics, 404|Devuelve las estadísticas de un usuario.|
-|`/api/v1/users/{id}/statistics`|PUT|Token|`{type: action}`|201, 409|Aplica la acción indicada sobre el tipo de estadística indicado. Los tipos son: `translations/chats/logins`. Y las acciones son: `add-one/remove-one`.|
 |||||||
 |`/api/v1/translations`|POST|Token|`{text:text,from-lang:lang,to-lang:lang}`|201 Translation, 404|Devuelve la traduciión para un texto dado.|
