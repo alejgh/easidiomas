@@ -75,4 +75,4 @@ Una vez vistos los servicios que componen el ecosistema para acceder a ellos se 
 |`/api/v1/statistics`|GET|Token||200 Statistics, 404|Devuelve todas las estadísticas del ecosistema.|
 |`/api/v1/users/{id}/statistics`|GET|Token||200 Statistics, 404|Devuelve las estadísticas de un usuario.|
 |||||||
-|`/api/v1/translations`|POST|Token|`{text:text,from-lang:lang,to-lang:lang}`|201 Translation, 404|Devuelve la traduciión para un texto dado.|
+|`/api/v1/translations`|POST|Token|`{text:text,from-lang:lang,to-lang:lang}`|201 Translation, 404|Devuelve la tradución para un texto dado.|
