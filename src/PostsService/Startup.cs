@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NLog.Config;
+using NLog.Targets;
+using PostsService.Kafka;
 
 namespace PostsService
 {
@@ -26,6 +29,8 @@ namespace PostsService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureKafka(services);
+            ConfigureLogging(services);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -44,6 +49,7 @@ namespace PostsService
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PostsService v1"));
             }
 
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -52,6 +58,30 @@ namespace PostsService
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ConfigureKafka(IServiceCollection services)
+        {
+            services.AddSingleton<KafkaClientHandle>();
+            services.AddSingleton<KafkaProducer<long, string>>();   // communication with services: ("post_id", "text")
+            services.AddSingleton<KafkaProducer<string, string>>(); // logs ("service_name", "log")
+            services.AddHostedService<KafkaConsumer>();             // listening to
+            services.AddScoped<KafkaLoggerTarget>();
+        }
+
+        private void ConfigureLogging(IServiceCollection services)
+        {
+            Target.Register<KafkaLoggerTarget>("KafkaLogger");
+
+            // workaround to use dependency injection + NLog custom target
+            // see https://stackoverflow.com/questions/42033398/custom-nlog-layoutrenderer-with-constructor-using-dependency-injection/42101946#42101946
+            // for more information
+            ConfigurationItemFactory.Default.CreateInstance = (Type type) =>
+            {
+                if (type == typeof(KafkaLoggerTarget))
+                    return new KafkaLoggerTarget(services.BuildServiceProvider().GetService<KafkaClientHandle>());
+                else return Activator.CreateInstance(type);
+            };
         }
     }
 }
