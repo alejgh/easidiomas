@@ -12,7 +12,7 @@ public class AuthenticationServiceClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationServiceController.class);
 
-    private final String serviceTarget = System.getProperty("AUTH_SERVICE_ADDRESS", "localhost:5000");
+    private final String serviceTarget = System.getenv("AUTH_SERVICE_ADDRESS")!=null ? System.getenv("AUTH_SERVICE_ADDRESS"): "loclhots:5000";
     private final AuthenticationServiceGrpc.AuthenticationServiceBlockingStub authService;
 
     public AuthenticationServiceClient() {
