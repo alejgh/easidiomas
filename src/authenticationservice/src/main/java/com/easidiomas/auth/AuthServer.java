@@ -20,10 +20,10 @@ public class AuthServer {
     private Server server;
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        LOGGER.info("Server Starting");
+        LOGGER.info("Service starting on port " + PORT);
         AuthServer server = new AuthServer();
         server.start();
-        LOGGER.info("Server Started");
+        LOGGER.info("Service started on port " + PORT);
         server.blockUntilShutdown();
     }
 
