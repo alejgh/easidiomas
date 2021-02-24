@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace PostsService.Kafka
 {
+    /// <summary>
+    /// Basic Client Handle to centralize configuration sent to a Kafka Producer.
+    /// </summary>
     public class KafkaClientHandle
     {
         IProducer<byte[], byte[]> kafkaProducer;

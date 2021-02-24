@@ -5,7 +5,7 @@ using Confluent.Kafka;
 namespace PostsService.Kafka
 {
     /// <summary>
-    /// Basic Kafka Consumer implementation that listens to multiple topics
+    /// Basic Kafka Consumer implementation that listens to a topic.
     ///
     /// Based on the one available at https://github.com/confluentinc/confluent-kafka-dotnet/blob/master/examples/Web/RequestTimeConsumer.cs
     /// </summary>
@@ -16,6 +16,15 @@ namespace PostsService.Kafka
 
         private readonly IConsumer<K, V> consumer;
 
+        /// <summary>
+        /// Base Constructor for the Kafka Consumer
+        /// </summary>
+        /// <param name="endpoint">Endpoint of Kafka (e.g. localhost:9092)</param>
+        /// <param name="topic">Topic that the consumer will listen to.</param>
+        /// <param name="groupID">Group id of the consumer in Kafka (see https://docs.confluent.io/platform/current/clients/consumer.html#consumer-groups)</param>
+        /// <param name="callback">Action to be called when a new message is consumed.</param>
+        /// <param name="keyDeserializer">Optional: Custom deserializer to parse keys received from the topic.</param>
+        /// <param name="valueDeserializer">Optional: Custom deserializer to parse values received from the topic.</param>
         public KafkaConsumer(string endpoint, string topic, string groupID,
             Action<K, V> callback, IDeserializer<K> keyDeserializer = null,
             IDeserializer<V> valueDeserializer = null)
@@ -25,6 +34,7 @@ namespace PostsService.Kafka
 
             var consumerConfig = new ConsumerConfig();
             consumerConfig.BootstrapServers = endpoint;
+            consumerConfig.AutoOffsetReset = AutoOffsetReset.Latest;
             consumerConfig.GroupId = groupID;
 
             var consumerBuilder = new ConsumerBuilder<K, V>(consumerConfig);
@@ -34,6 +44,12 @@ namespace PostsService.Kafka
             this.consumer = consumerBuilder.Build();
         }
 
+        /// <summary>
+        /// Starts the main consumer loop.
+        ///
+        /// This loop should be run in a separate thread.
+        /// </summary>
+        /// <param name="stoppingToken"></param>
         public void StartConsumerLoop(CancellationToken stoppingToken)
         {
             this.consumer.Subscribe(Topic);

@@ -3,6 +3,9 @@ using Confluent.Kafka;
 
 namespace PostsService.Deserializers
 {
+    /// <summary>
+    /// Custom deserializer to parse booleans from Kafka.
+    /// </summary>
     public class BooleanDeserializer : IDeserializer<bool>
     {
         public bool Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)

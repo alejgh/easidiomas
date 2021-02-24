@@ -9,6 +9,10 @@ using PostsService.Kafka;
 
 namespace PostsService.Consumers
 {
+
+    /// <summary>
+    /// Class that listens to messages received from the offensive text detection service.
+    /// </summary>
     public class OffensiveTextDetectionConsumer : BackgroundService
     {
         private readonly KafkaConsumer<long, bool> consumer;
@@ -25,6 +29,11 @@ namespace PostsService.Consumers
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Callback to be called when a new message from the offensive text detection service is consumed.
+        /// </summary>
+        /// <param name="postId">ID of the post</param>
+        /// <param name="isOffensive">Whether the post is considered to be offensive or not</param>
         private void onOffensiveTextDetected(long postId, bool isOffensive)
         {
             logger.LogDebug("OnOffensiveText detected was called");

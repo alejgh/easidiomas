@@ -10,6 +10,9 @@ using PostsService.Kafka;
 
 namespace PostsService.Consumers
 {
+    /// <summary>
+    /// Class that listens to messages received from the topic extraction service.
+    /// </summary>
     public class TopicsConsumer : BackgroundService
     {
         private readonly KafkaConsumer<long, IEnumerable<string>> consumer;
@@ -27,6 +30,11 @@ namespace PostsService.Consumers
         }
 
 
+        /// <summary>
+        /// Callback to be called when a new message from the topic extraction service is consumed.
+        /// </summary>
+        /// <param name="postId">ID of the post</param>
+        /// <param name="topics">List of topics that have been detected</param>
         private void onTopicsDetected(long postId, IEnumerable<string> topics)
         {
             logger.LogDebug("On topics detected was called");

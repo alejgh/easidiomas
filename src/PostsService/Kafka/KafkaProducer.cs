@@ -4,6 +4,11 @@ using Confluent.Kafka;
 
 namespace PostsService.Kafka
 {
+    /// <summary>
+    /// Basic Kafka Producer class.
+    /// </summary>
+    /// <typeparam name="K">Type of the key of each kafka message to be produced.</typeparam>
+    /// <typeparam name="V">Type of the value of each kafka message to be produced.</typeparam>
     public class KafkaProducer<K, V>
     {
         IProducer<K, V> kafkaHandle;

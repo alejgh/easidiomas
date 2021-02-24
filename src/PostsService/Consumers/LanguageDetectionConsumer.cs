@@ -10,6 +10,9 @@ using PostsService.Kafka;
 
 namespace PostsService.Consumers
 {
+    /// <summary>
+    /// Class that listens to messages received from the language detection service.
+    /// </summary>
     public class LanguageDetectionConsumer : BackgroundService
     {
         private readonly KafkaConsumer<long, string> consumer;
@@ -26,9 +29,15 @@ namespace PostsService.Consumers
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Callback to be called when a new message from the language detection service is consumed.
+        /// </summary>
+        /// <param name="postId">ID of the post</param>
+        /// <param name="language">Detected language of the post</param>
         private void onLanguageIdentification(long postId, string language)
         {
-            logger.LogInformation("OnLanguageIdentification was called");
+            logger.LogDebug("OnLanguageIdentification was called");
+            // TODO: call the statistics service with information about this post
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
