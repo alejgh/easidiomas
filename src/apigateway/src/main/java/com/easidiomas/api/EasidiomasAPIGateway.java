@@ -1,6 +1,8 @@
 package com.easidiomas.api;
 
 import com.easidiomas.api.filters.SecurityFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,12 +11,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import javax.servlet.Filter;
+import java.util.Collections;
 
 @SpringBootApplication
 public class EasidiomasAPIGateway {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EasidiomasAPIGateway.class);
+    private static final int PORT = Integer.parseInt(System.getProperty("SERVER_PORT", "5001"));
+
     public static void main(String... args) {
-        SpringApplication.run(EasidiomasAPIGateway.class, args);
+        LOGGER.info("Service starting on port " + PORT);
+        SpringApplication app = new SpringApplication(EasidiomasAPIGateway.class);
+        app.setDefaultProperties(Collections.singletonMap("server.port", PORT));
+        app.run(args);
+        LOGGER.info("Service started on port " + PORT);
     }
 
     /**

@@ -15,24 +15,29 @@ public class AuthServiceImpl extends AuthenticationServiceGrpc.AuthenticationSer
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
     private static final long TOKEN_LIVE_TIME_MS = Long.parseLong(System.getProperty("TOKEN_LIVE_TIME_MS", "600000"));
+    private static final String USERS_SERVICE_ADDR = System.getProperty("USERS_SERVICE_ADDR", "localhost:5002");
 
     @Override
     public void generateToken(Authservice.LoginInfo request, StreamObserver<Authservice.Token> responseObserver) {
         final String username = request.getUsername();
         final String password = request.getPassword();
-        LOGGER.debug(String.format("User [%s] request a new token.", username));
+        LOGGER.info(String.format("User [%s] requested a new token.", username));
 
         // 1. Look for the combination of user and password in the users service.
         // TO-DO
+        LOGGER.info(String.format("Looking for user [%s] in the users service", username));
+        LOGGER.info(String.format("User [%s] found in users service", username));
+        LOGGER.info(String.format("User [%s] not found in users service", username));
 
         // 2. If the user exists, generate a passport for it with its data.
+        LOGGER.info(String.format("Generating passport for user [%s].", username));
         String expirationDate = Long.toString(System.currentTimeMillis() + TOKEN_LIVE_TIME_MS);
         Authservice.Passport passport = Authservice.Passport.newBuilder().setUserId("0").setUsername(username)
                 .setName("Willy").setSurname("Facundo Colunga")
                 .setUserProfilePicUrl("https://content.easidiomas/static/willy.png").setExpirationDate(expirationDate)
                 .build();
 
-        LOGGER.debug(String.format("Passport generated for user [%s]: %s", username, passport));
+        LOGGER.info(String.format("Generated passport for user [%s]: %s", username, passport));
 
         // 3. Convert the passport to JSON object.
         String jsonPassport = "";
@@ -41,15 +46,19 @@ public class AuthServiceImpl extends AuthenticationServiceGrpc.AuthenticationSer
             Gson gson = new Gson();
             jsonPassport = gson.toJson(passport);
         } catch (Exception e) {
-            LOGGER.error("Error while serializing passport to JSON object: " + e.toString());
+            LOGGER.error("Error while serializing passport as a JSON object: " + e.toString());
             responseObserver.onError(e);
             return;
         }
 
         // 4. Cypher the passport with AES.
+        LOGGER.info(String.format("Generating token for user passport: %s", passport));
         String tokenString = AESEncryptor.encrypt(jsonPassport);
-        // 5. Create a token from the cyphered json.
+        LOGGER.info(String.format("Generated token [%s] for user passport: %s",tokenString, passport));
+
+        // 5. Create a token object from the cyphered json.
         Authservice.Token token = Authservice.Token.newBuilder().setToken(tokenString).build();
+
         // 6. Return the created token.
         responseObserver.onNext(token);
         responseObserver.onCompleted();
@@ -58,11 +67,15 @@ public class AuthServiceImpl extends AuthenticationServiceGrpc.AuthenticationSer
     @Override
     public void generatePassport(Authservice.Token request, StreamObserver<Authservice.Passport> responseObserver) {
         String tokenString = request.getToken();
+        LOGGER.info(String.format("Passport generation request received for token: %s", tokenString));
 
         // 1. Decrypt the token.
+        LOGGER.info(String.format("Decrypting token: %s", tokenString));
         String jsonToken = AESDecryptor.decrypt(tokenString);
+        LOGGER.info(String.format("Decrypted token: [%s] on to: %s", tokenString, jsonToken));
 
         // 2. Convert to passport.
+        LOGGER.info(String.format("Deserializing token [%s] as a Passport", tokenString));
         Authservice.Passport passport = null;
         try {
             Gson gson = new Gson();
@@ -73,8 +86,10 @@ public class AuthServiceImpl extends AuthenticationServiceGrpc.AuthenticationSer
             responseObserver.onCompleted();
             return;
         }
+        LOGGER.info(String.format("Deserialized token [%s] as a Passport: %s", tokenString, passport));
 
         // 3. Check the expirationDate.
+        LOGGER.info(String.format("Checking expiration date of the passport"));
         Long expirationDate = null;
         try {
             expirationDate = Long.parseLong(passport.getExpirationDate());
@@ -87,12 +102,13 @@ public class AuthServiceImpl extends AuthenticationServiceGrpc.AuthenticationSer
 
         if (expirationDate < System.currentTimeMillis()) {
             // The passport is no longer valid.
-            LOGGER.info("Invalid passport detected");
+            LOGGER.info(String.format("Passport %s has expired", passport));
             responseObserver.onCompleted();
             return;
         }
 
         // 4. Return passport.
+        LOGGER.info(String.format("Passport generated and valid for token [%s]", tokenString));
         responseObserver.onNext(passport);
         responseObserver.onCompleted();
     }
