@@ -39,13 +39,17 @@ services:
   
   authenticationservice:
     build: ../src/authenticationservice/
-    ports:
-      - "5010:5000"
+    environment: 
+      SERVER_PORT: "5000"
 
-  authenticationservice:
+  apigateway:
     build: ../src/apigateway/
+    depends_on:
+      - authenticationservice
     ports:
-      - "5020:8080"
+      - "8080:8080"
+    environment: 
+      AUTH_SERVICE_ADDRESS: "authenticationservice:5000"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:$ELK_VERSION
