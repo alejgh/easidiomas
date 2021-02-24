@@ -36,6 +36,17 @@ services:
       KAFKA_INPUT_TOPIC: "posts"
       KAFKA_LOGGING_TOPIC: "service_logs"
       POSTS_SERVICE_ENDPOINT: "posts_service:8888/soapws/posts.wsdl"
+  
+  postsservice:
+    build: ../src/PostsService/
+    ports:
+      - "80:80"
+    depends_on:
+      - kafka
+    networks:
+      - event_bus
+    environment:
+      KAFKA_ENDPOINT: "kafka:9092"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:$ELK_VERSION
