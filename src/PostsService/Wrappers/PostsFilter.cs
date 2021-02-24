@@ -17,5 +17,10 @@ namespace PostsService.Wrappers
             if (userID != null && userID >= 0) User = userID;
             Language = language;
         }
+
+        public override string ToString()
+        {
+            return $"Posts Filter[userID={User} - language={Language}]";
+        }
     }
 }

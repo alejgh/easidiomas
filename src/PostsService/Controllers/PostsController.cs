@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PostsService.Data;
 using PostsService.Model;
+using PostsService.Service;
 using PostsService.Wrappers;
 
 namespace PostsService.Controllers
@@ -16,13 +14,13 @@ namespace PostsService.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly DataContext _context;
-        private readonly ILogger<PostsController> _logger;
+        private readonly ILogger<PostsController> logger;
+        private readonly IPostsService _service;
 
-        public PostsController(DataContext context, ILogger<PostsController> logger)
+        public PostsController(IPostsService service, ILogger<PostsController> logger)
         {
-            _context = context;
-            _logger = logger;
+            _service = service;
+            this.logger = logger;
         }
 
         // GET: api/Posts
@@ -30,31 +28,15 @@ namespace PostsService.Controllers
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts([FromQuery] PaginationFilter paginationFilter,
             [FromQuery] PostsFilter postsFilter, [FromQuery] SortingInfo sortingInfo)
         {
+            logger.LogDebug("GET posts has been called");
+
             // we re-create the filters to perform internal validation (e.g. offset is greater than or equal to 0)
             var validPaginationFilter = new PaginationFilter(paginationFilter.Offset, paginationFilter.Limit);
             var validPostsFilter = new PostsFilter(postsFilter.User, postsFilter.Language);
             var validSortingInfo = new SortingInfo(sortingInfo.SortBy, sortingInfo.Order);
 
-            // we execute filters and get total results
-            IQueryable<Post> postsQueryable = _context.Posts
-                .Where(p => validPostsFilter.User == null ? true : p.AuthorId == validPostsFilter.User)
-                .Where(p => validPostsFilter.Language == null ? true : p.Language == validPostsFilter.Language);
-            int total = await postsQueryable.CountAsync();
-
-            // now pagination
-            postsQueryable = postsQueryable
-                .Skip(validPaginationFilter.Offset)
-                .Take(validPaginationFilter.Limit);
-
-            // sorting...
-            // at this point the name of the property has been validated to exist
-            if (validSortingInfo.Order.Equals("asc"))
-                postsQueryable = postsQueryable.OrderBy(p => EF.Property<object>(p, validSortingInfo.SortBy));
-            else
-                postsQueryable = postsQueryable.OrderByDescending(p => EF.Property<object>(p, validSortingInfo.SortBy));
-
-            // and get the posts!!
-            IEnumerable<Post> posts = await postsQueryable.ToListAsync();
+            IEnumerable<Post> posts = await _service.GetPosts(validPaginationFilter, validPostsFilter, validSortingInfo);
+            int total = await _service.GetPostsCount(validPostsFilter);
 
             return Ok(new PaginatedResponse<Post>(posts, "api/posts/",
                 validPaginationFilter.Limit, total, validPaginationFilter.Offset));
@@ -64,14 +46,14 @@ namespace PostsService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(long id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _service.GetPost(id);
 
             if (post == null)
             {
                 return NotFound();
             }
 
-            return post;
+            return Ok(post);
         }
 
         // PUT: api/Posts/5
@@ -79,27 +61,23 @@ namespace PostsService.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(long id, Post post)
         {
-            if (id != post.Id)
-            {
-                return BadRequest();
-            }
+            if (id != post.Id) return BadRequest();
 
-            _context.Entry(post).State = EntityState.Modified;
+            // the following values shouldn't be updated by a user
+            Post originalPost = await _service.GetPost(id);
+            if (originalPost == null) return NotFound();
+
+            post.AuthorId = originalPost.AuthorId;
+            post.CreatedDate = originalPost.CreatedDate;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.UpdatePost(post);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PostExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!await _service.PostExists(id)) return NotFound();
+                else throw;
             }
 
             return NoContent();
@@ -110,11 +88,18 @@ namespace PostsService.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
+            // TODO: verificar cómo nos llega el passport del api entrypoint
+            long userID = -1;
+            if (Request.Headers.TryGetValue("passport.userID", out var passportUserID)) {
+                userID = Convert.ToInt64(passportUserID);
+            }
+
+            // auto created fields
+            post.AuthorId = userID;
             post.CreatedDate = DateTime.Now;
             post.Likes = 0;
 
-            _context.Posts.Add(post);
-            await _context.SaveChangesAsync();
+            await _service.CreatePost(post);
 
             return CreatedAtAction("GetPost", new { id = post.Id }, post);
         }
@@ -123,21 +108,20 @@ namespace PostsService.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(long id)
         {
-            var post = await _context.Posts.FindAsync(id);
-            if (post == null)
+            // TODO: verificar cómo nos llega el passport del api entrypoint
+            string role = "USER";
+            if (Request.Headers.TryGetValue("passport.userRole", out var passportUserRole))
             {
-                return NotFound();
+                role = passportUserRole;
             }
 
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
+            if (!role.ToUpper().Equals("ADMIN")) return Unauthorized();
 
+            Post post = await _service.GetPost(id);
+            if (post == null) return NotFound();
+
+            await _service.DeletePost(post);
             return NoContent();
-        }
-
-        private bool PostExists(long id)
-        {
-            return _context.Posts.Any(e => e.Id == id);
         }
     }
 }

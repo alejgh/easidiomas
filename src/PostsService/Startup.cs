@@ -9,6 +9,7 @@ using NLog.Targets;
 using PostsService.Kafka.Consumers;
 using PostsService.Data;
 using PostsService.Kafka;
+using PostsService.Service;
 
 namespace PostsService
 {
@@ -21,7 +22,11 @@ namespace PostsService
             ConfigureKafka(services);
             ConfigureLogging(services);
 
+            // dependency injection of data context and post service
             services.AddDbContext<DataContext>();
+            services.AddScoped<BasicPostsService>();
+            services.AddScoped<IPostsService>(x => x.GetRequiredService<BasicPostsService>());
+
             services.AddControllers();
         }
 

@@ -29,5 +29,6 @@
     <Folder Include="Wrappers\" />
     <Folder Include="Kafka\Deserializers\" />
     <Folder Include="Kafka\Consumers\" />
+    <Folder Include="Service\" />
   </ItemGroup>
 </Project>

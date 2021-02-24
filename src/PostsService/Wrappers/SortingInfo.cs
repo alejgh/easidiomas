@@ -23,5 +23,10 @@ namespace PostsService.Wrappers
             if (order != null && (order == "asc" || order == "desc")) Order = order;
             else Order = "asc";
         }
+
+        public override string ToString()
+        {
+            return $"Sorting Info[sortBy={SortBy} - order={Order}]";
+        }
     }
 }

@@ -16,5 +16,10 @@
             Offset = offset >= 0 ? offset : 0;
             Limit = limit <= 100 ? limit : 5;
         }
+
+        public override string ToString()
+        {
+            return $"Pagination Filter[offset={Offset} - limit={Limit}]";
+        }
     }
 }

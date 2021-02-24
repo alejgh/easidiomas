@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using NLog;
-using NLog.Common;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
-using PostsService.Kafka;
 
 namespace PostsService.Kafka
 {
