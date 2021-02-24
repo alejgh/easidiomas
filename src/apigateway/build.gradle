@@ -5,10 +5,14 @@ plugins {
     id 'com.google.protobuf' version '0.8.15'
     // Generate IntelliJ IDEA's .idea & .iml project files
     id 'idea'
+
+    id 'org.springframework.boot' version '2.4.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 group 'com.easidiomas'
 version '1.0'
+sourceCompatibility = '1.8'
 
 repositories {
     maven { // The google mirror is less flaky than mavenCentral()
@@ -23,30 +27,17 @@ def protocVersion = protobufVersion
 
 dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    //implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+    //implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
 
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
-    //implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.4.3'
-
-    //def withoutX = { exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
-    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-log4j-appender
-    //implementation group: 'org.apache.kafka', name: 'kafka-log4j-appender', version: '2.7.0', withoutX
-
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
-
-
-
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     compile "io.grpc:grpc-netty:${grpcVersion}"
     compile "io.grpc:grpc-protobuf:${grpcVersion}"
     compile "io.grpc:grpc-stub:${grpcVersion}"
     compile group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.12.2'
-
     compileOnly group: "javax.annotation", name: "javax.annotation-api", version: "1.3.2"
     compileOnly group: "org.jetbrains", name: "annotations", version: "13.0"
 
@@ -71,18 +62,6 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/java'
         }
     }
-}
-
-task runServer(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.easidiomas.auth.AuthServer'
-}
-
-task authServer(type: CreateStartScripts) {
-    mainClassName = "icom.easidiomas.auth.AuthServer"
-    applicationName = "auth-server"
-    outputDir = new File(project.buildDir, 'tmp')
-    classpath = jar.outputs.files + project.configurations.runtime
 }
 
 startScripts.enabled = false
