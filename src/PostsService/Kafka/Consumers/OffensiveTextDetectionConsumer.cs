@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PostsService.Deserializers;
-using PostsService.Kafka;
+using PostsService.Kafka.Deserializers;
 
-namespace PostsService.Consumers
+namespace PostsService.Kafka.Consumers
 {
 
     /// <summary>

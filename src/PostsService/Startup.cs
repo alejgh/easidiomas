@@ -1,13 +1,12 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Config;
 using NLog.Targets;
-using PostsService.Consumers;
+using PostsService.Kafka.Consumers;
 using PostsService.Data;
 using PostsService.Kafka;
 

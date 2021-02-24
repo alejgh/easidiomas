@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PostsService.Data;
 using PostsService.Model;
+using PostsService.Wrappers;
 
 namespace PostsService.Controllers
 {
@@ -15,17 +17,47 @@ namespace PostsService.Controllers
     public class PostsController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly ILogger<PostsController> _logger;
 
-        public PostsController(DataContext context)
+        public PostsController(DataContext context, ILogger<PostsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Posts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
+        public async Task<ActionResult<IEnumerable<Post>>> GetPosts([FromQuery] PaginationFilter paginationFilter,
+            [FromQuery] PostsFilter postsFilter, [FromQuery] SortingInfo sortingInfo)
         {
-            return await _context.Posts.ToListAsync();
+            // we re-create the filters to perform internal validation (e.g. offset is greater than or equal to 0)
+            var validPaginationFilter = new PaginationFilter(paginationFilter.Offset, paginationFilter.Limit);
+            var validPostsFilter = new PostsFilter(postsFilter.User, postsFilter.Language);
+            var validSortingInfo = new SortingInfo(sortingInfo.SortBy, sortingInfo.Order);
+
+            // we execute filters and get total results
+            IQueryable<Post> postsQueryable = _context.Posts
+                .Where(p => validPostsFilter.User == null ? true : p.AuthorId == validPostsFilter.User)
+                .Where(p => validPostsFilter.Language == null ? true : p.Language == validPostsFilter.Language);
+            int total = await postsQueryable.CountAsync();
+
+            // now pagination
+            postsQueryable = postsQueryable
+                .Skip(validPaginationFilter.Offset)
+                .Take(validPaginationFilter.Limit);
+
+            // sorting...
+            // at this point the name of the property has been validated to exist
+            if (validSortingInfo.Order.Equals("asc"))
+                postsQueryable = postsQueryable.OrderBy(p => EF.Property<object>(p, validSortingInfo.SortBy));
+            else
+                postsQueryable = postsQueryable.OrderByDescending(p => EF.Property<object>(p, validSortingInfo.SortBy));
+
+            // and get the posts!!
+            IEnumerable<Post> posts = await postsQueryable.ToListAsync();
+
+            return Ok(new PaginatedResponse<Post>(posts, "api/posts/",
+                validPaginationFilter.Limit, total, validPaginationFilter.Offset));
         }
 
         // GET: api/Posts/5

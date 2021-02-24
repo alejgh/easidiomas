@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Confluent.Kafka;
 
-namespace PostsService.Deserializers
+namespace PostsService.Kafka.Deserializers
 {
     /// <summary>
     /// Custom deserializer to parse lists of strings received from kafka.

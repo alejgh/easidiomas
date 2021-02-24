@@ -37,7 +37,7 @@ namespace PostsService.Data
         /// Adds seed data to the database.
         ///
         /// This method should only be used for testing/development purposes. It reads
-        /// the posts from the devposts.json files, and adds them to the database if
+        /// the posts from the devposts.json file, and adds them to the database if
         /// needed.
         /// </summary>
         /// <param name="modelBuilder">ModelBuilder instance </param>

@@ -1,7 +1,7 @@
 ﻿using System;
 using Confluent.Kafka;
 
-namespace PostsService.Deserializers
+namespace PostsService.Kafka.Deserializers
 {
     /// <summary>
     /// Custom deserializer to parse booleans from Kafka.
