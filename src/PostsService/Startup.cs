@@ -12,7 +12,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NLog.Config;
+using NLog.Extensions.Logging;
 using NLog.Targets;
+using NLog.Web;
+using PostsService.Consumers;
 using PostsService.Kafka;
 
 namespace PostsService
@@ -40,7 +43,7 @@ namespace PostsService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -62,11 +65,15 @@ namespace PostsService
 
         private void ConfigureKafka(IServiceCollection services)
         {
+            // create producers
             services.AddSingleton<KafkaClientHandle>();
             services.AddSingleton<KafkaProducer<long, string>>();   // communication with services: ("post_id", "text")
-            services.AddSingleton<KafkaProducer<string, string>>(); // logs ("service_name", "log")
-            services.AddHostedService<KafkaConsumer>();             // listening to
-            services.AddScoped<KafkaLoggerTarget>();
+            services.AddSingleton<KafkaProducer<string, string>>(); // logs: ("service_name", "log")
+
+            // create consumers of messages from text processing systems
+            services.AddHostedService<LanguageDetectionConsumer>();
+            services.AddHostedService<OffensiveTextDetectionConsumer>();
+            services.AddHostedService<TopicsConsumer>();
         }
 
         private void ConfigureLogging(IServiceCollection services)

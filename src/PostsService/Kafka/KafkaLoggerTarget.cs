@@ -29,28 +29,16 @@ namespace PostsService.Kafka
 
         protected override async Task WriteAsyncTask(LogEventInfo logEvent, CancellationToken cancellationToken)
         {
-
             // Using RenderLogEvent will allow NLog-Target to make optimal reuse of StringBuilder-buffers.  
             string topic = base.RenderLogEvent(this.Topic, logEvent);
             string key = base.RenderLogEvent(this.Key, logEvent);
             string msg = base.RenderLogEvent(this.Layout, logEvent);
 
-
-            try
+            await producer.ProduceAsync(topic, new Message<string, string>()
             {
-                await producer.ProduceAsync(topic, new Message<string, string>()
-                {
-                    Key = key,
-                    Value = msg
-                });
-            }
-            catch (Exception ex)
-            {
-                InternalLogger.Error(ex, $"kafka published error.");
-            }
-            finally
-            {
-            }
+                Key = key,
+                Value = msg
+            });
         }
     }
 }

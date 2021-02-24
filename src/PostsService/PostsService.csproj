@@ -15,5 +15,7 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Kafka\" />
+    <Folder Include="Consumers\" />
+    <Folder Include="Deserializers\" />
   </ItemGroup>
 </Project>
