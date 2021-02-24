@@ -10,6 +10,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Confluent.Kafka" Version="1.5.3" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.10.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,5 +26,7 @@
     <Folder Include="Kafka\" />
     <Folder Include="Consumers\" />
     <Folder Include="Deserializers\" />
+    <Folder Include="Model\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Config;
 using NLog.Targets;
 using PostsService.Consumers;
+using PostsService.Data;
 using PostsService.Kafka;
 
 namespace PostsService
@@ -21,6 +22,7 @@ namespace PostsService
             ConfigureKafka(services);
             ConfigureLogging(services);
 
+            services.AddDbContext<DataContext>();
             services.AddControllers();
         }
 
@@ -29,6 +31,13 @@ namespace PostsService
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var services = serviceScope.ServiceProvider;
+                var context = services.GetRequiredService<DataContext>();
+                context.Database.EnsureDeleted(); // for testing purposes
+                context.Database.EnsureCreated();
+            }
 
             app.UseRouting();
 

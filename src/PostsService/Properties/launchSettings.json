@@ -20,7 +20,7 @@
     "PostsService": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/Example",
+      "launchUrl": "api/Posts",
       "applicationUrl": "http://localhost:5002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
