@@ -2,6 +2,7 @@ version: "3.8"
 services:
   zookeeper:
     image: wurstmeister/zookeeper
+    container_name: zookeeper
     ports:
       - "2181:2181"
     networks:
@@ -9,6 +10,7 @@ services:
 
   kafka:
     image: wurstmeister/kafka
+    container_name: kafka
     ports:
       - "9092:9092"
     expose:
@@ -25,6 +27,7 @@ services:
   
   topicmodeling:
     build: ../src/topicmodelingservice/
+    container_name: topicmodelingservice
     ports:
       - "5001:5001"
     depends_on:
@@ -39,18 +42,22 @@ services:
   
   authenticationservice:
     build: ../src/authenticationservice/
+    container_name: authservice
+    environment: 
+      SERVER_PORT: "5000"
 
   apigateway:
     build: ../src/apigateway/
-    depends_on:
-      - authenticationservice
+    container_name: apigateway
     ports:
-      - "5020:8080"
+      - "8080:5000"
     environment: 
-      AUTH_SERVICE_ADDRESS: "http://authenticationservice:50000"
+      SERVER_PORT: "5000"
+      AUTH_SERVICE_ADDRESS: "authservice:5000"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:$ELK_VERSION
+    container_name: elasticsearch
     volumes:
       - type: bind
         source: ./config/elasticsearch.yml
@@ -71,6 +78,7 @@ services:
 
   logstash:
     image: docker.elastic.co/logstash/logstash:$ELK_VERSION
+    container_name: logstash
     ports:
       - "5044:5044"
       - "5000:5000"
@@ -95,6 +103,7 @@ services:
 
   kibana:
     image: docker.elastic.co/kibana/kibana:$ELK_VERSION
+    container_name: kibana
     ports:
       - "5601:5601"
     volumes:
