@@ -41,24 +41,24 @@ services:
       POSTS_SERVICE_ENDPOINT: "posts_service:8888/soapws/posts.wsdl"
 
   postsservice:
-    build: ../src/PostsService/
+    build: ../src/postsservice/
     ports:
       - "5002:80"
     depends_on:
       - kafka
-      - posts_db
+      - postgres_db
     networks:
       - event_bus
       - postgres
     environment:
       KAFKA_ENDPOINT: "kafka:9092"
-      POSTGRES_ENDPOINT: "posts_db"
+      POSTGRES_ENDPOINT: "postgres_db"
       POSTGRES_PORT: "5432"
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASS: ${POSTGRES_PASS}
       POSTGRES_DB: ${POSTGRES_DB}
   
-  posts_db:
+  postgres_db:
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
