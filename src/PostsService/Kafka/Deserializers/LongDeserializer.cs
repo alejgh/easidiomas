@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Confluent.Kafka;
 
 namespace PostsService.Kafka.Deserializers
@@ -15,7 +16,8 @@ namespace PostsService.Kafka.Deserializers
     {
         public long Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
         {
-            return Convert.ToInt64(data.ToArray());
+            var bytes = data.ToArray();
+            return BitConverter.ToInt64(bytes.Reverse().ToArray());
         }
     }
 }

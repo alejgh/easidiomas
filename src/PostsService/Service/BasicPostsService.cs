@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PostsService.Data;
+using PostsService.Kafka;
 using PostsService.Model;
 using PostsService.Wrappers;
 
@@ -26,6 +28,7 @@ namespace PostsService.Service
         {
             _logger.LogDebug($"Creating post from service: {post}");
             _context.Posts.Add(post);
+
             return _context.SaveChangesAsync();
         }
 
@@ -92,17 +95,26 @@ namespace PostsService.Service
         }
 
         /// <inheritdoc/>
+        public Task UpdatePost(Post post)
+        {
+            _logger.LogDebug($"Updating post from service: {post}");
+
+            // the following values shouldn't be updated by a user
+            post.AuthorId = post.AuthorId;
+            post.CreatedDate = post.CreatedDate;
+
+            _context.Entry(post).State = EntityState.Modified;
+            return _context.SaveChangesAsync();
+        }
+
+        /// <inheritdoc/>
         public Task UpdatePost(Post originalPost, Post finalPost)
         {
             _logger.LogDebug($"Updating post from service: {finalPost}");
 
-            // the following values shouldn't be updated by a user
-            finalPost.AuthorId = originalPost.AuthorId;
-            finalPost.CreatedDate = originalPost.CreatedDate;
-
             _context.Entry(originalPost).State = EntityState.Detached;
-            _context.Entry(finalPost).State = EntityState.Modified;
-            return _context.SaveChangesAsync();
+
+            return UpdatePost(finalPost);
         }
     }
 }

@@ -22,6 +22,8 @@ namespace PostsService.Service
 
         public Task<bool> PostExists(long id);
 
+        public Task UpdatePost(Post post);
+
         public Task UpdatePost(Post originalPost, Post finalPost);
 
     }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PostsService.Kafka;
 using PostsService.Model;
 using PostsService.Service;
 using PostsService.Wrappers;
@@ -14,13 +16,16 @@ namespace PostsService.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly ILogger<PostsController> logger;
+        private readonly ILogger<PostsController> _logger;
         private readonly IPostsService _service;
+        private readonly KafkaProducer<long, string> _producer;
 
-        public PostsController(IPostsService service, ILogger<PostsController> logger)
+        public PostsController(IPostsService service, ILogger<PostsController> logger,
+            KafkaProducer<long, string> producer)
         {
             _service = service;
-            this.logger = logger;
+            _logger = logger;
+            _producer = producer;
         }
 
         // GET: api/Posts
@@ -28,18 +33,18 @@ namespace PostsService.Controllers
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts([FromQuery] PaginationFilter paginationFilter,
             [FromQuery] PostsFilter postsFilter, [FromQuery] SortingInfo sortingInfo)
         {
-            logger.LogInformation("GET posts has been called");
+            _logger.LogInformation("GET posts has been called");
 
             // we re-create the filters to perform internal validation (e.g. offset is greater than or equal to 0)
             var validPaginationFilter = new PaginationFilter(paginationFilter.Offset, paginationFilter.Limit);
             var validPostsFilter = new PostsFilter(postsFilter.User, postsFilter.Language);
             var validSortingInfo = new SortingInfo(sortingInfo.SortBy, sortingInfo.Order);
 
-            logger.LogInformation("Calling service to retrieve list of posts and total count...");
+            _logger.LogInformation("Calling service to retrieve list of posts and total count...");
             IEnumerable<Post> posts = await _service.GetPosts(validPaginationFilter, validPostsFilter, validSortingInfo);
             int total = await _service.GetPostsCount(validPostsFilter);
-            logger.LogDebug($"Posts fetched: {posts}");
-            logger.LogDebug($"Total count: {total}");
+            _logger.LogDebug($"Posts fetched: {posts}");
+            _logger.LogDebug($"Total count: {total}");
 
             return Ok(new PaginatedResponse<Post>(posts, "api/posts/",
                 validPaginationFilter.Limit, total, validPaginationFilter.Offset));
@@ -49,18 +54,18 @@ namespace PostsService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(long id)
         {
-            logger.LogInformation($"GET post with id '{id}' has been called");
+            _logger.LogInformation($"GET post with id '{id}' has been called");
 
-            logger.LogInformation("Calling service to retrieve post...");
+            _logger.LogInformation("Calling service to retrieve post...");
             Post post = await _service.GetPost(id);
 
             if (post == null)
             {
-                logger.LogDebug("Post wasn't found, returning 404");
+                _logger.LogDebug("Post wasn't found, returning 404");
                 return NotFound();
             }
 
-            logger.LogDebug($"Post was found: {post}");
+            _logger.LogDebug($"Post was found: {post}");
             return Ok(post);
         }
 
@@ -69,17 +74,17 @@ namespace PostsService.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(long id, Post post)
         {
-            logger.LogInformation($"PUT for post with id '{id} has been called with data: {post}");
+            _logger.LogInformation($"PUT for post with id '{id} has been called with data: {post}");
 
             if (id != post.Id) return BadRequest();
 
-            logger.LogInformation($"Calling service to fetch post with id '{id}'");
+            _logger.LogInformation($"Calling service to fetch post with id '{id}'");
             Post originalPost = await _service.GetPost(id);
             if (originalPost == null) return NotFound();
 
             try
             {
-                logger.LogInformation("Calling service to update post...");
+                _logger.LogInformation("Calling service to update post...");
                 await _service.UpdatePost(originalPost, post);
             }
             catch (DbUpdateConcurrencyException)
@@ -96,15 +101,15 @@ namespace PostsService.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
-            logger.LogInformation($"POST for post has been called with data: {post}");
+            _logger.LogInformation($"POST for post has been called with data: {post}");
 
             // TODO: verificar cómo nos llega el passport del api entrypoint
-            logger.LogDebug("Retrieving user id from headers");
+            _logger.LogDebug("Retrieving user id from headers");
             long userID = -1;
             if (Request.Headers.TryGetValue("passport.userID", out var passportUserID)) {
                 userID = Convert.ToInt64(passportUserID);
             }
-            logger.LogDebug($"User id is '{userID}'");
+            _logger.LogDebug($"User id is '{userID}'");
             if (userID < 0) return BadRequest();
 
             // auto created fields
@@ -113,8 +118,15 @@ namespace PostsService.Controllers
             post.Likes = 0;
             post.Id = 0;
 
-            logger.LogInformation("Calling service to create post...");
+            _logger.LogInformation("Calling service to create post...");
             await _service.CreatePost(post);
+
+            _logger.LogDebug($"Notifying Kafka queue of new post");
+            _producer.Produce("posts", new Message<long, string>()
+            {
+                Key = post.Id,
+                Value = post.Content
+            });
 
             return CreatedAtAction("GetPost", new { id = post.Id }, post);
         }
@@ -123,24 +135,24 @@ namespace PostsService.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(long id)
         {
-            logger.LogInformation($"DELETE for post with id '{id}' has been called");
+            _logger.LogInformation($"DELETE for post with id '{id}' has been called");
 
             // TODO: verificar cómo nos llega el passport del api entrypoint
-            logger.LogDebug("Retrieving user role from headers");
+            _logger.LogDebug("Retrieving user role from headers");
             string role = "USER";
             if (Request.Headers.TryGetValue("passport.userRole", out var passportUserRole))
             {
                 role = passportUserRole;
             }
 
-            logger.LogDebug($"User role is '{role}'");
+            _logger.LogDebug($"User role is '{role}'");
 
             if (!role.ToUpper().Equals("ADMIN")) return Unauthorized();
 
             Post post = await _service.GetPost(id);
             if (post == null) return NotFound();
 
-            logger.LogInformation("Calling service to delete post...");
+            _logger.LogInformation("Calling service to delete post...");
             await _service.DeletePost(post);
             return NoContent();
         }

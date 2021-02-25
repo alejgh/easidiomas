@@ -13,27 +13,26 @@ namespace PostsService.Kafka.Deserializers
     /// if there are more strings in the array, another integer specifying
     /// the length of the next string and so on...
     /// </summary>
-    public class ArrayDeserializer : IDeserializer<IEnumerable<string>>
+    public class ArrayDeserializer : IDeserializer<string[]>
     {
 
-        public IEnumerable<string> Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
+        public string[] Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
         {
             if (isNull) return null;
 
             byte[] bytes = data.ToArray();
-            int numElements = Convert.ToInt16(bytes[0]);
+            IList<string> res = new List<string>();
             int i = 1;
-
-            IEnumerable<string> res = new List<string>();
             while (i < bytes.Length)
             {
-                int numBytesString = bytes[1];
-                string element = Convert.ToBase64String(bytes.Skip(i + 1).Take(numBytesString).ToArray());
-                res.Append(element);
+                int numBytesString = bytes[i];
+                i += 1;
+                string element = System.Text.Encoding.UTF8.GetString(bytes.Skip(i).Take(numBytesString).ToArray());
+                res.Add(element);
                 i += numBytesString;
             }
 
-            return res;
+            return res.ToArray();
         }
     }
 }

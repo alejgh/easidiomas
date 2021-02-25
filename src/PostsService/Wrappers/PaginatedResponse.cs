@@ -17,7 +17,7 @@ namespace PostsService.Wrappers
             {
                 Self = $"{baseEndpoint}?offset={offset}&limit={count}";
                 First = $"{baseEndpoint}?offset=0&limit={count}";
-                Last = $"{baseEndpoint}?offset={Math.Floor((double) total / count)}&limit={count}";
+                Last = $"{baseEndpoint}?offset={Math.Max(0, total - count)}&limit={count}";
 
                 if (offset - count >= 0) Prev = $"{baseEndpoint}?offset={offset - count}&limit={count}";
                 if (offset + count < total) Next = $"{baseEndpoint}?offset={offset + count}&limit={count}";
