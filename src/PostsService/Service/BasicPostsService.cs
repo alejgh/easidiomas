@@ -55,10 +55,13 @@ namespace PostsService.Service
             _logger.LogDebug($"Data filters: {postsFilter}");
             _logger.LogDebug($"Sorting parameters: {sortingInfo}");
 
+            IList<string> languages = new List<string>();
+            if (postsFilter.Language != null ) languages = postsFilter.Language.Split('|');
+
             // we execute filters and get total results
             IQueryable<Post> postsQueryable = _context.Posts
                 .Where(p => postsFilter.User == null ? true : p.AuthorId == postsFilter.User)
-                .Where(p => postsFilter.Language == null ? true : p.Language == postsFilter.Language);
+                .Where(p => postsFilter.Language == null ? true : languages.Contains(p.Language));
 
             // now pagination
             postsQueryable = postsQueryable
