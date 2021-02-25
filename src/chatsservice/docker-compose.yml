@@ -1,16 +1,16 @@
 version: '3'
 services:
-  chats_db:
+  mongo:
     image: 'mongo'
     ports:
-      - 27017:27017
+      - "27017:27017"
       
-  chats_service:
+  chatsservice:
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - 5000:5000
+      - "5000:5000"
     environment:
       DB_HOST: "chats_db"
       DB_PORT: "27017"

@@ -1,9 +1,9 @@
 version: '3'
 services:
-  chats_db:
+  mongo:
     image: 'mongo'
 
-  chats_service:
+  chatsservice:
     build: ../src/chats
     environment:
       DB_HOST: "chats_db"
