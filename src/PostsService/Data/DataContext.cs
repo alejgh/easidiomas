@@ -26,7 +26,12 @@ namespace PostsService.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             logger.LogDebug("Configuring connection to Postgres...");
-            optionsBuilder.UseNpgsql(this.config["POSTGRES_CONNECTION"]);
+
+            string connectionString = $"Host={config["POSTGRES_ENDPOINT"]};Port={config["POSTGRES_PORT"]};" +
+                $"Username={config["POSTGRES_USER"]};Password={config["POSTGRES_PASS"]};Database={config["POSTGRES_DB"]};";
+            logger.LogDebug($"Connecting with following data: {connectionString}");
+
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

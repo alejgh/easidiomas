@@ -40,13 +40,33 @@ services:
   postsservice:
     build: ../src/PostsService/
     ports:
-      - "80:80"
+      - "5002:80"
     depends_on:
       - kafka
+      - posts_db
     networks:
       - event_bus
+      - postgres
     environment:
       KAFKA_ENDPOINT: "kafka:9092"
+      POSTGRES_ENDPOINT: "posts_db"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+  
+  posts_db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:$ELK_VERSION
@@ -114,7 +134,10 @@ networks:
     driver: bridge
   event_bus:
     driver: bridge
+  postgres:
+    driver: bridge
 
 
 volumes:
   elasticsearch:
+  postgres:
