@@ -1,0 +1,46 @@
+﻿[
+  {
+    "Id":  1,
+    "AuthorId": 1,
+    "CreatedDate":  "2021/2/12 15:59:27",
+    "Content": "English vocabulary: POOR\n broke\n needy\n bad off \n in need \n hard up \n dirt poor\n destitute\n bankrupt \n flat broke \n insolvent \n penniless\n moneyless\n stone broke\n impecunious\n impoverished\n down-and-out\n poverty - stricken\n strapped for cash",
+    "IsOffensive": false,
+    "Language": "en",
+    "Likes":  7,
+    "Topics": ["poor", "vocabulary", "broke"]
+  },
+  {
+
+    "Id": 2,
+    "AuthorId": 2,
+    "CreatedDate": "2021/2/23 14:30:57",
+    "Content": "26일 그랜드오픈하는 여의도 더현대서울 백화점 내부설계가 최강이네.\n공중정원같은 식당층과 대형 분수, 층고 높고 조경 좋고..기분좋은 공간을 만들었다.\n금돼지 몽탄 에그슬럿 뜨락 신상맛집 다 입점했고 인스타스타 OVN과 블루보틀 백화점 첫 입성.\n현백 자체 스타 브랜드 와인웍스 3호점도!",
+    "IsOffensive": false,
+    "Language": "ko",
+    "Likes": 15,
+    "Topics": ["더현대서울", "백화점"]
+  },
+  {
+
+    "Id": 3,
+    "AuthorId": 1,
+    "CreatedDate": "2021/2/2 7:20:05",
+    "Content": "English Vocabulary: MAGIC\nhex\nspell\ncharm\ncurse\ndevilry\nvoodoo\nsorcery\nwitching\nwitchery\nwizardry\nincantation\nspellworking\nenchantment",
+    "IsOffensive": false,
+    "Language": "en",
+    "Likes": 25,
+    "Topics": ["magic", "vocabulary", "enchantment"]
+  },
+  {
+
+    "Id": 4,
+    "AuthorId": 3,
+    "CreatedDate": "2021/1/25 19:24:37",
+    "Content": "Desde que he ido a vivir a España escucho mucho la palabra siesta.\nCreo que es...",
+    "IsOffensive": false,
+    "Language": "es",
+    "Likes": 21,
+    "Topics": ["siesta", "España"]
+  }
+
+]
