@@ -55,6 +55,7 @@ namespace PostsService.Service
             _logger.LogDebug($"Data filters: {postsFilter}");
             _logger.LogDebug($"Sorting parameters: {sortingInfo}");
 
+            // handling multiple languages as a filter (e.g. 'en|ko|es')
             IList<string> languages = new List<string>();
             if (postsFilter.Language != null ) languages = postsFilter.Language.Split('|');
 
