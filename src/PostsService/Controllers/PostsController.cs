@@ -76,11 +76,14 @@ namespace PostsService.Controllers
         {
             _logger.LogInformation($"PUT for post with id '{id} has been called with data: {post}");
 
-            if (id != post.Id) return BadRequest();
+            long? userID = RetrieveUserIdFromPassport();
+            if (userID == null) return BadRequest();
+            else if (id != post.Id) return BadRequest();
 
             _logger.LogInformation($"Calling service to fetch post with id '{id}'");
             Post originalPost = await _service.GetPost(id);
             if (originalPost == null) return NotFound();
+            else if (userID.Value != originalPost.AuthorId) return Unauthorized(); // a user can't modify posts made by others!
 
             try
             {
@@ -103,17 +106,11 @@ namespace PostsService.Controllers
         {
             _logger.LogInformation($"POST for post has been called with data: {post}");
 
-            // TODO: verificar cómo nos llega el passport del api entrypoint
-            _logger.LogDebug("Retrieving user id from headers");
-            long userID = -1;
-            if (Request.Headers.TryGetValue("passport.userID", out var passportUserID)) {
-                userID = Convert.ToInt64(passportUserID);
-            }
-            _logger.LogDebug($"User id is '{userID}'");
-            if (userID < 0) return BadRequest();
+            long? userID = RetrieveUserIdFromPassport();
+            if (userID == null) return BadRequest();
 
             // auto created fields
-            post.AuthorId = userID;
+            post.AuthorId = userID.Value;
             post.CreatedDate = DateTime.Now;
             post.Likes = 0;
             post.Id = 0;
@@ -155,6 +152,19 @@ namespace PostsService.Controllers
             _logger.LogInformation("Calling service to delete post...");
             await _service.DeletePost(post);
             return NoContent();
+        }
+
+        private long? RetrieveUserIdFromPassport()
+        {
+            // TODO: verificar cómo nos llega el passport del api entrypoint
+            _logger.LogDebug("Retrieving user id from headers");
+            long? userID = null;
+            if (Request.Headers.TryGetValue("passport.userID", out var passportUserID))
+            {
+                userID = Convert.ToInt64(passportUserID);
+            }
+            _logger.LogDebug($"User id is '{userID}'");
+            return userID;
         }
     }
 }

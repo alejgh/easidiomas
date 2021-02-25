@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PostsService.Data;
-using PostsService.Kafka;
 using PostsService.Model;
 using PostsService.Wrappers;
 
