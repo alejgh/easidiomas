@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -30,7 +31,20 @@ namespace PostsService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseSerialColumns();
             SeedData(modelBuilder);
+        }
+
+        public void DetachAllEntities()
+        {
+            var changedEntriesCopy = this.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added ||
+                            e.State == EntityState.Modified ||
+                            e.State == EntityState.Deleted)
+                .ToList();
+
+            foreach (var entry in changedEntriesCopy)
+                entry.State = EntityState.Detached;
         }
 
         /// <summary>

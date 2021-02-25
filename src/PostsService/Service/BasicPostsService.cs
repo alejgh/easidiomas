@@ -92,10 +92,16 @@ namespace PostsService.Service
         }
 
         /// <inheritdoc/>
-        public Task UpdatePost(Post post)
+        public Task UpdatePost(Post originalPost, Post finalPost)
         {
-            _logger.LogDebug($"Updating post from service: {post}");
-            _context.Entry(post).State = EntityState.Modified;
+            _logger.LogDebug($"Updating post from service: {finalPost}");
+
+            // the following values shouldn't be updated by a user
+            finalPost.AuthorId = originalPost.AuthorId;
+            finalPost.CreatedDate = originalPost.CreatedDate;
+
+            _context.Entry(originalPost).State = EntityState.Detached;
+            _context.Entry(finalPost).State = EntityState.Modified;
             return _context.SaveChangesAsync();
         }
     }
