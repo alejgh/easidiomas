@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import {AppContext} from '../App';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import Conversation from './items/Chat';
+import Chat from './items/Chat';
 
 export default function ChatsScreen({navigation}) {
 
@@ -39,7 +39,7 @@ export default function ChatsScreen({navigation}) {
         keyExtractor={(item) => item.id} 
         data={chats} 
         renderItem={({ item }) => ( 
-            <Conversation user={item.user} navigation={navigation}/>
+            <Chat user={item.user} navigation={navigation} sreen={'Room'}/>
         )}
       />
 

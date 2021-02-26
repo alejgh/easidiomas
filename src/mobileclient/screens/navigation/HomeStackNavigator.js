@@ -2,8 +2,8 @@ import React, { useState,useEffect } from 'react';
 import { Text, StyleSheet,TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../HomeScreen';
 import NewPostScreen from '../home/NewPostScreen';
+import HomeTabNavigator from './HomeTabNavigator';
 
 
 export const navigationRef = React.createRef();
@@ -32,7 +32,9 @@ export default function HomeStackNavigator({navigation}){
                 headerStyle: {
                     backgroundColor: '#1b2836',
                     borderBottomWidth: 1,
-                    borderBottomColor: '#435060'
+                    borderBottomColor: '#435060',
+                    elevation:0,
+                    borderBottomWidth:0
 
                 },
                 headerTintColor: '#fff',
@@ -41,7 +43,7 @@ export default function HomeStackNavigator({navigation}){
                 }
             }}>   
             <Stack.Screen name="Home">
-                {props => <HomeScreen {...props} parentNavigation={navigation}/>}
+                {props => <HomeTabNavigator {...props} parentNavigation={navigation}/>}
             </Stack.Screen>      
             <Stack.Screen name="New Post"  options={{
                     headerRight: () => (

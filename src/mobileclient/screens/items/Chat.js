@@ -11,18 +11,18 @@ import {
 
 export default function Chat(props){
 
-    const {navigation} = props;
+    const {navigation,sreen} = props;
     const {name,username,avatar} = props.user;
     const [photo,setPhoto] = useState({ uri: avatar});
     const [time,setTime] = useState('1hr');
 
-    const navigateToConversation = function(){
-        navigation.navigate('Room',{user:props.user})
+    const navigateToScreen = function(){
+        navigation.navigate(sreen,{user:props.user})
     }
 
 
     return(
-      <TouchableHighlight onPress={() => navigateToConversation(true)} >
+      <TouchableHighlight onPress={() => navigateToScreen(true)} >
         <View style={styles.container}>
             <View style={styles.innerContainer}>
               <View style={styles.photoContainer}>

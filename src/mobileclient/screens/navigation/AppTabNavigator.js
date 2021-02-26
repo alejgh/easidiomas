@@ -4,9 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import ChatsStackNavigator from './ChatsStackNavigator';
-import SearchScreen from '../SearchScreen';
-import HomeStackNavigator from './HomeStackNavigator';
+import SearchStackNavigator from './SearchStackNavigator';
 import ProfileStackNavigator from './ProfileStackNavigator';
+import HomeStackNavigator from './HomeStackNavigator';
 
 
 const Tab = createBottomTabNavigator();
@@ -60,7 +60,7 @@ export default function AppTabNavigator({ navigation }) {
         }}
       >
           <Tab.Screen name="Home" component={HomeStackNavigator} />
-          <Tab.Screen name="Search" component={SearchScreen} />
+          <Tab.Screen name="Search" component={SearchStackNavigator} />
           <Tab.Screen name="Chats" component={ChatsStackNavigator} />
           <Tab.Screen name="Profile" component={ProfileStackNavigator}  listeners={({ navigation, route }) => ({
               tabPress: e => {

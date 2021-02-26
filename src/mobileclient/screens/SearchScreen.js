@@ -1,97 +1,56 @@
-
-import React, { useEffect, useState,useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import SearchTabNavigator from './navigation/SearchTabNavigator';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import FiltersScreen from './search/FiltersScreen';
-
-export const navigationRef = React.createRef();
-
-export function navigate(name, params) {
-    navigationRef.current?.navigate(name, params);
-}
-
+import React, { useEffect, useState, useContext } from 'react';
+import {AppContext} from '../App';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import Chat from './items/Chat';
 
 export default function SearchScreen({navigation}) {
 
-    const [search,setSearch] = useState('');
-    const [lupa,setLupa] = useState(styles.leftIconContainerStyle);
-    const inputEl = useRef(null);
+  const context = useContext(AppContext);
 
-    const updateSearch = (search) => {
-       setSearch(search)
-    };
+  const [chats, setChats] = useState([]);
 
-
-    const Stack = createStackNavigator();
-
-    function FiltersBtn() {
-        return (
-            <TouchableOpacity onPress={() => navigate('Search Options')}>
-                <Ionicons name={'settings-outline'} size={20} color={'white'} style={styles.configBtn}/>
-            </TouchableOpacity>
-        );
+  const getChats = async function(){
+    let response = await (await fetch('http://localhost:5000/api/mock/chats')).json();
+    let newChats = [];
+    for(let chat in response){
+      let user1 = await getUser(response[chat].user1)
+      let user2 = await getUser(response[chat].user2)
+      if(context.user.username == user1.username)
+        newChats.push({id:response[chat].id,key:response[chat].id,user:user2})
+      else
+        newChats.push({id:response[chat].id,key:response[chat].id,user:user1})
     }
+    setChats(newChats)
+  }
+  
+  const getUser = async function(url){
+    return (await fetch('http://localhost:5000/'+url)).json();
+  }
 
 
-    
+  useEffect(()=>{
+    getChats()
+  },[])
 
   return (
     <View style={styles.container}>
+      <FlatList 
+        numColumns={1}
+        keyExtractor={(item) => item.id} 
+        data={chats} 
+        renderItem={({ item }) => ( 
+            <Chat user={item.user} navigation={navigation} sreen={'Room'}/>
+        )}
+      />
 
-        <NavigationContainer independent  initialRouteName="Search" ref={navigationRef}>
-            <Stack.Navigator screenOptions={{
-                headerStyle: {
-                    backgroundColor: '#1b2836',
-                    elevation:0,
-                    borderBottomWidth:0
-
-                },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                }
-            }}>                
-                <Stack.Screen name="Search" component={SearchTabNavigator}  options={{
-                    headerRight: () => (
-                        <FiltersBtn/>
-                    )
-                }}/>
-                <Stack.Screen name="Search Options" component={FiltersScreen}/>
-            </Stack.Navigator>
-        </NavigationContainer>
     </View>
   );
 }
 
-
-
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor: '#1b2836'
-    },
-    searchContainer: {
-        paddingTop:30,
-        backgroundColor: '#1b2836'
-    },
-    inputContainerStyle:{
-        backgroundColor: '#1b2836'
-    },
-    search: {
-        borderRadius:50,
-        backgroundColor: '#435060',
-        paddingLeft:15
-    },
-    leftIconContainerStyle:{
-        display:'none',
-        backgroundColor: '#435060',
-    },
-    configBtn:{
-        paddingRight:15
-    }
-  });
-
-
+  container: {
+    flex: 1,
+    backgroundColor: '#1b2836',
+    justifyContent: 'center'
+  }
+});

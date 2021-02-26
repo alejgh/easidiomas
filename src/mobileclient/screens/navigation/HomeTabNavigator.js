@@ -1,9 +1,12 @@
 import React, { useState,useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import MessagesScreen from '../ChatsScreen';
+import HomeScreen from '../HomeScreen';
 
-export default function SearchTabNavigator({navigation}){
+export default function HomeTabNavigator(props){
+
+  console.log(props)
+    const {parentNavigation,navigation} = props;
 
     const Tab = createMaterialTopTabNavigator();
 
@@ -23,8 +26,10 @@ export default function SearchTabNavigator({navigation}){
             backgroundColor: '#1b2836',
           },
         }} >
-          <Tab.Screen name="Results" component={MessagesScreen} />
-          <Tab.Screen name="For you" component={MessagesScreen} />
+          <Tab.Screen name="Posts">
+            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation}/>}
+          </Tab.Screen>
+          <Tab.Screen name="Learn" component={HomeScreen} />
         </Tab.Navigator>
     </NavigationContainer>
     )
