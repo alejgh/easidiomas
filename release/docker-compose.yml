@@ -39,6 +39,37 @@ services:
       KAFKA_INPUT_TOPIC: "posts"
       KAFKA_LOGGING_TOPIC: "service_logs"
       POSTS_SERVICE_ENDPOINT: "posts_service:8888/soapws/posts.wsdl"
+
+  postsservice:
+    build: ../src/postsservice/
+    ports:
+      - "5002:80"
+    depends_on:
+      - kafka
+      - postgres_db
+    networks:
+      - event_bus
+      - postgres
+    environment:
+      KAFKA_ENDPOINT: "kafka:9092"
+      POSTGRES_ENDPOINT: "postgres_db"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+  
+  postgres_db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
   
   texttospeech:
     build: ../src/texttospeechservice/
@@ -136,7 +167,10 @@ networks:
     driver: bridge
   event_bus:
     driver: bridge
+  postgres:
+    driver: bridge
 
 
 volumes:
   elasticsearch:
+  postgres:
