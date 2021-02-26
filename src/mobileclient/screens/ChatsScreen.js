@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import {AppContext} from '../App';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import Conversation from './items/Conversation';
+import Conversation from './items/Chat';
 
-export default function MessagesScreen({navigation}) {
+export default function ChatsScreen({navigation}) {
 
   const context = useContext(AppContext);
 

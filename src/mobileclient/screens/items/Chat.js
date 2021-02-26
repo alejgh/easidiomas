@@ -8,10 +8,8 @@ import {
   TouchableHighlight,
   TouchableOpacity, 
 } from 'react-native'
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import Entypo from 'react-native-vector-icons/Entypo'
 
-export default function Conversation(props){
+export default function Chat(props){
 
     const {navigation} = props;
     const {name,username,avatar} = props.user;
@@ -19,7 +17,7 @@ export default function Conversation(props){
     const [time,setTime] = useState('1hr');
 
     const navigateToConversation = function(){
-        navigation.navigate('Conversation')
+        navigation.navigate('Room',{user:props.user})
     }
 
 

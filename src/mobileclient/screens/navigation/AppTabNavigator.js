@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import MessagesStackNavigator from './MessagesStackNavigator';
+import ChatsStackNavigator from './ChatsStackNavigator';
 import SearchScreen from '../SearchScreen';
 import HomeStackNavigator from './HomeStackNavigator';
 import ProfileStackNavigator from './ProfileStackNavigator';
@@ -16,7 +16,7 @@ export const AppNavigationRef = React.createRef();
 export default function AppTabNavigator({ navigation }) {
     return (
     <NavigationContainer independent >
-        <Tab.Navigator initialRouteName="Home" ref={AppNavigationRef} screenOptions={({ route }) => ({
+        <Tab.Navigator initialRouteName="Chats" ref={AppNavigationRef} screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -25,7 +25,7 @@ export default function AppTabNavigator({ navigation }) {
             } else if (route.name === 'Search') {
               iconName = focused ? 'search' : 'search-outline';
             }
-            else if (route.name === 'Mesagges') {
+            else if (route.name === 'Chats') {
                 iconName = focused ? 'mail' : 'mail-outline';
             }
             else if (route.name === 'Profile') {
@@ -61,7 +61,7 @@ export default function AppTabNavigator({ navigation }) {
       >
           <Tab.Screen name="Home" component={HomeStackNavigator} />
           <Tab.Screen name="Search" component={SearchScreen} />
-          <Tab.Screen name="Mesagges" component={MessagesStackNavigator} />
+          <Tab.Screen name="Chats" component={ChatsStackNavigator} />
           <Tab.Screen name="Profile" component={ProfileStackNavigator}  listeners={({ navigation, route }) => ({
               tabPress: e => {
                 navigation.navigate('Profile',{user:DefaultUser,isOwner:true});

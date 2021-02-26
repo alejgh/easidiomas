@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import MessagesScreen from '../MessagesScreen';
+import MessagesScreen from '../ChatsScreen';
 
 export default function SearchTabNavigator({navigation}){
 

@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HeaderBackButton } from '@react-navigation/stack';
-import MessagesScreen from '../MessagesScreen';
-import ChatScreen from '../chat/ChatScreen';
+import RoomScreen from '../chat/RoomScreen';
+import ChatsScreen from '../ChatsScreen';
 
-export default function MessagesStackNavigator({navigation}){
+export default function ChatsStackNavigator({navigation}){
 
     const Stack = createStackNavigator();
 
     return(
-    <NavigationContainer independent  initialRouteName="Messages">
+    <NavigationContainer independent  initialRouteName="Chats">
         <Stack.Navigator
          screenOptions={{
             headerTintColor: '#fff',
@@ -23,11 +22,11 @@ export default function MessagesStackNavigator({navigation}){
                 borderBottomWidth:1
             },
           }}>
-            <Stack.Screen name="Messages">
-                {props => <MessagesScreen {...props} parentNavigation={navigation} />}
+            <Stack.Screen name="Chats">
+                {props => <ChatsScreen {...props} parentNavigation={navigation} />}
             </Stack.Screen>
-            <Stack.Screen name="Conversation">
-                {props => <ChatScreen {...props} parentNavigation={navigation} />}
+            <Stack.Screen name="Room">
+                {props => <RoomScreen {...props} parentNavigation={navigation} />}
             </Stack.Screen>
         </Stack.Navigator>
     </NavigationContainer>
