@@ -3,8 +3,9 @@ import {AppContext} from '../App';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Chat from './items/Chat';
 
-export default function ChatsScreen({navigation}) {
+export default function ChatsScreen({route,navigation}) {
 
+  console.log(route)
   const context = useContext(AppContext);
 
   const [chats, setChats] = useState([]);

@@ -1,15 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import RoomScreen from '../chat/RoomScreen';
 import ChatsScreen from '../ChatsScreen';
 
-export default function ChatsStackNavigator({navigation}){
+export const ChatNavigationRef = React.createRef();
+
+export default function ChatsStackNavigator({route,navigation}){
 
     const Stack = createStackNavigator();
+    const chatNavigation = useRef(ChatNavigationRef);
+  
+    if(route?.params?.startChat)
+        chatNavigation?.current?.current?.navigate('Room',{user:route.params.user});
+
 
     return(
-    <NavigationContainer independent  initialRouteName="Chats">
+    <NavigationContainer independent  initialRouteName="Chats" ref={ChatNavigationRef}>
         <Stack.Navigator
          screenOptions={{
             headerTintColor: '#fff',

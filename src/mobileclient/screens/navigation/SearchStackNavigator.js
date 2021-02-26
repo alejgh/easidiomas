@@ -54,11 +54,14 @@ export default function SearchStackNavigator({navigation}) {
                     fontWeight: 'bold',
                 }
             }}>                
-                <Stack.Screen name="Discover" component={SearchScreen}  options={{
+                <Stack.Screen name="Discover"options={{
                     headerRight: () => (
                         <FiltersBtn/>
                     )
-                }}/>
+                }}>
+                    {props=> <SearchScreen {...props} parentNavigation={navigation}/>
+                }
+                </Stack.Screen>
                 <Stack.Screen name="Search Options" component={FiltersScreen}/>
             </Stack.Navigator>
         </NavigationContainer>

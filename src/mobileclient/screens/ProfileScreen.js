@@ -11,7 +11,7 @@ import {
 
 export default function ProfileScreen(props) {
 
-    const {navigation,isOwner} = props;
+    const {parentNavigation,navigation,isOwner} = props;
     const {avatar,name,surname,username,learning,speaks} = props.user;
     const context = useContext(AppContext);
    
@@ -24,7 +24,7 @@ export default function ProfileScreen(props) {
     }
 
     const sendMessage = function(){
-      // TODO
+      parentNavigation.navigate('Chats',{startChat:true,user:props.user});
     }
 
 

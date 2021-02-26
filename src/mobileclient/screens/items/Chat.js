@@ -27,11 +27,9 @@ export default function Chat(props){
             <View style={styles.innerContainer}>
               <View style={styles.photoContainer}>
                 <View style={styles.innerPhotoContainer}>
-                  <TouchableOpacity>
                   <Image
                     source={photo}
                     style={styles.photo}/>
-                  </TouchableOpacity>
                 </View>
               </View>
               <View style={styles.info}>

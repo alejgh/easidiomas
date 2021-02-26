@@ -3,9 +3,11 @@ import {AppContext} from '../App';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Chat from './items/Chat';
 
-export default function SearchScreen({navigation}) {
+export default function SearchScreen(props) {
 
   const context = useContext(AppContext);
+
+  const {parentNavigation} = props;
 
   const [chats, setChats] = useState([]);
 
@@ -39,7 +41,7 @@ export default function SearchScreen({navigation}) {
         keyExtractor={(item) => item.id} 
         data={chats} 
         renderItem={({ item }) => ( 
-            <Chat user={item.user} navigation={navigation} sreen={'Room'}/>
+            <Chat user={item.user} navigation={parentNavigation} sreen={'Profile'}/>
         )}
       />
 

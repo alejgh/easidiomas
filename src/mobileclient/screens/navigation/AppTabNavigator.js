@@ -16,7 +16,7 @@ export const AppNavigationRef = React.createRef();
 export default function AppTabNavigator({ navigation }) {
     return (
     <NavigationContainer independent >
-        <Tab.Navigator initialRouteName="Chats" ref={AppNavigationRef} screenOptions={({ route }) => ({
+        <Tab.Navigator initialRouteName="Search" ref={AppNavigationRef} screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
