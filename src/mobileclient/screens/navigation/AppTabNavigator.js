@@ -6,15 +6,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MessagesStackNavigator from './MessagesStackNavigator';
 import SearchScreen from '../SearchScreen';
 import HomeStackNavigator from './HomeStackNavigator';
+import ProfileStackNavigator from './ProfileStackNavigator';
 
 
 const Tab = createBottomTabNavigator();
 
+export const AppNavigationRef = React.createRef();
   
-export  function TabMenuNavigator({ navigation }) {
+export default function AppTabNavigator({ navigation }) {
     return (
-    <NavigationContainer independent  >
-        <Tab.Navigator initialRouteName="Search" screenOptions={({ route }) => ({
+    <NavigationContainer independent >
+        <Tab.Navigator initialRouteName="Home" ref={AppNavigationRef} screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -60,9 +62,25 @@ export  function TabMenuNavigator({ navigation }) {
           <Tab.Screen name="Home" component={HomeStackNavigator} />
           <Tab.Screen name="Search" component={SearchScreen} />
           <Tab.Screen name="Mesagges" component={MessagesStackNavigator} />
-          <Tab.Screen name="Profile" component={HomeStackNavigator} />
+          <Tab.Screen name="Profile" component={ProfileStackNavigator}  listeners={({ navigation, route }) => ({
+              tabPress: e => {
+                navigation.navigate('Profile',{user:DefaultUser});
+              },
+            })}/>
         </Tab.Navigator>
     </NavigationContainer>
     );
   }
+
+
+  
+export const DefaultUser = {
+  id: 1,
+  name: 'Pablo',
+  surname: 'Menéndez Suárez',
+  learning: ['en', 'cn'],
+  speaks: 'es',
+  birthDate: '<long_time_since_epoch>',
+  avatar: '<url_del_avatar>'
+}
   

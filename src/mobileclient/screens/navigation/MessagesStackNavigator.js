@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/stack';
 import MessagesScreen from '../MessagesScreen';
-import ConversationScreen from '../ConversationScreen';
+import ChatScreen from '../chat/ChatScreen';
 
 export default function MessagesStackNavigator({navigation}){
 
@@ -27,7 +27,7 @@ export default function MessagesStackNavigator({navigation}){
                 {props => <MessagesScreen {...props} parentNavigation={navigation} />}
             </Stack.Screen>
             <Stack.Screen name="Conversation">
-                {props => <ConversationScreen {...props} parentNavigation={navigation} />}
+                {props => <ChatScreen {...props} parentNavigation={navigation} />}
             </Stack.Screen>
         </Stack.Navigator>
     </NavigationContainer>

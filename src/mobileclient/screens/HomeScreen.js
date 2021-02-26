@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Post from './items/Post';
 import randomWords from 'random-words'
+import { FloatingAction } from "react-native-floating-action";
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-export default function Home() {
+export default function Home(props) {
+  
+  const{parentNavigation,navigation} = props;
+
   const [people, setPeople] = useState([
     { name: 'shaun', id: '1' },
     { name: 'yoshi', id: '2' },
@@ -21,6 +26,13 @@ export default function Home() {
     { name: 'bowser', id: '14' },
   ]);
 
+  const actions = [
+    {
+      text: "Accessibility",
+      name: "bt_accessibility",
+      icon: <Ionicons name={'add-outline'}  size={25} color={'#fff'} />,
+      position: 1
+    },]
 
   return (
     <View style={styles.container}>
@@ -30,9 +42,19 @@ export default function Home() {
         keyExtractor={(item) => item.id} 
         data={people} 
         renderItem={({ item }) => ( 
-            <Post name={item.name} handle={"@"+item.name} post={randomWords({min: 18, max: 40}).join(" ")}/>
+            <Post parentNavigation={parentNavigation} name={item.name} handle={"@"+item.name} post={randomWords({min: 18, max: 40}).join(" ")}/>
         )}
       />
+
+      <FloatingAction
+          color={'#1DA1F2'}
+          animated={false}
+          actions={actions}
+          overrideWithAction
+          onPressItem={name => {
+            navigation.navigate("New Post");
+          }}
+        />
 
     </View>
   );

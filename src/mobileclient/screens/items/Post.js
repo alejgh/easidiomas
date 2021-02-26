@@ -13,7 +13,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 
 export default function Post(props){
 
-    const {post, name, handle, picture} = props
+    const {parentNavigation,post, name, handle, picture} = props
     const [photo,setPhoto] = useState({ uri: 'https://reactnative.dev/img/tiny_logo.png'});
     const [touched,setTouched] = useState(false);
     const [likes,setLikes] = useState(0);
@@ -22,11 +22,11 @@ export default function Post(props){
 
 
     const postPressed = function(pressed = false){
-        setTouched(pressed)
+      setTouched(pressed)
     }
 
     const like = function(pressed = false){
-        if (liked){ 
+      if (liked){ 
           setLiked(false)
           setLikes(likes-1)
         }else{
@@ -35,13 +35,23 @@ export default function Post(props){
         }
     }
 
+    const navigateToProfile = function(){
+      fetch('http://localhost:5000/api/mock')
+      .then((response) => response.json())
+      .then((data) =>{
+        parentNavigation.navigate("Profile",{user:data});
+      } )
+      .catch((error) => console.error(error))
+     
+    }
+
     return(
       <TouchableHighlight onPressIn={() => postPressed(true)} onPressOut={() => postPressed()}>
         <View style={styles.container}>
             <View style={styles.innerContainer}>
               <View style={styles.photoContainer}>
                 <View style={styles.innerPhotoContainer}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={navigateToProfile}>
                   <Image
                     source={photo}
                     style={styles.photo}/>
@@ -147,3 +157,4 @@ const styles = StyleSheet.create({
     marginLeft: 3
   }
 });
+

@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { StyleSheet,SafeAreaView } from 'react-native';
 
-export default function RoomScreen(props) {
+export default function ChatScreen(props) {
 
     const {parentNavigation} = props;
 

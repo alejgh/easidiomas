@@ -34,6 +34,7 @@ public class ChatDTO {
 	public void addMessage(Message message) {
 		message.setId(messagesDTO.size());
 		this.messagesDTO.add(message);
+		this.lastUpdated = System.currentTimeMillis();
 	}
 
 	public String getId() {

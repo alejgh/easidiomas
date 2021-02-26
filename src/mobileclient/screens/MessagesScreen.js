@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Conversation from './items/Conversation';
-import randomWords from 'random-words'
 
 export default function MessagesScreen({navigation}) {
   const [people, setPeople] = useState([

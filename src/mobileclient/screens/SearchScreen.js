@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SearchTabNavigator from './navigation/SearchTabNavigator';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import FiltersScreen from './FiltersScreen';
+import FiltersScreen from './search/FiltersScreen';
 
 export const navigationRef = React.createRef();
 
