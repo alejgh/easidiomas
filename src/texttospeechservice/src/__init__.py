@@ -43,6 +43,6 @@ def _setup_logging(kafka_endpoint, topic, service_key):
         logger.addHandler(logging.StreamHandler())
 
     logger.debug(f"Starting kafka logging with endpoint '{kafka_endpoint}' and topic '{topic}'")
-    kh = KafkaLoggingHandler(kafka_endpoint, key="topic_modeling", topic=topic)
+    kh = KafkaLoggingHandler(kafka_endpoint, key="text_to_speech", topic=topic)
     logger.addHandler(kh)
     logger.debug("Logging system started")

@@ -12,6 +12,6 @@ app = create_app()
 if __name__ == '__main__':
     if app.config['ENV'] == 'production':
         from waitress import serve
-        serve(app, host='0.0.0.0', port=5000)
+        serve(app, host='0.0.0.0', port=app.config['DEPLOY_PORT'])
     else:
         app.run(host='0.0.0.0')

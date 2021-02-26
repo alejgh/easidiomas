@@ -9,6 +9,9 @@ logger.setLevel(logging.DEBUG)
 
 
 class GCloudTTSClient():
+    """ Wrapper around the Google Cloud Text-To-Speech Service.
+    """
+
     def __init__(self):
         logger.debug("Initializing google cloud client")
         self.client = texttospeech.TextToSpeechClient()
@@ -17,6 +20,8 @@ class GCloudTTSClient():
         )
     
     def tts(self, text, locale):
+        """ Transforms text to audio spoken in the given locale.
+        """
         logger.debug(f"Calling GCloud tts with params[text='{text}', locale={locale}]")
         synthesis_input = texttospeech.SynthesisInput(text=text)
         voice = texttospeech.VoiceSelectionParams(language_code=locale,

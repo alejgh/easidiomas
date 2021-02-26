@@ -1,14 +1,13 @@
 import csv
-import logging
-
-from flask import current_app as app
-
-
-logger = logging.getLogger(app.config['SERVICE_KEY'])
-logger.setLevel(logging.DEBUG)
-
 
 class LocaleManager:
+    """ Utility class to handle locale data and transform languages to a given default locale.
+
+    This class handles the locales supported by our tts service. It should be used to check
+    if the locale provided by the user is supported. In case that a user does not send a locale,
+    it can transform a language to a default locale for the language (e.g. 'en' to 'en-UK')
+    """
+
     def __init__(self, locale_mappings_file):
         # this may as well be a singleton, since we should only read
         # the mappings once. However, due to time constraints and since

@@ -6,8 +6,6 @@ created in src/__init__.py.
 
 import os
 
-from src.util.error import InvalidConfigError
-
 def _try_get_config_from_env(config_key, default):
     if config_key not in os.environ:
         return default
@@ -22,6 +20,7 @@ class BaseConfig():
     KAFKA_LOGGING_TOPIC = _try_get_config_from_env('KAFKA_LOGGING_TOPIC', 'service_logs')
     SERVICE_KEY = _try_get_config_from_env('SERVICE_KEY', 'tts_service')
     LOCALE_MAPPINGS_FILE = _try_get_config_from_env('MAPPINGS_FILE', 'lang2locale.csv')
+    DEPLOY_PORT = int(_try_get_config_from_env('DEPLOY_PORT', '5000'))
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True

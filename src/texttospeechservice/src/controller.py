@@ -3,7 +3,6 @@
 
 import base64
 import logging
-import io
 
 from flask import current_app as app
 from flask import jsonify, request, send_file
@@ -30,7 +29,9 @@ def page_not_found(e):
 
 @app.route('/api/TextsToSpeechs', methods=['POST'])
 def tts():
-    """ Transforms the given text to an audio
+    """ Transforms the given text to an audio.
+
+    The returned audio is encoded as a base64 string.
     """
     logger.debug("POST to TextsToSpeechs received")
     body_data = request.get_json()
@@ -57,7 +58,7 @@ def tts():
         # but the python library auto decodes it for us and we get the audio bytes as a result.
         # In order to send it again we have to encode the bytes as base64 and decode it
         # so it can be sent in json (no bytes allowed there)
-        # A user can then use it with base64.b64decode(audio_str.encode())
+        # A user can then use it with base64.b64decode(audio_str)
         logger.debug("Encoding audio file to base64 and decoding to string...")
         audio_str = base64.b64encode(audio).decode()
 
@@ -65,10 +66,11 @@ def tts():
         #statistics_client.update_
 
         return jsonify({
+            'locale': locale,
             'result': audio_str
         }), 201  # Created
     except TooManyRequestsError as e:
-        # Either we sent too many requests to gcloud...
+        # Either we have sent too many requests to gcloud...
         # ...or we run out of money! :(
         logger.error(f"There was an error calling google cloud: {e}")
         return jsonify({
