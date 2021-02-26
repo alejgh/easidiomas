@@ -8,7 +8,7 @@ export const AppContext = React.createContext();
 
 export default function App() {
 
-  const [user,setUser] = useState('asd'); //Poner a null
+  const [user,setUser] = useState(DefaultUser); //Poner a null
 
   return (
     <AppContext.Provider value={{user:user,setUser:setUser}}>
@@ -22,3 +22,16 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF'
   }})
+
+
+  export const DefaultUser = {
+    id: 1,
+    name: 'Pablo',
+    surname: 'Menéndez Suárez',
+    username: '@mistermboy',
+    learning: ['en', 'cn'],
+    speaks: 'es',
+    birthDate: '<long_time_since_epoch>',
+    avatar: 'https://bootdey.com/img/Content/avatar/avatar6.png'
+  }
+    

@@ -13,8 +13,9 @@ import Entypo from 'react-native-vector-icons/Entypo'
 
 export default function Conversation(props){
 
-    const {name, handle, navigation} = props
-    const [photo,setPhoto] = useState({ uri: 'https://reactnative.dev/img/tiny_logo.png'});
+    const {navigation} = props;
+    const {name,username,avatar} = props.user;
+    const [photo,setPhoto] = useState({ uri: avatar});
     const [time,setTime] = useState('1hr');
 
     const navigateToConversation = function(){
@@ -38,7 +39,7 @@ export default function Conversation(props){
               <View style={styles.info}>
                 <View style={styles.userDetails}>
                   <Text style={styles.userName}>{name}
-                    <Text style={styles.userHandleAndTime}>{handle}</Text>
+                    <Text style={styles.userHandleAndTime}>{username}</Text>
                   </Text>
                 </View>
               </View>

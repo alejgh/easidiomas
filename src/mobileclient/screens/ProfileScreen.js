@@ -11,7 +11,7 @@ import {
 
 export default function ProfileScreen(props) {
 
-    const {navigation} = props;
+    const {navigation,isOwner} = props;
     const {avatar,name,surname,username,learning,speaks} = props.user;
     const context = useContext(AppContext);
    
@@ -23,11 +23,15 @@ export default function ProfileScreen(props) {
       context.setUser(null);
     }
 
+    const sendMessage = function(){
+      // TODO
+    }
+
 
     return (
       <View style={styles.container}>
           <View style={styles.header}></View>
-          <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+          <Image style={styles.avatar} source={{uri: avatar}}/>
           <View style={styles.bodyContent}>
             <Text style={styles.nameLabel} >{name}{' '}{surname}</Text>
             <Text style={styles.usernameLabel}>{username}</Text>
@@ -42,13 +46,21 @@ export default function ProfileScreen(props) {
                 <Text style={styles.learningLabel}>{learning[0].toUpperCase()+'-'+learning[1].toUpperCase()}</Text>
               </View>
             </View>
-
-            <TouchableOpacity style={styles.buttonContainer} onPress={()=> editProfile()}>
-                <Text style={styles.usernameLabel}>Edit Profile</Text>  
-            </TouchableOpacity>      
-            <TouchableOpacity style={styles.buttonContainer} onPress={()=> logOut()}>
-                <Text style={styles.usernameLabel}>Log Out</Text>  
-            </TouchableOpacity>                  
+            {
+            isOwner ?
+              <View>
+                  <TouchableOpacity style={styles.buttonContainer} onPress={()=> editProfile()}>
+                      <Text style={styles.usernameLabel}>Edit Profile</Text>  
+                  </TouchableOpacity>      
+                  <TouchableOpacity style={styles.buttonContainer} onPress={()=> logOut()}>
+                      <Text style={styles.usernameLabel}>Log Out</Text>  
+                  </TouchableOpacity>
+                </View>  
+              :
+              <TouchableOpacity style={styles.buttonContainer} onPress={()=> sendMessage()}>
+                <Text style={styles.usernameLabel}>Send Message</Text>  
+              </TouchableOpacity>      
+            }
           </View>
       </View>
     );

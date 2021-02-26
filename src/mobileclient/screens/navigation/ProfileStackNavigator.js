@@ -7,7 +7,7 @@ import EditProfileScreen from '../profile/EditProfileScreen';
 
 export default function ProfileStackNavigator({route,navigation}){
 
-    const {user} = route.params;
+    const {user,isOwner} = route.params;
     const Stack = createStackNavigator();
 
 
@@ -34,6 +34,7 @@ export default function ProfileStackNavigator({route,navigation}){
                 {props => 
                 <ProfileScreen {...props}
                      user={user} 
+                     isOwner={isOwner}
                      parentNavigation={navigation} />}
             </Stack.Screen>
             <Stack.Screen name='Edit Profile'>

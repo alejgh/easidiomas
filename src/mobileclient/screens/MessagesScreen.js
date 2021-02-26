@@ -1,35 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import {AppContext} from '../App';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Conversation from './items/Conversation';
 
 export default function MessagesScreen({navigation}) {
-  const [people, setPeople] = useState([
-    { name: 'shaun', id: '1' },
-    { name: 'yoshi', id: '2' },
-    { name: 'mario', id: '3' },
-    { name: 'luigi', id: '4' },
-    { name: 'peach', id: '5' },
-    { name: 'toad', id: '6' },
-    { name: 'bowser', id: '7' },
-    { name: 'shaun', id: '8' },
-    { name: 'yoshi', id: '9' },
-    { name: 'mario', id: '10' },
-    { name: 'luigi', id: '11' },
-    { name: 'peach', id: '12' },
-    { name: 'toad', id: '13' },
-    { name: 'bowser', id: '14' },
-  ]);
 
+  const context = useContext(AppContext);
+
+  const [chats, setChats] = useState([]);
+
+  const getChats = async function(){
+    let response = await (await fetch('http://localhost:5000/api/mock/chats')).json();
+    let newChats = [];
+    for(let chat in response){
+      let user1 = await getUser(response[chat].user1)
+      let user2 = await getUser(response[chat].user2)
+      if(context.user.username == user1.username)
+        newChats.push({id:response[chat].id,key:response[chat].id,user:user2})
+      else
+        newChats.push({id:response[chat].id,key:response[chat].id,user:user1})
+    }
+    setChats(newChats)
+  }
   
+  const getUser = async function(url){
+    return (await fetch('http://localhost:5000/'+url)).json();
+  }
+
+
+  useEffect(()=>{
+    getChats()
+  },[])
 
   return (
     <View style={styles.container}>
       <FlatList 
         numColumns={1}
         keyExtractor={(item) => item.id} 
-        data={people} 
+        data={chats} 
         renderItem={({ item }) => ( 
-            <Conversation name={item.name} handle={"@"+item.name} navigation={navigation}/>
+            <Conversation user={item.user} navigation={navigation}/>
         )}
       />
 

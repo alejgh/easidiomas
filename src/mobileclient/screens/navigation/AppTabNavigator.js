@@ -64,7 +64,7 @@ export default function AppTabNavigator({ navigation }) {
           <Tab.Screen name="Mesagges" component={MessagesStackNavigator} />
           <Tab.Screen name="Profile" component={ProfileStackNavigator}  listeners={({ navigation, route }) => ({
               tabPress: e => {
-                navigation.navigate('Profile',{user:DefaultUser});
+                navigation.navigate('Profile',{user:DefaultUser,isOwner:true});
               },
             })}/>
         </Tab.Navigator>
@@ -78,9 +78,10 @@ export const DefaultUser = {
   id: 1,
   name: 'Pablo',
   surname: 'Menéndez Suárez',
+  username: '@mistermboy',
   learning: ['en', 'cn'],
   speaks: 'es',
   birthDate: '<long_time_since_epoch>',
-  avatar: '<url_del_avatar>'
+  avatar: 'https://bootdey.com/img/Content/avatar/avatar6.png'
 }
   

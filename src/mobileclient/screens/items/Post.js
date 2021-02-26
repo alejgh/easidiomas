@@ -36,10 +36,10 @@ export default function Post(props){
     }
 
     const navigateToProfile = function(){
-      fetch('http://localhost:5000/api/mock')
+      fetch('http://localhost:5000/api/mock/user3')
       .then((response) => response.json())
       .then((data) =>{
-        parentNavigation.navigate("Profile",{user:data});
+        parentNavigation.navigate("Profile",{user:data,isOwner:false});
       } )
       .catch((error) => console.error(error))
      
