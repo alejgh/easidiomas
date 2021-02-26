@@ -82,6 +82,8 @@ public class User {
     }
 
     public String[] getLearning() {
+        if(this.learning == null)
+            this.learning = new String[] {};
         return learning;
     }
 

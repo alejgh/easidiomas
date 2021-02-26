@@ -1,6 +1,5 @@
 package com.easidiomas.usersservice.filters;
 
-import com.easidiomas.usersservice.model.Language;
 import com.easidiomas.usersservice.model.User;
 
 import java.util.Collection;
