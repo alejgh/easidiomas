@@ -17,7 +17,7 @@ export default function Chat(props){
     const [time,setTime] = useState('1hr');
 
     const navigateToScreen = function(){
-        navigation.navigate(sreen,{user:props.user})
+        navigation.navigate(sreen,{user:props.user,isOwner:false})
     }
 
 
