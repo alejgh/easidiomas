@@ -1,5 +1,6 @@
 package easidiomas.chatservice.controller;
 
+import java.net.URI;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,7 +89,7 @@ public class ChatsController {
 		chat = chatsService.save(chat);
 
 		LOGGER.info(String.format("Chat between user [%s] and user [%s] created.", user1, user2));
-		return ResponseEntity.ok(chat);
+		return ResponseEntity.created(URI.create("/api/chats/" + chat.getId())).body(chat);
 	}
 
 	@GetMapping("/{id}/messages")
@@ -153,7 +154,8 @@ public class ChatsController {
 			chat.addMessage(message);
 			chatsService.save(chat);
 			LOGGER.info(String.format("New message created in chat [%s]", chat));
-			return ResponseEntity.ok(message);
+			return ResponseEntity.created(URI.create("/api/chats/" + chat.getId() + "/messages" + message.getId()))
+					.body(message);
 		}
 
 		LOGGER.error(String.format("User [%s] doesn´t have permission for chat", user, chat));
@@ -171,6 +173,7 @@ public class ChatsController {
 			passsport = new Gson().fromJson(passportHeader, Passport.class);
 			;
 		} catch (JsonSyntaxException e) {
+			LOGGER.error(String.format("Error when trying to parse passport"));
 			e.printStackTrace();
 		}
 		return passsport;

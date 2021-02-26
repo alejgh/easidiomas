@@ -9,7 +9,7 @@
 		<version>2.4.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>easidiomas</groupId>
+	<groupId>com.easidiomas</groupId>
 	<artifactId>chats</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>chats</name>
