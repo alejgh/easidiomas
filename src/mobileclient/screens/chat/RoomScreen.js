@@ -9,29 +9,7 @@ export default function RoomScreen(props) {
     const {parentNavigation} = props;
     const {user} = props.route.params;
  
-    const [messages, setMessages] = useState([
-      /**
-       * Mock message data
-       */
-      // example of system message
-      {
-        _id: 0,
-        text: 'New room created.',
-        createdAt: new Date().getTime(),
-        system: true
-      },
-      // example of chat message
-      {
-        _id: 1,
-        text: 'Hello!',
-        createdAt: new Date().getTime(),
-        user: {
-          _id: 2,
-          name: 'Test User'
-        }
-      }
-    ]);
-
+    const [messages, setMessages] = useState([]);
 
     const getMessages = async function(){
       let response = await (await fetch('http://localhost:5000/api/mock/chats/messages')).json();
@@ -61,7 +39,6 @@ export default function RoomScreen(props) {
         }
         
       }
-      console.log(newMessages)
       setMessages(newMessages.reverse());
     }
 
@@ -87,8 +64,10 @@ export default function RoomScreen(props) {
   
 
   // helper method that is sends a message
-  function handleSend(newMessage = []) {
+  async function handleSend(newMessage = []) {
     setMessages(GiftedChat.append(messages, newMessage));
+    await fetch('http://localhost:5000/api/mock/chats/messages/add');
+    getMessages();
   }
 
   return (
