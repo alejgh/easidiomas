@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Post from './items/Post';
-import randomWords from 'random-words'
 import { FloatingAction } from "react-native-floating-action";
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -10,14 +9,14 @@ export default function Home(props) {
   const{parentNavigation,navigation} = props;
 
   const [posts, setPosts] = useState([]);
+  const [links,setLinks] = useState([]);
 
-  const getPosts = async function(){
-    let response = await (await fetch('http://localhost:5000/api/mock/posts')).json();
+  const getPosts = async function(url){
+    let response = await (await fetch('http://localhost:5000/api/mock'+url)).json();
     let data = response.data;
     let newPosts = [];
     for(let post in data){
-      let user = await getUser('api/mock/user'+data[post].id);
-      console.log(user)
+      let user = await getUser('api/mock/user'+data[post].id); // en verdad hay que pasar authorId pero es pa ver nuevas fotos [aprovecha el BUG willyrex]
       newPosts.push({
         id:data[post].id,
         user:user,
@@ -25,7 +24,9 @@ export default function Home(props) {
         numLikes:data[post].likes
       })
     }
-    setPosts(newPosts)
+    //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
+    setPosts(posts.concat(newPosts))
+    setLinks(response.links)
   }
   
 
@@ -33,8 +34,12 @@ export default function Home(props) {
     return (await fetch('http://localhost:5000/'+url)).json();
   }
 
+  const loadMorePosts = async info => {
+      getPosts(links.next);
+  }
+
   useEffect(()=>{
-    getPosts();
+    getPosts('/posts');
   },[])
 
   const actions = [
@@ -50,6 +55,10 @@ export default function Home(props) {
 
       <FlatList 
         numColumns={1}
+        onEndReachedThreshold={0.01}
+        onEndReached={info => {
+          loadMorePosts(info);
+        }}
         keyExtractor={(item) => item.id} 
         data={posts} 
         renderItem={({ item }) => ( 

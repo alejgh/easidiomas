@@ -25,6 +25,8 @@ export default function ProfileScreen(props) {
 
     const sendMessage = function(){
       parentNavigation.navigate('Chats',{startChat:true,user:props.user});
+      // TODO
+      // Crear conversación REQUEST
     }
 
 
