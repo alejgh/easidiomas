@@ -9,10 +9,10 @@ export default function SearchScreen(props) {
 
   const {parentNavigation} = props;
 
-  const [chats, setChats] = useState([]);
+  const [results, setResults] = useState([]);
 
-  const getChats = async function(){
-    let response = await (await fetch('http://localhost:5000/api/mock/chats')).json();
+  const getResults = async function(){
+    let response = await (await fetch('http://localhost:5000/api/mock/search')).json();
     let newChats = [];
     for(let chat in response){
       let user1 = await getUser(response[chat].user1)
@@ -22,7 +22,7 @@ export default function SearchScreen(props) {
       else
         newChats.push({id:response[chat].id,key:response[chat].id,user:user1})
     }
-    setChats(newChats)
+    setResults(newChats)
   }
   
   const getUser = async function(url){
@@ -31,7 +31,7 @@ export default function SearchScreen(props) {
 
 
   useEffect(()=>{
-    getChats()
+    getResults()
   },[])
 
   return (
@@ -39,7 +39,7 @@ export default function SearchScreen(props) {
       <FlatList 
         numColumns={1}
         keyExtractor={(item) => item.id} 
-        data={chats} 
+        data={results} 
         renderItem={({ item }) => ( 
             <Chat user={item.user} navigation={parentNavigation} sreen={'Profile'}/>
         )}

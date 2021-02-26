@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useContext, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -10,13 +10,16 @@ import {
 } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
+import {AppContext} from '../../App';
 
 export default function Post(props){
 
-    const {parentNavigation,post, name, handle, picture} = props
-    const [photo,setPhoto] = useState({ uri: 'https://reactnative.dev/img/tiny_logo.png'});
+    const context = useContext(AppContext);
+    const {parentNavigation,content,numLikes} = props
+    const {id,name,username,avatar} = props.user;
+    const [photo,setPhoto] = useState({ uri: avatar});
     const [touched,setTouched] = useState(false);
-    const [likes,setLikes] = useState(0);
+    const [likes,setLikes] = useState(numLikes);
     const [time,setTime] = useState('1hr');
     const [liked,setLiked] = useState(false);
 
@@ -36,10 +39,13 @@ export default function Post(props){
     }
 
     const navigateToProfile = function(){
-      fetch('http://localhost:5000/api/mock/user3')
+      fetch('http://localhost:5000/api/mock/user'+id)
       .then((response) => response.json())
       .then((data) =>{
-        parentNavigation.navigate("Profile",{user:data,isOwner:false});
+        let isOwner = data.id==context.user.id ? true :false;
+        console.log(data)
+        console.log(isOwner)
+        parentNavigation.navigate("Profile",{user:data,isOwner:isOwner});
       } )
       .catch((error) => console.error(error))
      
@@ -61,11 +67,11 @@ export default function Post(props){
               <View style={styles.info}>
                 <View style={styles.userDetails}>
                   <Text style={styles.userName}>{name}
-                    <Text style={styles.userHandleAndTime}>{handle} · {time}</Text>
+                    <Text style={styles.userHandleAndTime}>{username} · {time}</Text>
                   </Text>
                 </View>
               <View style={styles.postTextContainer}>
-                <Text style={styles.postText}>{post}</Text>
+                <Text style={styles.postText}>{content}</Text>
 
               </View>
               <View style={styles.postActionsContainer}>

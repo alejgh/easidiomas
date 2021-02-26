@@ -16,13 +16,13 @@ export const AppNavigationRef = React.createRef();
 export default function AppTabNavigator({ navigation }) {
     return (
     <NavigationContainer independent >
-        <Tab.Navigator initialRouteName="Search" ref={AppNavigationRef} screenOptions={({ route }) => ({
+        <Tab.Navigator initialRouteName="Home" ref={AppNavigationRef} screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Search') {
+            } else if (route.name === 'Discover') {
               iconName = focused ? 'search' : 'search-outline';
             }
             else if (route.name === 'Chats') {
@@ -60,7 +60,7 @@ export default function AppTabNavigator({ navigation }) {
         }}
       >
           <Tab.Screen name="Home" component={HomeStackNavigator} />
-          <Tab.Screen name="Search" component={SearchStackNavigator} />
+          <Tab.Screen name="Discover" component={SearchStackNavigator} />
           <Tab.Screen name="Chats" component={ChatsStackNavigator} />
           <Tab.Screen name="Profile" component={ProfileStackNavigator}  listeners={({ navigation, route }) => ({
               tabPress: e => {

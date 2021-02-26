@@ -9,22 +9,33 @@ export default function Home(props) {
   
   const{parentNavigation,navigation} = props;
 
-  const [people, setPeople] = useState([
-    { name: 'shaun', id: '1' },
-    { name: 'yoshi', id: '2' },
-    { name: 'mario', id: '3' },
-    { name: 'luigi', id: '4' },
-    { name: 'peach', id: '5' },
-    { name: 'toad', id: '6' },
-    { name: 'bowser', id: '7' },
-    { name: 'shaun', id: '8' },
-    { name: 'yoshi', id: '9' },
-    { name: 'mario', id: '10' },
-    { name: 'luigi', id: '11' },
-    { name: 'peach', id: '12' },
-    { name: 'toad', id: '13' },
-    { name: 'bowser', id: '14' },
-  ]);
+  const [posts, setPosts] = useState([]);
+
+  const getPosts = async function(){
+    let response = await (await fetch('http://localhost:5000/api/mock/posts')).json();
+    let data = response.data;
+    let newPosts = [];
+    for(let post in data){
+      let user = await getUser('api/mock/user'+data[post].id);
+      console.log(user)
+      newPosts.push({
+        id:data[post].id,
+        user:user,
+        content:data[post].content,
+        numLikes:data[post].likes
+      })
+    }
+    setPosts(newPosts)
+  }
+  
+
+  const getUser = async function(url){
+    return (await fetch('http://localhost:5000/'+url)).json();
+  }
+
+  useEffect(()=>{
+    getPosts();
+  },[])
 
   const actions = [
     {
@@ -40,9 +51,9 @@ export default function Home(props) {
       <FlatList 
         numColumns={1}
         keyExtractor={(item) => item.id} 
-        data={people} 
+        data={posts} 
         renderItem={({ item }) => ( 
-            <Post parentNavigation={parentNavigation} name={item.name} handle={"@"+item.name} post={randomWords({min: 18, max: 40}).join(" ")}/>
+            <Post key={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} numLikes={item.numLikes}/>
         )}
       />
 

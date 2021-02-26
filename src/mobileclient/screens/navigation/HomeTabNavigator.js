@@ -5,7 +5,6 @@ import HomeScreen from '../HomeScreen';
 
 export default function HomeTabNavigator(props){
 
-  console.log(props)
     const {parentNavigation,navigation} = props;
 
     const Tab = createMaterialTopTabNavigator();
@@ -29,7 +28,9 @@ export default function HomeTabNavigator(props){
           <Tab.Screen name="Posts">
             {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation}/>}
           </Tab.Screen>
-          <Tab.Screen name="Learn" component={HomeScreen} />
+          <Tab.Screen name="Learn">
+            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation}/>}
+          </Tab.Screen>
         </Tab.Navigator>
     </NavigationContainer>
     )
