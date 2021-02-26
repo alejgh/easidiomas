@@ -7,6 +7,7 @@ import java.util.Set;
 public class UserInfo {
     private String username;
     private String password;
+
     private String name;
     private String surname;
     private String[] learning;

@@ -1,19 +1,18 @@
 package com.easidiomas.usersservice.controllers;
 
 import com.easidiomas.usersservice.filters.*;
+import com.easidiomas.usersservice.model.Links;
+import com.easidiomas.usersservice.model.ResultPageWrapper;
 import com.easidiomas.usersservice.model.User;
 import com.easidiomas.usersservice.model.UserInfo;
 import com.easidiomas.usersservice.persistence.UsersRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -51,8 +50,13 @@ public class UsersController {
             if(limit < hits.size())
                 hits = hits.subList(0, limit);
 
+        ResultPageWrapper page = new ResultPageWrapper();
+        page.setUsers(hits);
+        page.setHits(hits.size());
+        page.setTotal(repository.findAll().size());
+        page.setLinks(new Links("", "", "", "", ""));
 
-        return ResponseEntity.ok().body(hits);
+        return ResponseEntity.ok().body(page);
     }
 
     // POST: /api/users

@@ -1,5 +1,7 @@
 package com.easidiomas.usersservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -8,7 +10,6 @@ import org.springframework.data.neo4j.core.schema.Node;
 
 import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 
 @Node
 public class User {
@@ -20,7 +21,11 @@ public class User {
     @GeneratedValue
     private Long id;
     private String username;
+    @JsonIgnore
     private String password;
+
+    @JsonIgnore
+    private Integer role; // 0 user, 1 admin;
 
     // User public fields.
     private String name;
@@ -28,6 +33,7 @@ public class User {
     private String[] learning;
     private String speaks;
     private Date birthDate;
+    @JsonProperty("avatar")
     private String avatarUrl;
     //@Relationship(type = "IS_FOLLOWING")
     //private Set<User> follows;
@@ -79,6 +85,14 @@ public class User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     public String[] getLearning() {
