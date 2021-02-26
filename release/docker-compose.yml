@@ -71,6 +71,18 @@ services:
     networks:
       - postgres
   
+  texttospeech:
+    build: ../src/texttospeechservice/
+    container_name: texttospeechservice
+    ports:
+      - "5003:5000"
+    depends_on:
+      - kafka
+    networks:
+      - event_bus
+    environment: 
+      KAFKA_ENDPOINT: "kafka:9092"
+  
   authenticationservice:
     build: ../src/authenticationservice/
     container_name: authservice
