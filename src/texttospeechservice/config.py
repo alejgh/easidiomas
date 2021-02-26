@@ -21,6 +21,7 @@ class BaseConfig():
     KAFKA_ENDPOINT = _try_get_config_from_env('KAFKA_ENDPOINT', 'localhost:9092')
     KAFKA_LOGGING_TOPIC = _try_get_config_from_env('KAFKA_LOGGING_TOPIC', 'service_logs')
     SERVICE_KEY = _try_get_config_from_env('SERVICE_KEY', 'tts_service')
+    LOCALE_MAPPINGS_FILE = _try_get_config_from_env('MAPPINGS_FILE', 'lang2locale.csv')
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True

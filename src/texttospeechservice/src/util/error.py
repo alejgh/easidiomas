@@ -3,3 +3,6 @@ class InvalidArgumentError(Exception):
 
 class InvalidConfigError(Exception):
     pass
+
+class TooManyRequestsError(Exception):
+    pass
