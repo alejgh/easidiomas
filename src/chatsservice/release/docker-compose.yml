@@ -1,0 +1,12 @@
+version: '3'
+services:
+  mongo:
+    image: 'mongo'
+
+  chatsservice:
+    build: ../src/chats
+    environment:
+      DB_HOST: "chats_db"
+      DB_PORT: "27017"
+      SERVER_PORT: "5000"
+    stdin_open: true # Needed to keep the image alive.
