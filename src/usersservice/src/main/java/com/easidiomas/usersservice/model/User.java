@@ -23,8 +23,6 @@ public class User {
     private String username;
     @JsonIgnore
     private String password;
-
-    @JsonIgnore
     private Integer role; // 0 user, 1 admin;
 
     // User public fields.
@@ -32,15 +30,13 @@ public class User {
     private String surname;
     private String[] learning;
     private String speaks;
-    private Date birthDate;
+    private Long birthDate;
     @JsonProperty("avatar")
     private String avatarUrl;
-    //@Relationship(type = "IS_FOLLOWING")
-    //private Set<User> follows;
 
     public User() {}
 
-    public User(String username, String password, String name, String surname, String[] learning, String speaks, Date birthDate, String avatarUrl) {
+    public User(String username, String password, String name, String surname, String[] learning, String speaks, Long birthDate, String avatarUrl) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -113,11 +109,11 @@ public class User {
         this.speaks = speaks;
     }
 
-    public Date getBirthDate() {
+    public Long getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(Long birthDate) {
         this.birthDate = birthDate;
     }
 
