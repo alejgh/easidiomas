@@ -5,7 +5,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from './languajes.json';
 export default function CustomPickerPodal(props) {
 
-    console.log(props)
     const {labelTag,selectedLanguaje,setSelectedLanguaje} = props;
 
     const handleSelected = function(selected){
@@ -16,14 +15,14 @@ export default function CustomPickerPodal(props) {
   return (
     <PickerModal renderSelectView={(disabled, selected, showModal) =>
         <TouchableOpacity style={styles.nativeContainer} onPress={showModal}>
-            <View style={styles.nativeLabelContainer}>
-              <Text style={styles.nativeLabel}>{labelTag}</Text>
+            <View style={styles.languajeContainer}>
+              <Text style={styles.languajeLabel}>{labelTag}</Text>
             </View>
-            <View style={styles.nativeLabelContainer}>
+            <View style={styles.languajeContainer}>
               <Text style={styles.isoLabel}>{selectedLanguaje.Code}</Text>
             </View>
-            <View style={styles.nativeLanguajeContainer}>
-              <Text style={styles.nativeLabel}>{selectedLanguaje.Value}</Text>
+            <View style={styles.languajeContainer}>
+              <Text style={styles.languajeLabel}>{selectedLanguaje.Value}</Text>
               <Ionicons name={'chevron-forward-outline'} size={30} color={'white'} style={styles.configBtn}/>
             </View>
         </TouchableOpacity> 
@@ -59,17 +58,13 @@ const styles = StyleSheet.create({
     borderColor:'#fff',
     borderBottomWidth:1,
   },
-  nativeLabelContainer:{
-    flex: 0.3,
+  languajeContainer:{
+    width:80,
+    alignItems:'center',
     justifyContent:'center',
-    alignItems:'center',
-    textAlign:'left',
-  },
-  nativeLanguajeContainer:{
-    alignItems:'center',
     flexDirection:'row'
   },
-  nativeLabel:{
+  languajeLabel:{
       color:'white',
       fontSize:18,
   },
@@ -77,19 +72,5 @@ const styles = StyleSheet.create({
     color:'white',
     fontSize:18,
     fontWeight: 'bold'
-  },
-  ageContainer:{
-    flex: 0.2,
-    backgroundColor: '#1b2836',
-    justifyContent:'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    borderColor:'#fff',
-    borderBottomWidth:1,
-  },
-  ageLabel:{
-    color:'white',
-    fontSize:18,
-    marginTop:10
   }
 });

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View,TouchableOpacity } from 'react-native';
 import PickerModal from 'react-native-picker-modal-view';
-import data from '../search/languajes.json';
+import data from '../discover/languajes.json';
 
 export default function SignUpLanguajePicker(props) {
 

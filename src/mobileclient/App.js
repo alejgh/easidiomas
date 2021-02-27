@@ -8,7 +8,7 @@ export const AppContext = React.createContext();
 
 export default function App() {
 
-  const [user,setUser] = useState(null); //Poner a null
+  const [user,setUser] = useState(DefaultUser); //Poner a null
 
   return (
     <AppContext.Provider value={{user:user,setUser:setUser}}>

@@ -12,6 +12,9 @@ export default function Home(props) {
   const [links,setLinks] = useState([]);
 
   const loadPosts = async function(url){
+    console.log(links)
+    if(links?.next =='url_pagina_siguiente')  // A ver como es esto en verdad (cuando no hay más que pone ahí?)
+      return;
     let response = await (await fetch('http://localhost:5000/api/mock'+url)).json();
     let data = response.data;
     let newPosts = [];

@@ -3,7 +3,7 @@ import {AppContext} from '../App';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Chat from './items/Chat';
 
-export default function SearchScreen(props) {
+export default function DiscoverScreen(props) {
 
   const context = useContext(AppContext);
 

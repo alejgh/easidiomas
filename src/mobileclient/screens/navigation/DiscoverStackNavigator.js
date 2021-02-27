@@ -4,12 +4,12 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import FiltersScreen from '../search/FiltersScreen';
-import SearchScreen from '../SearchScreen';
-import data from '../search/languajes.json';
+import FiltersScreen from '../discover/FiltersScreen';
+import DiscoverScreen from '../DiscoverScreen';
+import data from '../discover/languajes.json';
 
 
-export const SearchContext = React.createContext();
+export const DiscoverContext = React.createContext();
 export const navigationRef = React.createRef();
 
 export function navigate(name, params) {
@@ -17,33 +17,53 @@ export function navigate(name, params) {
 }
 
 
-export default function SearchStackNavigator({navigation}) {
+export default function DiscoverStackNavigator({navigation}) {
 
     const [native,setNative] = useState(data[0]);
-    const [learning,setLearning] = useState(data[1]);
-
-    const filter = function(){
-        console.log(native)
-        console.log(learning)
-        // TODO
-        // Search Request
-      }
+    const [learning1,setLearning1] = useState(data[1]);
+    const [learning2,setLearning2] = useState(data[2]);
+    const [minAge,setMinAge] = useState(18);
+    const [maxAge,setMaxAge] = useState(40); 
 
     const Stack = createStackNavigator();
 
     function FiltersBtn() {
         return (
-            <TouchableOpacity onPress={() => navigate('Search Options')}>
+            <TouchableOpacity onPress={() => navigate('Discover Options')}>
                 <Ionicons name={'settings-outline'} size={20} color={'white'} style={styles.configBtn}/>
             </TouchableOpacity>
         );
     }
 
+    function ApplyFiltersBtn() {
 
-    
+        const apply = function(){
+            // TODO 
+            // NEW SEARCH REQUEST
+            //navigation.navigate("Discover");
+            navigate('Discover')
+        }
+        return (
+            <TouchableOpacity onPress={() => apply()} style={styles.applyFiltersBtn}>
+                <Text style={styles.applyFiltersBtnText}>Apply</Text>
+            </TouchableOpacity>
+        );
+    }
+
 
   return (
-    <SearchContext.Provider value={{native:native,setNative:setNative,learning,setLearning,filter:filter}}>
+    <DiscoverContext.Provider value={
+        {
+            native:native,
+            learning1,learning1,
+            learning2:learning2,
+            minAge:minAge,
+            maxAge:maxAge,
+            setNative:setNative,
+            setLearning1:setLearning1,
+            setLearning2:setLearning2,
+            setMinAge:setMinAge,
+            setMaxAge:setMaxAge}}>
         <View style={styles.container}>
             <NavigationContainer independent  initialRouteName="Discover" ref={navigationRef}>
                 <Stack.Navigator screenOptions={{
@@ -63,14 +83,18 @@ export default function SearchStackNavigator({navigation}) {
                             <FiltersBtn/>
                         )
                     }}>
-                        {props=> <SearchScreen {...props} parentNavigation={navigation}/>
+                        {props=> <DiscoverScreen {...props} parentNavigation={navigation}/>
                     }
                     </Stack.Screen>
-                    <Stack.Screen name="Search Options" component={FiltersScreen}/>
+                    <Stack.Screen name="Discover Options" component={FiltersScreen} options={{
+                        headerRight: () => (
+                            <ApplyFiltersBtn/>
+                        )
+                    }}/>
                 </Stack.Navigator>
             </NavigationContainer>
         </View>
-    </SearchContext.Provider>
+    </DiscoverContext.Provider>
   );
 }
 
@@ -99,6 +123,20 @@ const styles = StyleSheet.create({
     },
     configBtn:{
         paddingRight:15
+    },
+    applyFiltersBtn:{
+        backgroundColor:'#1DA1F2',
+        marginRight:15,
+        width:80,
+        height:25,
+        borderRadius:10
+
+        
+    },
+    applyFiltersBtnText:{
+        textAlign:'center',
+        fontSize:18,
+        color:'#fff'
     }
   });
 
