@@ -3189,6 +3189,14 @@ expo-font@~8.4.0:
     fbjs "1.0.0"
     fontfaceobserver "^2.1.0"
 
+expo-image-picker@~9.2.0:
+  version "9.2.1"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-9.2.1.tgz#113a46bfc8ef9bf675e8700b1bf7b8472f4de516"
+  integrity sha512-IPrBY7+zgxUUZqjtLVfj+PTKMm6lmI48Z9b8BKJhY/gF49g/cDZwWN0mrg+3G3a3ug5TtIr+pektsNWp1V+T1g==
+  dependencies:
+    expo-permissions "~10.0.0"
+    uuid "7.0.2"
+
 expo-keep-awake@~8.4.0:
   version "8.4.0"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-8.4.0.tgz#346d0988e6364c46050fef4b7829f302ef3e603d"
@@ -5748,6 +5756,13 @@ react-native-lightbox@^0.8.1:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-loading-spinner-overlay@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-2.0.0.tgz#30934b6f07cb39711020d6b422a02a2a56763a73"
+  integrity sha512-V38M+N1Wk9GlpbfrD6znsJA1K2+09b3naxq3UjDjqNTA3MOBfj4W87alKSI3P+4ZawczQASTv2fTzhEQ7Z+SVA==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-login-screen@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/react-native-login-screen/-/react-native-login-screen-2.1.2.tgz#996b449b8ff962eb737396fce7ecf41b456d5913"
@@ -5799,7 +5814,7 @@ react-native-ratings@^7.3.0:
     lodash "^4.17.15"
     prop-types "^15.7.2"
 
-react-native-reanimated@~1.13.0:
+react-native-reanimated@^1.13.2:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.2.tgz#1ae5457b24b4913d173a5a064bb28eae7783d293"
   integrity sha512-O+WhgxSjOIzcVdAAvx+h2DY331Ek1knKlaq+jsNLpC1fhRy9XTdOObovgob/aF2ve9uJfPEawCx8381g/tUJZQ==
@@ -6892,6 +6907,11 @@ uuid@3.4.0, uuid@^3.3.2, uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+  integrity sha512-vy9V/+pKG+5ZTYKf+VcphF5Oc6EFiu3W8Nv3P3zIh0EqVI80ZxOzuPfe9EHjkFNvf8+xuTHVeei4Drydlx4zjw==
 
 uuid@^7.0.3:
   version "7.0.3"

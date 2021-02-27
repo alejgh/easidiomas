@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, Image,TouchableOpacity } from 'react-native';
 import SignUpLanguajePicker from '../auth/SignUpLanguajePicker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function EditProfileScreen({navigation}){
 
@@ -8,6 +9,7 @@ export default function EditProfileScreen({navigation}){
     const [learning1,setLearning1] = useState('Learning');
     const [learning2,setLearning2] = useState('Learning');
 
+    const [image, setImage] = useState('https://www.bootdey.com/img/Content/avatar/avatar2.png');
     
     const signUp = function(){
       //TODOO
@@ -15,16 +17,35 @@ export default function EditProfileScreen({navigation}){
     }
     
 
-    const changeProfilePic = function(){
-      //TODOO
-    }
+    const pickImage = async () => {
+
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+
+      if (!result.cancelled) {
+        setImage(result.uri);
+      }
+
+    };
     
 
 
     return (
       <View style={styles.container}>
-         <TouchableOpacity onPress={changeProfilePic}>
-          <Image style={styles.avatar} source={{uri: 'https://www.bootdey.com/img/Content/avatar/avatar2.png'}}/>
+         <TouchableOpacity onPress={pickImage}>
+          <Image style={styles.avatar} source={{uri: image}}/>
         </TouchableOpacity>  
         <View style={styles.inputView} >
           <TextInput  
