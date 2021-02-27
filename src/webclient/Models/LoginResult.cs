@@ -3,8 +3,7 @@ namespace WebClient.Models
 {
     public class LoginResult
     {
-        public LoginResult()
-        {
-        }
+        public bool Successful { get; set; }
+        public string Token { get; set; }
     }
 }

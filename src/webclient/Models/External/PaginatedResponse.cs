@@ -1,7 +1,7 @@
 ﻿using System;
-namespace WebClient.Models
+namespace WebClient.Models.External
 {
-    public class PaginatedResponse
+    public class PaginatedResponse<T>
     {
         public PaginatedResponse()
         {
