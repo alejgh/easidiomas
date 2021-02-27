@@ -12,19 +12,15 @@ export default function SearchScreen(props) {
   const [results, setResults] = useState([]);
   const [links,setLinks] = useState([]);
 
-  const getResults = async function(url){
+  const loadResults = async function(url){
     let response = await (await fetch('http://localhost:5000/api/mock'+url)).json();
     //setResults([...results,response.users]) -> I´m not sure why this is not working...
     setResults(results.concat(response.users))
     setLinks(response.links)
   }
   
-  const loadMoreResults = async info => {
-    getResults(links.next);
-  }
-
   useEffect(()=>{
-    getResults('/search');
+    loadResults('/search');
   },[])
 
   return (
@@ -33,7 +29,7 @@ export default function SearchScreen(props) {
         numColumns={1}
         onEndReachedThreshold={0.01}
         onEndReached={info => {
-          loadMoreResults(info);
+          loadResults(links.next);
         }}
         keyExtractor={(item) => item.id} 
         data={results} 

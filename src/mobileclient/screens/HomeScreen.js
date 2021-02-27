@@ -11,7 +11,7 @@ export default function Home(props) {
   const [posts, setPosts] = useState([]);
   const [links,setLinks] = useState([]);
 
-  const getPosts = async function(url){
+  const loadPosts = async function(url){
     let response = await (await fetch('http://localhost:5000/api/mock'+url)).json();
     let data = response.data;
     let newPosts = [];
@@ -28,18 +28,14 @@ export default function Home(props) {
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
   }
-  
+
 
   const getUser = async function(url){
     return (await fetch('http://localhost:5000/api/mock'+url)).json();
   }
 
-  const loadMorePosts = async info => {
-      getPosts(links.next);
-  }
-
   useEffect(()=>{
-    getPosts('/posts');
+    loadPosts('/posts');
   },[])
 
   const actions = [
@@ -57,7 +53,7 @@ export default function Home(props) {
         numColumns={1}
         onEndReachedThreshold={0.01}
         onEndReached={info => {
-          loadMorePosts(info);
+          loadPosts(links.next);
         }}
         keyExtractor={(item) => item.id} 
         data={posts} 
