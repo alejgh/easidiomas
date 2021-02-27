@@ -11,6 +11,9 @@ import javax.jws.WebService;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.soap.MTOM;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import miw.ws.easidiomas.images.client.GoogleCloudStorageClient;
 import miw.ws.easidiomas.images.exception.ImageProcessingException;
 import miw.ws.easidiomas.images.util.ImageUtils;
@@ -18,6 +21,8 @@ import miw.ws.easidiomas.images.util.ImageUtils;
 @MTOM
 @WebService(endpointInterface = "miw.ws.easidiomas.images.service.IImageManager", serviceName = "imageManager")
 public class ImageManagerImpl implements IImageManager {
+	
+    private static final Logger logger = LoggerFactory.getLogger(ImageManagerImpl.class);
 	
 	private static final int RESIZE_WIDTH = Integer.parseInt(System.getenv("RESIZE_WIDTH") !=null ? System.getenv("RESIZE_WIDTH"): "512");
 	
@@ -33,6 +38,7 @@ public class ImageManagerImpl implements IImageManager {
 
 	@Override
 	public String uploadImage(Image data) throws ImageProcessingException {
+		logger.debug("Upload image was called");
 		if(data == null) throw new WebServiceException("The image was not received");
 		
 		try {
