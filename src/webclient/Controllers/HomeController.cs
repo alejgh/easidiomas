@@ -20,12 +20,14 @@ namespace WebClient.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Welcome page controller has been called");
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            _logger.LogInformation("Error page from home controller has been called");
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

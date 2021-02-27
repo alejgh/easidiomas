@@ -22,7 +22,13 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Posts</a>
                         </li>
                     </ul>
                 </div>
@@ -41,8 +47,23 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/notify.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @if (TempData["Notification"] != null)
+    {
+        <script type="text/javascript">
+            var notification = JSON.parse(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject((string) TempData["Notification"])));
+            console.log(notification);
+            if (notification != null) {
+                $.notify(notification.Message, {
+                        className: notification.ClassName
+                });
+            }
+        </script>
+    }
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

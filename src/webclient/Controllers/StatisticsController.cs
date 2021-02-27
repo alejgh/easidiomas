@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebClient.Controllers
 {
-    public class StstisticsController : Controller
+    public class StatisticsController : Controller
     {
         // GET: /<controller>/
         public IActionResult Index()

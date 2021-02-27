@@ -11,8 +11,10 @@
     <Folder Include="Services\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Filters\" />
+    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 </Project>
