@@ -16,7 +16,7 @@ export default function Home(props) {
     let data = response.data;
     let newPosts = [];
     for(let post in data){
-      let user = await getUser('api/mock/user'+data[post].id); // en verdad hay que pasar authorId pero es pa ver nuevas fotos [aprovecha el BUG willyrex]
+      let user = await getUser('/user'+data[post].id); // en verdad hay que pasar authorId pero es pa ver nuevas fotos [aprovecha el BUG willyrex]
       newPosts.push({
         id:data[post].id,
         user:user,
@@ -31,7 +31,7 @@ export default function Home(props) {
   
 
   const getUser = async function(url){
-    return (await fetch('http://localhost:5000/'+url)).json();
+    return (await fetch('http://localhost:5000/api/mock'+url)).json();
   }
 
   const loadMorePosts = async info => {

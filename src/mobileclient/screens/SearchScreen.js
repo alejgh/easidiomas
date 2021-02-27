@@ -10,38 +10,35 @@ export default function SearchScreen(props) {
   const {parentNavigation} = props;
 
   const [results, setResults] = useState([]);
+  const [links,setLinks] = useState([]);
 
-  const getResults = async function(){
-    let response = await (await fetch('http://localhost:5000/api/mock/search')).json();
-    let newChats = [];
-    for(let chat in response){
-      let user1 = await getUser(response[chat].user1)
-      let user2 = await getUser(response[chat].user2)
-      if(context.user.username == user1.username)
-        newChats.push({id:response[chat].id,key:response[chat].id,user:user2})
-      else
-        newChats.push({id:response[chat].id,key:response[chat].id,user:user1})
-    }
-    setResults(newChats)
+  const getResults = async function(url){
+    let response = await (await fetch('http://localhost:5000/api/mock'+url)).json();
+    //setResults([...results,response.users]) -> I´m not sure why this is not working...
+    setResults(results.concat(response.users))
+    setLinks(response.links)
   }
   
-  const getUser = async function(url){
-    return (await fetch('http://localhost:5000/'+url)).json();
+  const loadMoreResults = async info => {
+    getResults(links.next);
   }
 
-
   useEffect(()=>{
-    getResults()
+    getResults('/search');
   },[])
 
   return (
     <View style={styles.container}>
       <FlatList 
         numColumns={1}
+        onEndReachedThreshold={0.01}
+        onEndReached={info => {
+          loadMoreResults(info);
+        }}
         keyExtractor={(item) => item.id} 
         data={results} 
         renderItem={({ item }) => ( 
-            <Chat user={item.user} navigation={parentNavigation} sreen={'Profile'}/>
+            <Chat user={item} navigation={parentNavigation} sreen={'Profile'}/>
         )}
       />
 
