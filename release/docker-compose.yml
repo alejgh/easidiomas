@@ -57,6 +57,15 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASS: ${POSTGRES_PASS}
       POSTGRES_DB: ${POSTGRES_DB}
+
+  imagesservice:
+    build: ../src/imagesservice/
+    ports:
+      - "5004:5000"
+    depends_on:
+      - kafka
+    networks:
+      - event_bus
   
   postgres_db:
     image: postgres
