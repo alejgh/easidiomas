@@ -28,7 +28,7 @@ public class MinAgeFilter implements Filter<User> {
         Stream<User> filteredUsersStream =
                 streamToFilter.filter(
                         user -> {
-                            userBirthDate.setTime(user.getBirthDate());
+                            userBirthDate.setTime(new Date(user.getBirthDate()));
                             int currentYear = today.get(Calendar.YEAR);
                             int userBirthYear = today.get(Calendar.YEAR);
                             int userAgeInYears = currentYear - userBirthYear;
