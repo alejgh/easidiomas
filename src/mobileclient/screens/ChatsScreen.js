@@ -5,9 +5,7 @@ import Chat from './items/Chat';
 
 export default function ChatsScreen({route,navigation}) {
 
-  console.log(route)
   const context = useContext(AppContext);
-
   const [chats, setChats] = useState([]);
 
   const getChats = async function(){

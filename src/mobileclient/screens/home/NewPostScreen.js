@@ -1,10 +1,17 @@
-import React, { useState,useEffect } from 'react';
+import React, { useEffect,useContext,useState } from 'react';
 import { StyleSheet, TextInput , View, Image } from 'react-native';
+import {HomeContext} from '../navigation/HomeStackNavigator';
 
 export default function NewPostScreen(props) {
 
+  const context = useContext(HomeContext);
   const {parentNavigation} = props;
-  const [value, onChangeText] = useState('');
+  const [value,setValue] = useState(null);
+
+  const onChangeText = function(text){
+    setValue(text);
+    context.setNewPost(text)
+  }
 
   useEffect(()=>{
     parentNavigation.setOptions({

@@ -1,11 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useContext } from 'react';
 import { Text, StyleSheet,TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import NewPostScreen from '../home/NewPostScreen';
 import HomeTabNavigator from './HomeTabNavigator';
 
-
+export const HomeContext = React.createContext();
 export const navigationRef = React.createRef();
 
 export function navigate(name, params) {
@@ -16,18 +16,27 @@ export function navigate(name, params) {
 export default function HomeStackNavigator({navigation}){
 
     const Stack = createStackNavigator();
+  
+    const [newPost,setNewPost] = useState(null);
 
-    
     function PostBtn() {
+
+        const context = useContext(HomeContext);
+        const createPost = function(){
+            // TODO 
+            // CREATE A NEW POST REQUEST
+            //console.log(context.newPost)
+        }
         return (
-            <TouchableOpacity onPress={() => navigate('Home')} style={styles.postBtn}>
+            <TouchableOpacity onPress={() => createPost()} style={styles.postBtn}>
                 <Text style={styles.postBtnText}>Post</Text>
             </TouchableOpacity>
         );
     }
 
     return(
-    <NavigationContainer independent  initialRouteName="Results" ref={navigationRef}>
+<HomeContext.Provider value={{newPost:newPost,setNewPost:setNewPost}}>
+    <NavigationContainer independent  initialRouteName="Home" ref={navigationRef}>
         <Stack.Navigator  screenOptions={{
                 headerStyle: {
                     backgroundColor: '#1b2836',
@@ -54,6 +63,7 @@ export default function HomeStackNavigator({navigation}){
             </Stack.Screen>
         </Stack.Navigator>
     </NavigationContainer>
+</HomeContext.Provider>
     )
 }
 
