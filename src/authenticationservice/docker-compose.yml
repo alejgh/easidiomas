@@ -10,7 +10,7 @@ services:
       NEO4J_AUTH: neo4j/secret
 
   usersservice:
-    build: ./
+    build: ../usersservice/
     container_name: usersservice
     depends_on:
       - neo4j
@@ -21,3 +21,16 @@ services:
     environment:
       SERVER_PORT: 5001
       USERS_SERVICE_NEO4J_ADDR: bolt://neo4j:7687
+
+  authservice:
+    build: ./
+    container_name: authservice
+    depends_on:
+      - usersservice
+    expose:
+      - "5002"
+    ports:
+    - "5002:5002"
+    environment:
+      SERVER_PORT: 5002
+      USERS_SERVICE_ADDR: usersservice:5001
