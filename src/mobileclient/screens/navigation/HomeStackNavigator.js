@@ -25,7 +25,8 @@ export default function HomeStackNavigator({navigation}){
         const createPost = function(){
             // TODO 
             // CREATE A NEW POST REQUEST
-            //console.log(context.newPost)
+            //console.log(context.newPost);
+            //navigation.navigate("Home");
         }
         return (
             <TouchableOpacity onPress={() => createPost()} style={styles.postBtn}>

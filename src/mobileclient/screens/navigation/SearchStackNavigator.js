@@ -6,7 +6,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FiltersScreen from '../search/FiltersScreen';
 import SearchScreen from '../SearchScreen';
+import data from '../search/languajes.json';
 
+
+export const SearchContext = React.createContext();
 export const navigationRef = React.createRef();
 
 export function navigate(name, params) {
@@ -16,14 +19,15 @@ export function navigate(name, params) {
 
 export default function SearchStackNavigator({navigation}) {
 
-    const [search,setSearch] = useState('');
-    const [lupa,setLupa] = useState(styles.leftIconContainerStyle);
-    const inputEl = useRef(null);
+    const [native,setNative] = useState(data[0]);
+    const [learning,setLearning] = useState(data[1]);
 
-    const updateSearch = (search) => {
-       setSearch(search)
-    };
-
+    const filter = function(){
+        console.log(native)
+        console.log(learning)
+        // TODO
+        // Search Request
+      }
 
     const Stack = createStackNavigator();
 
@@ -39,33 +43,34 @@ export default function SearchStackNavigator({navigation}) {
     
 
   return (
-    <View style={styles.container}>
+    <SearchContext.Provider value={{native:native,setNative:setNative,learning,setLearning,filter:filter}}>
+        <View style={styles.container}>
+            <NavigationContainer independent  initialRouteName="Discover" ref={navigationRef}>
+                <Stack.Navigator screenOptions={{
+                    headerStyle: {
+                        backgroundColor: '#1b2836',
+                        elevation:0,
+                        borderBottomWidth:0
 
-        <NavigationContainer independent  initialRouteName="Discover" ref={navigationRef}>
-            <Stack.Navigator screenOptions={{
-                headerStyle: {
-                    backgroundColor: '#1b2836',
-                    elevation:0,
-                    borderBottomWidth:0
-
-                },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                }
-            }}>                
-                <Stack.Screen name="Discover"options={{
-                    headerRight: () => (
-                        <FiltersBtn/>
-                    )
-                }}>
-                    {props=> <SearchScreen {...props} parentNavigation={navigation}/>
-                }
-                </Stack.Screen>
-                <Stack.Screen name="Search Options" component={FiltersScreen}/>
-            </Stack.Navigator>
-        </NavigationContainer>
-    </View>
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    }
+                }}>                
+                    <Stack.Screen name="Discover"options={{
+                        headerRight: () => (
+                            <FiltersBtn/>
+                        )
+                    }}>
+                        {props=> <SearchScreen {...props} parentNavigation={navigation}/>
+                    }
+                    </Stack.Screen>
+                    <Stack.Screen name="Search Options" component={FiltersScreen}/>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </View>
+    </SearchContext.Provider>
   );
 }
 

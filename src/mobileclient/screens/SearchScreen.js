@@ -18,25 +18,26 @@ export default function SearchScreen(props) {
     setResults(results.concat(response.users))
     setLinks(response.links)
   }
-  
+
+
   useEffect(()=>{
     loadResults('/search');
   },[])
 
   return (
-    <View style={styles.container}>
-      <FlatList 
-        numColumns={1}
-        onEndReachedThreshold={0.01}
-        onEndReached={info => {
-          loadResults(links.next);
-        }}
-        keyExtractor={(item) => item.id} 
-        data={results} 
-        renderItem={({ item }) => ( 
-            <Chat user={item} navigation={parentNavigation} sreen={'Profile'}/>
-        )}
-      />
+      <View style={styles.container}>
+        <FlatList 
+          numColumns={1}
+          onEndReachedThreshold={0.01}
+          onEndReached={info => {
+            loadResults(links.next);
+          }}
+          keyExtractor={(item) => item.id} 
+          data={results} 
+          renderItem={({ item }) => ( 
+              <Chat user={item} navigation={parentNavigation} sreen={'Profile'}/>
+          )}
+        />
 
     </View>
   );

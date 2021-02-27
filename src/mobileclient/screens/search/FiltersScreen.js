@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, Text, View,Button} from 'react-native';
 /*import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
  <MultiSlider
@@ -17,23 +17,26 @@ import { StyleSheet, Text, View} from 'react-native';
 */
 import CustomLabel from './CustomLabel';
 import CustomPickerPodal from './CustomPickerModal';
+import {SearchContext} from '../navigation/SearchStackNavigator';
 
 export default function FiltersScreen() {
 
+    const context = useContext(SearchContext);
+    console.log(context)
     const [multiSliderValue, setMultiSliderValue] = useState([20, 35]);
-
     const multiSliderValuesChange = values => setMultiSliderValue(values);
 
   return (
     <View style={styles.container}>
        
-       <CustomPickerPodal labelTag={"Native"}/>
-       <CustomPickerPodal labelTag={"Learning"}/>
+       <CustomPickerPodal labelTag={"Native"} selectedLanguaje={context.native} setSelectedLanguaje={context.setNative}/>
+       <CustomPickerPodal labelTag={"Learning"} selectedLanguaje={context.learning} setSelectedLanguaje={context.setLearning}/>
     
       <View style={styles.ageContainer}>
         <Text style={styles.ageLabel}>Age Range</Text>
         
       </View>
+      <Button onPress={context.filter}/>
     </View>
   );
 }

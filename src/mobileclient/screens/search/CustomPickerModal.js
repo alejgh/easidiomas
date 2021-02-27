@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import PickerModal from 'react-native-picker-modal-view';
-import data from './languajes.json';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import data from './languajes.json';
 export default function CustomPickerPodal(props) {
 
-    const {labelTag} = props;
-
-    const [selectedLanguaje,setSelectedLanguaje] = useState(data[0])
+    console.log(props)
+    const {labelTag,selectedLanguaje,setSelectedLanguaje} = props;
 
     const handleSelected = function(selected){
-		setSelectedLanguaje(selected);
+		    setSelectedLanguaje(selected);
         return selected;
-	}
+	  }
 
   return (
     <PickerModal renderSelectView={(disabled, selected, showModal) =>
