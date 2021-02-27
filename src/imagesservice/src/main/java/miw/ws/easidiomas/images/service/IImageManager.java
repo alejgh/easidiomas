@@ -13,6 +13,16 @@ import miw.ws.easidiomas.images.exception.ImageProcessingException;
 @SOAPBinding(style = Style.DOCUMENT)
 public interface IImageManager {
 
+	/**
+	 * Uploads an image to be processed and stored for future use.
+	 * 
+	 * The processing involves resizing the image to a standard size.
+	 * An URL to access the image will be returned.
+	 * 
+	 * @param data Binary image data.
+	 * @return URL to access the processed image.
+	 * @throws ImageProcessingException If there was an error resizing the image.
+	 */
 	String uploadImage(@XmlMimeType("image/jpeg") Image data) throws ImageProcessingException;
 
 }

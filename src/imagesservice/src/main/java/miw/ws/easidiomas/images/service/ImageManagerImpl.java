@@ -32,27 +32,42 @@ public class ImageManagerImpl implements IImageManager {
 	
 	private GoogleCloudStorageClient gcloudClient;
 	
+	
 	public ImageManagerImpl() {
 		gcloudClient = new GoogleCloudStorageClient();
 	}
 
+	
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	public String uploadImage(Image data) throws ImageProcessingException {
-		logger.debug("Upload image was called");
+		logger.info("Upload image was called");
+	
 		if(data == null) throw new WebServiceException("The image was not received");
 		
 		try {
+			logger.debug("Resizing image to width=" + RESIZE_WIDTH + ", height=" + RESIZE_HEIGHT);
            	BufferedImage resizedImage = ImageUtils.resizeImage(data, RESIZE_WIDTH, RESIZE_HEIGHT);
-           	
+
+			logger.debug("Converting image to array of bytes...");
            	ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(resizedImage, "jpg", baos);
            	byte[] imageData = baos.toByteArray();
+			logger.trace("Byte array processed: " + imageData);
            	
-           	String url = gcloudClient.uploadToStorage(imageData, BUCKET_NAME, UUID.randomUUID().toString() + ".jpg");
+			logger.debug("Uploading image data to bucket: " + BUCKET_NAME);
+           	String url = gcloudClient.uploadToStorage(imageData, BUCKET_NAME,
+           			UUID.randomUUID().toString() + ".jpg", "image/jpeg");
+           	logger.debug("Final url: " + url);
             return url;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("An IO error when resizing the image has occurred: " + e.getMessage());
 		    throw new ImageProcessingException();
+		} catch (Exception e) {
+			logger.error("An error has occurred: " + e.getMessage());
+			throw new WebServiceException("An error has occurred");
 		}
     }
 
