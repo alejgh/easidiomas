@@ -13,9 +13,12 @@ export default function SearchScreen(props) {
   const [links,setLinks] = useState([]);
 
   const loadResults = async function(url){
+    if(links?.next =='url_pagina_siguiente')  // A ver como es esto en verdad (cuando no hay más que pone ahí?)
+      return;
     let response = await (await fetch('http://localhost:5000/api/mock'+url)).json();
     //setResults([...results,response.users]) -> I´m not sure why this is not working...
-    setResults(results.concat(response.users))
+    console.log(response)
+    setResults(results.concat(response?.users))
     setLinks(response.links)
   }
 

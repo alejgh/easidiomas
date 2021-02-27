@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, View,TouchableOpacity } from 'react-native';
 import PickerModal from 'react-native-picker-modal-view';
 import data from '../search/languajes.json';
 
@@ -12,15 +12,22 @@ export default function SignUpLanguajePicker(props) {
 
     const handleSelected = function(selected){
 		setSelectedLanguaje(selected);
-        setNewLabel(labelTag+'-'+selected.Code)
+        if(selected)
+          setNewLabel(labelTag.replace('*','')+'\n'+selected.Code)
         return selected;
 	}
 
   return (
     <PickerModal renderSelectView={(disabled, selected, showModal) =>
-                <TouchableOpacity style={styles.languajeItem} onPress={showModal}>
-                <Text style={styles.languajeLabel}>{newLabel}</Text>
-            </TouchableOpacity>
+        <View style={styles.inputView} >
+            <TouchableOpacity onPress={showModal}>
+              <TextInput  
+                style={styles.inputText}
+                editable = {false}
+                placeholder={newLabel} 
+                placeholderTextColor="#E1E8ED"/>
+          </TouchableOpacity>
+        </View>
         }
         onSelected={handleSelected}
         items={data}
@@ -46,10 +53,23 @@ const styles = StyleSheet.create({
       borderColor:'#fff',
       borderRadius:10,
       justifyContent:'center',
-  
+    },
+    inputView:{
+      backgroundColor:"#465881",
+      borderRadius:20,
+      height:50,
+      width:90,
+      justifyContent:"center",
+      padding:16,
+      margin:5
     },
     languajeLabel:{
       textAlign:'center',
       color:"white"
-    }
+    },
+    inputText:{
+      height:50,
+      color:"white",
+      textAlign:'center'
+    },
   });

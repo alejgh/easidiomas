@@ -26,11 +26,19 @@ export default function ProfileStackNavigator({route,navigation}){
 
     return(
     <NavigationContainer independent  initialRouteName='Profile'>
-        <Stack.Navigator
-         screenOptions={{
-            headerShown: false
+        <Stack.Navigator screenOptions={{
+            animationEnabled: true, //poner a false para evitar flasazo
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+            headerStyle: { 
+                backgroundColor: '#1b2836',
+                borderBottomColor: '#435060',
+                borderBottomWidth:1
+            },
           }}>
-            <Stack.Screen name='Profile'>
+            <Stack.Screen name='Profile' options={{ headerShown: false}}>
                 {props => 
                 <ProfileScreen {...props}
                      user={user} 

@@ -3,22 +3,35 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../auth/LoginScreen';
 import SignUpScreen from '../auth/SignUpScreen';
-import AppTabNavigator from '../navigation/AppTabNavigator';
+import SignUpProfileScreen from '../auth/SignUpProfileScreen';
 
 export default function AuthStackNavigator(){
 
     const Stack = createStackNavigator();
 
     return(
-    <NavigationContainer independent  initialRouteName="Messages"
+    <NavigationContainer independent  
     transitionerStyle={{backgroundColor: '#222'}}>
         <Stack.Navigator 
          screenOptions={{
-            headerShown: false,
-            animationEnabled: true, //poner a false para evitar flasazos
+            animationEnabled: true, //poner a false para evitar flasazo
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+            headerStyle: { 
+                backgroundColor: '#1b2836',
+                borderBottomColor: '#435060',
+                borderBottomWidth:1
+            },
           }}>
-            <Stack.Screen name="Login" component={LoginScreen}/>
-            <Stack.Screen name="SignUp" component={SignUpScreen}/>
+            
+            <Stack.Screen name="Login" component={LoginScreen} options={{
+                 headerShown: false
+            }}/>
+            <Stack.Screen name="Sign Up" component={SignUpScreen}/>
+            <Stack.Screen name="Sign Up Profile" component={SignUpProfileScreen}/>
+            
         </Stack.Navigator>
     </NavigationContainer>
     )

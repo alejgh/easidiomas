@@ -8,7 +8,7 @@ export default function LoginScreen({navigation}){
   const context = useContext(AppContext);
 
     const signUp = function(){
-        navigation.navigate("SignUp");
+        navigation.navigate("Sign Up");
     }
 
     const signIn = function(){
@@ -21,23 +21,23 @@ export default function LoginScreen({navigation}){
         <View style={styles.inputView} >
           <TextInput  
             style={styles.inputText}
-            placeholder="Email..." 
-            placeholderTextColor="#003f5c"
+            placeholder="Email *" 
+            placeholderTextColor="#E1E8ED"
             />
         </View>
         <View style={styles.inputView} >
           <TextInput  
             secureTextEntry
             style={styles.inputText}
-            placeholder="Password..." 
-            placeholderTextColor="#003f5c"
+            placeholder="Password *" 
+            placeholderTextColor="#E1E8ED"
            />
         </View>
         <TouchableOpacity style={styles.loginBtn} onPress={signIn}>
           <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={signUp}>
-          <Text style={styles.loginText}>Signup</Text>
+          <Text style={styles.signupText}>Sign Up</Text>
         </TouchableOpacity>
 
   
@@ -86,6 +86,12 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   loginText:{
-    color:"white"
+    color:"white",
+    fontSize:18
+  },
+  signupText:{
+    color:"white",
+    marginTop:20,
+    fontSize:15
   }
 });

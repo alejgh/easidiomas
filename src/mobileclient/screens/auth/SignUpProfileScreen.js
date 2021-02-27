@@ -2,16 +2,16 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, Image,TouchableOpacity } from 'react-native';
 import SignUpLanguajePicker from './SignUpLanguajePicker';
 
-export default function SignUpScreen({navigation}){
+export default function SignUpProfileScreen({navigation}){
 
     const [native,setNative] = useState('Native');
     const [learning1,setLearning1] = useState('Learning');
     const [learning2,setLearning2] = useState('Learning');
 
     
-    const next = function(){
+    const signUp = function(){
       //TODOO
-      navigation.navigate("Sign Up Profile");
+      navigation.navigate("Login");
     }
     
 
@@ -23,33 +23,37 @@ export default function SignUpScreen({navigation}){
 
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>Easidiomas</Text>
+         <TouchableOpacity onPress={changeProfilePic}>
+          <Image style={styles.avatar} source={{uri: 'https://www.bootdey.com/img/Content/avatar/avatar2.png'}}/>
+        </TouchableOpacity>  
         <View style={styles.inputView} >
           <TextInput  
             style={styles.inputText}
-            placeholder="Username *" 
+            placeholder="Name *" 
             placeholderTextColor="#E1E8ED"/>
         </View>
         <View style={styles.inputView} >
           <TextInput  
             style={styles.inputText}
-            placeholder="Email *" 
+            placeholder="Surname *" 
             placeholderTextColor="#E1E8ED"/>
         </View>
         <View style={styles.inputView} >
           <TextInput  
-            secureTextEntry
             style={styles.inputText}
-            placeholder="Password *" 
+            placeholder="BirthDate *" 
             placeholderTextColor="#E1E8ED"/>
         </View>
 
-    
-        
-        
+        <View style={styles.languajesContainer} >
+            <SignUpLanguajePicker labelTag='Native*'/>
+            <SignUpLanguajePicker labelTag='Learning*'/>
+            <SignUpLanguajePicker labelTag='Learning*'/>
+        </View>
 
-        <TouchableOpacity style={styles.nextBtn} onPress={next}>
-          <Text style={styles.nextText}>Next</Text>
+  
+        <TouchableOpacity style={styles.signupBtn} onPress={signUp}>
+          <Text style={styles.signupText}>SIGN UP</Text>
         </TouchableOpacity>
 
       </View>
@@ -64,12 +68,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1b2836',
     alignItems: 'center',
     justifyContent: 'center',
-  }, 
-  logo:{
-    fontWeight:"bold",
-    fontSize:50,
-    color:"#1DA1F2",
-    marginBottom:40
   },
   avatar: {
     width: 130,
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
 
   },
   inputView:{
-    width:"80%",
+    width:"82%",
     backgroundColor:"#465881",
     borderRadius:25,
     height:50,
@@ -97,7 +95,7 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize:11
   },
-  nextBtn:{
+  signupBtn:{
     width:"80%",
     backgroundColor:"#1DA1F2",
     borderRadius:25,
@@ -107,15 +105,14 @@ const styles = StyleSheet.create({
     marginTop:40,
     marginBottom:10
   },
-  nextText:{
+  signupText:{
     color:"white",
-    fontSize:18
+    fontSize:18,
   },
   languajesContainer:{
-    flex:0.2,
-    width:300,
+    flex:0.4,
     flexDirection:'row',
-    justifyContent:'space-around',
-    alignItems:'center'
+    justifyContent:'center',
+    width:"100%",
   }
 });
