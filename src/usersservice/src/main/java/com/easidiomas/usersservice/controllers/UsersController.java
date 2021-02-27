@@ -6,6 +6,8 @@ import com.easidiomas.usersservice.model.ResultPageWrapper;
 import com.easidiomas.usersservice.model.User;
 import com.easidiomas.usersservice.model.UserInfo;
 import com.easidiomas.usersservice.persistence.UsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import java.util.*;
 @RestController
 public class UsersController {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
+
     private Pipeline filters;
 
     @Autowired
@@ -33,6 +37,10 @@ public class UsersController {
                                 @Nullable @RequestParam Integer maxAge,
                                 @Nullable @RequestParam String[] speaks,
                                 @Nullable @RequestParam String[] wantsToLearn) {
+
+        LOGGER.debug("Logging a debug message");
+        LOGGER.info("Logging an info message");
+        LOGGER.error("Logging an error message");
 
         this.filters = new Pipeline(repository.findAll());
         if(!Objects.isNull(minAge))
