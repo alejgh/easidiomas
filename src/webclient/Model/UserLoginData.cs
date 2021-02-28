@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WebClient.Model
 {
     /// <summary>
-    /// Data fetched from the login view.
+    /// Data fetched from the login view, used 
     /// </summary>
     public class UserLoginData
     {
