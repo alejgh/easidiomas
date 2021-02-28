@@ -65,9 +65,9 @@ namespace PostsService.Kafka.Consumers
             }
 
             // call the statistics service with information about this post
-            StatisticsServiceClient.EndpointConfiguration config = new StatisticsServiceClient.EndpointConfiguration();
-            StatisticsServiceClient client = new StatisticsServiceClient(config, _statisticsServiceAddress);
-            await client.registerPostCreatedEventAsync(postId.ToString(), language);
+            //StatisticsServiceClient.EndpointConfiguration config = new StatisticsServiceClient.EndpointConfiguration();
+            //StatisticsServiceClient client = new StatisticsServiceClient(config, _statisticsServiceAddress);
+            //await client.registerPostCreatedEventAsync(postId.ToString(), language);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
