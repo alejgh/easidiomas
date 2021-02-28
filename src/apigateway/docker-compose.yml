@@ -9,6 +9,10 @@ services:
     environment:
       NEO4J_AUTH: neo4j/secret
 
+  redis:
+    image: redis
+    container_name: redis
+
   usersservice:
     build: ../usersservice/
     container_name: usersservice
@@ -32,11 +36,23 @@ services:
       USERS_SERVICE_HOST: usersservice
       USERS_SERVICE_PORT: 5000
 
+  statisticsservice:
+    build: ../statisticsservice/
+    container_name: statisticsservice
+    depends_on:
+      - redis
+    expose:
+      - "5000"
+    environment:
+      REDIS_ADDR: redis
+      REDIS_PORT: 6379
+
   apigateway:
     build: ./
     container_name: apigateway
     depends_on:
       - authservice
+      - statisticsservice
     ports:
       - "5000:5000"
     expose:
@@ -46,3 +62,4 @@ services:
       AUTH_SERVICE_ADDRESS: authservice:5000
       USERS_SERVICE_HOST: usersservice
       USERS_SERVICE_PORT: 5000
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"

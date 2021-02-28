@@ -33,7 +33,7 @@ public class UsersServiceController extends EasidiomasAPIController {
     public ResponseEntity index(HttpServletRequest request) throws IOException, URISyntaxException {
         LOGGER.info(String.format("Request to path [%s] received.", request.getRequestURL()));
         LOGGER.info(String.format("Getting the passport from the header for request [%s].", request.getRequestURL()));
-        //Authservice.Passport passport = super.getPassport(request);
+        Authservice.Passport passport = super.getPassport(request);
 
         LOGGER.info(String.format("Requesting to the users service the list of users paginated [%s].", request.getRequestURL()));
         LOGGER.info(String.format("Redirecting request to [%s:%s].", USERS_SERVICE_HOST, USERS_SERVICE_PORT));
