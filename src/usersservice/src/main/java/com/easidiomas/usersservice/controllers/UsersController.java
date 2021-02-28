@@ -106,7 +106,7 @@ public class UsersController {
 
     // POST: /api/users
     @PostMapping(value = "/api/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity add(@RequestBody UserInfo user) throws URISyntaxException {
+    public ResponseEntity add(@RequestBody UserInfo user) throws URISyntaxException, MalformedURLException {
         if(repository.findByUsername(user.getUsername()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken");
         }
