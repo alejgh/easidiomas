@@ -81,9 +81,9 @@ import javax.xml.bind.annotation.XmlType;
 public class RegisteredUsersData {
 
     @XmlElement(required = true)
-    protected RegisteredUsersData.Learning learning;
+    protected Learning learning;
     @XmlElement(required = true)
-    protected RegisteredUsersData.Nnative nnative;
+    protected Nnative nnative;
     protected int total;
 
     /**
@@ -91,10 +91,10 @@ public class RegisteredUsersData {
      * 
      * @return
      *     possible object is
-     *     {@link RegisteredUsersData.Learning }
+     *     {@link Learning }
      *     
      */
-    public RegisteredUsersData.Learning getLearning() {
+    public Learning getLearning() {
         return learning;
     }
 
@@ -103,10 +103,10 @@ public class RegisteredUsersData {
      * 
      * @param value
      *     allowed object is
-     *     {@link RegisteredUsersData.Learning }
+     *     {@link Learning }
      *     
      */
-    public void setLearning(RegisteredUsersData.Learning value) {
+    public void setLearning(Learning value) {
         this.learning = value;
     }
 
@@ -115,10 +115,10 @@ public class RegisteredUsersData {
      * 
      * @return
      *     possible object is
-     *     {@link RegisteredUsersData.Nnative }
+     *     {@link Nnative }
      *     
      */
-    public RegisteredUsersData.Nnative getNnative() {
+    public Nnative getNnative() {
         return nnative;
     }
 
@@ -127,10 +127,10 @@ public class RegisteredUsersData {
      * 
      * @param value
      *     allowed object is
-     *     {@link RegisteredUsersData.Nnative }
+     *     {@link Nnative }
      *     
      */
-    public void setNnative(RegisteredUsersData.Nnative value) {
+    public void setNnative(Nnative value) {
         this.nnative = value;
     }
 
@@ -187,7 +187,7 @@ public class RegisteredUsersData {
     })
     public static class Learning {
 
-        protected List<RegisteredUsersData.Learning.Entry> entry;
+        protected List<Entry> entry;
 
         /**
          * Gets the value of the entry property.
@@ -207,13 +207,13 @@ public class RegisteredUsersData {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link RegisteredUsersData.Learning.Entry }
+         * {@link Entry }
          * 
          * 
          */
-        public List<RegisteredUsersData.Learning.Entry> getEntry() {
+        public List<Entry> getEntry() {
             if (entry == null) {
-                entry = new ArrayList<RegisteredUsersData.Learning.Entry>();
+                entry = new ArrayList<Entry>();
             }
             return this.entry;
         }
@@ -338,7 +338,7 @@ public class RegisteredUsersData {
     })
     public static class Nnative {
 
-        protected List<RegisteredUsersData.Nnative.Entry> entry;
+        protected List<Entry> entry;
 
         /**
          * Gets the value of the entry property.
@@ -358,13 +358,13 @@ public class RegisteredUsersData {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link RegisteredUsersData.Nnative.Entry }
+         * {@link Entry }
          * 
          * 
          */
-        public List<RegisteredUsersData.Nnative.Entry> getEntry() {
+        public List<Entry> getEntry() {
             if (entry == null) {
-                entry = new ArrayList<RegisteredUsersData.Nnative.Entry>();
+                entry = new ArrayList<Entry>();
             }
             return this.entry;
         }

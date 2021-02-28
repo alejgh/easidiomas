@@ -62,7 +62,7 @@ import javax.xml.bind.annotation.XmlType;
 public class UserStatistics {
 
     @XmlElement(required = true)
-    protected UserStatistics.CreatedPosts createdPosts;
+    protected CreatedPosts createdPosts;
     protected int textToSpeechMade;
     protected int translationsMade;
     protected String userId;
@@ -72,10 +72,10 @@ public class UserStatistics {
      * 
      * @return
      *     possible object is
-     *     {@link UserStatistics.CreatedPosts }
+     *     {@link CreatedPosts }
      *     
      */
-    public UserStatistics.CreatedPosts getCreatedPosts() {
+    public CreatedPosts getCreatedPosts() {
         return createdPosts;
     }
 
@@ -84,10 +84,10 @@ public class UserStatistics {
      * 
      * @param value
      *     allowed object is
-     *     {@link UserStatistics.CreatedPosts }
+     *     {@link CreatedPosts }
      *     
      */
-    public void setCreatedPosts(UserStatistics.CreatedPosts value) {
+    public void setCreatedPosts(CreatedPosts value) {
         this.createdPosts = value;
     }
 
@@ -184,7 +184,7 @@ public class UserStatistics {
     })
     public static class CreatedPosts {
 
-        protected List<UserStatistics.CreatedPosts.Entry> entry;
+        protected List<Entry> entry;
 
         /**
          * Gets the value of the entry property.
@@ -204,13 +204,13 @@ public class UserStatistics {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link UserStatistics.CreatedPosts.Entry }
+         * {@link Entry }
          * 
          * 
          */
-        public List<UserStatistics.CreatedPosts.Entry> getEntry() {
+        public List<Entry> getEntry() {
             if (entry == null) {
-                entry = new ArrayList<UserStatistics.CreatedPosts.Entry>();
+                entry = new ArrayList<Entry>();
             }
             return this.entry;
         }

@@ -1,10 +1,13 @@
 package com.easidiomas.usersservice.controllers;
 
+import com.easidiomas.usersservice.clients.statisticsservice.IStatisticsService;
+import com.easidiomas.usersservice.clients.statisticsservice.IStatisticsServiceService;
 import com.easidiomas.usersservice.filters.*;
 import com.easidiomas.usersservice.model.Links;
 import com.easidiomas.usersservice.model.ResultPageWrapper;
 import com.easidiomas.usersservice.model.User;
 import com.easidiomas.usersservice.model.UserInfo;
+import com.easidiomas.usersservice.persistence.DataGenerator;
 import com.easidiomas.usersservice.persistence.UsersRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 @RestController
@@ -24,10 +29,20 @@ public class UsersController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
 
+    private static final String STATS_SERVICE_WDSL = System.getenv("STATS_SERVICE_WDSL")!=null ? System.getenv("STATS_SERVICE_WDSL"): "http://localhost:5000/soapws/statistics?wsdl";
+
     private Pipeline filters;
 
     @Autowired
     public UsersRepository repository;
+
+    @GetMapping(value = "api/users:generateData")
+    public ResponseEntity generateData() throws MalformedURLException {
+
+        new DataGenerator().loadSomeData(repository, 100, 50);
+
+        return ResponseEntity.ok().build();
+    }
 
     // GET: /api/users
     @GetMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,7 +90,7 @@ public class UsersController {
 
     // POST: /api/users
     @PostMapping(value = "/api/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity add(@RequestBody UserInfo user) throws URISyntaxException {
+    public ResponseEntity add(@RequestBody UserInfo user) throws URISyntaxException, MalformedURLException {
         if(repository.findByUsername(user.getUsername()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken");
         }
@@ -91,6 +106,12 @@ public class UsersController {
         // Call images service HERE
         userToSave.setAvatarUrl("http://CALL_THE_IMAGES_SERVICE_ASHOLE/");
         User savedUser = repository.save(userToSave);
+
+        // Register the created user in the statistics service
+        IStatisticsServiceService service = new IStatisticsServiceService(new URL(STATS_SERVICE_WDSL));
+        IStatisticsService statisticsService = service.getIStatisticsServicePort();
+        statisticsService.registerUserCreatedEvent(Arrays.asList(savedUser.getLearning()), savedUser.getSpeaks());
+
         return ResponseEntity.created(new URI("http://easidiomas.com/users/" + savedUser.getId())).body(savedUser);
     }
 

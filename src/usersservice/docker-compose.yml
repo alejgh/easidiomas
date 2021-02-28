@@ -3,21 +3,60 @@ services:
   neo4j:
     image: neo4j
     container_name: neo4j
+    volumes:
+    - type: volume
+      source: neo4j
+      target: /data
     expose:
       - "7474"
       - "7687"
+    ports:
+    - "7474:7474"
+    - "7687:7687"
     environment:
       NEO4J_AUTH: neo4j/secret
+
+  redis:
+    image: redis
+    container_name: redis
+
+  statisticsservice:
+    build: ../statisticsservice/
+    container_name: statisticsservice
+    depends_on:
+      - redis
+    ports:
+      - "5050:5000"
+    expose:
+      - "5000"
+    environment:
+      REDIS_ADDR: redis
+      REDIS_PORT: 6379
+
+  imagesservice:
+    build: ../imagesservice/
+    container_name: imagesservice
+    ports:
+    - "5060:5000"
+    expose:
+      - 5000
 
   usersservice:
     build: ./
     container_name: usersservice
     depends_on:
       - neo4j
+      - statisticsservice
+      - imagesservice
     ports:
-      - "5001:5001"
+      - "5000:5000"
     expose:
-      - "5001"
+      - "5000"
     environment:
-      SERVER_PORT: 5001
+      SERVER_PORT: 5000
       USERS_SERVICE_NEO4J_ADDR: bolt://neo4j:7687
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      IMAGES_SERVICE_WDSL: "http://imagesservice:5000/soapws/images?wsdl"
+
+volumes:
+  neo4j:

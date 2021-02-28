@@ -61,7 +61,7 @@ public class SystemStatistics {
 
     protected int createdChats;
     @XmlElement(required = true)
-    protected SystemStatistics.CreatedPosts createdPosts;
+    protected CreatedPosts createdPosts;
     protected RegisteredUsersData registeredUsers;
 
     /**
@@ -85,10 +85,10 @@ public class SystemStatistics {
      * 
      * @return
      *     possible object is
-     *     {@link SystemStatistics.CreatedPosts }
+     *     {@link CreatedPosts }
      *     
      */
-    public SystemStatistics.CreatedPosts getCreatedPosts() {
+    public CreatedPosts getCreatedPosts() {
         return createdPosts;
     }
 
@@ -97,10 +97,10 @@ public class SystemStatistics {
      * 
      * @param value
      *     allowed object is
-     *     {@link SystemStatistics.CreatedPosts }
+     *     {@link CreatedPosts }
      *     
      */
-    public void setCreatedPosts(SystemStatistics.CreatedPosts value) {
+    public void setCreatedPosts(CreatedPosts value) {
         this.createdPosts = value;
     }
 
@@ -165,7 +165,7 @@ public class SystemStatistics {
     })
     public static class CreatedPosts {
 
-        protected List<SystemStatistics.CreatedPosts.Entry> entry;
+        protected List<Entry> entry;
 
         /**
          * Gets the value of the entry property.
@@ -185,13 +185,13 @@ public class SystemStatistics {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link SystemStatistics.CreatedPosts.Entry }
+         * {@link Entry }
          * 
          * 
          */
-        public List<SystemStatistics.CreatedPosts.Entry> getEntry() {
+        public List<Entry> getEntry() {
             if (entry == null) {
-                entry = new ArrayList<SystemStatistics.CreatedPosts.Entry>();
+                entry = new ArrayList<Entry>();
             }
             return this.entry;
         }
