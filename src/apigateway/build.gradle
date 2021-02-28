@@ -8,6 +8,8 @@ plugins {
 
     id 'org.springframework.boot' version '2.4.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+
+    //id "uk.co.boothen.gradle.wsimport" version "0.16"
 }
 
 group 'com.easidiomas'
@@ -33,6 +35,18 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // https://mvnrepository.com/artifact/javax.activation/activation
+    implementation group: 'javax.activation', name: 'activation', version: '1.1.1'
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0'
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
+
+
+
 
     compile "io.grpc:grpc-netty:${grpcVersion}"
     compile "io.grpc:grpc-protobuf:${grpcVersion}"
@@ -63,5 +77,14 @@ sourceSets {
         }
     }
 }
+
+/*wsimport {
+    verbose = true
+    generatedSourceRoot = "../src/main/java"
+
+    wsdl ("StatisticsService.wsdl") {
+        packageName("com.easidiomas.api.clients.statisticsservice")
+    }
+}*/
 
 startScripts.enabled = false

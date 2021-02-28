@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  redis:
+    image: redis
+    container_name: redis
+
+  statisticsservice:
+    build: ./
+    container_name: statisticsservice
+    depends_on:
+      - redis
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+    environment:
+      REDIS_ADDR: redis
+      REDIS_PORT: 6379

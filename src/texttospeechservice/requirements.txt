@@ -1,0 +1,5 @@
+Flask==1.1.2
+google-cloud-texttospeech
+kafka-python==1.4.6
+waitress
+zeep==4.0.0

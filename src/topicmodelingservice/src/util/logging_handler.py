@@ -16,7 +16,7 @@ class KafkaLoggingHandler(logging.Handler):
 
     Logs will be sent under the 'service_logs' topic.
     """
-    def __init__(self, endpoint, key="default", topic="default"):
+    def __init__(self, endpoint, key="default", topic="service_logs"):
         while not hasattr(self, 'producer'):
             try:
                 self.producer = KafkaProducer(bootstrap_servers=endpoint)
@@ -32,7 +32,7 @@ class KafkaLoggingHandler(logging.Handler):
             return
         try:
             msg = self.format(record)
-            self.producer.send("service_logs", value=str.encode(msg), key=self.key)
+            self.producer.send(self.topic, value=str.encode(msg), key=self.key)
         except:
             ei = sys.exc_info()
             traceback.print_exception(ei[0], ei[1], ei[2], None, sys.stderr)
