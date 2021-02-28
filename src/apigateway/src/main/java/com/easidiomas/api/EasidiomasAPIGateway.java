@@ -36,7 +36,7 @@ public class EasidiomasAPIGateway {
     public FilterRegistrationBean securityFilterFilter() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(securityFilter());
-        registrationBean.addUrlPatterns("/api/users/*", "/api/statistics/*", "/api/translations/*", "/api/posts/*");
+        registrationBean.addUrlPatterns("/api/users/*", "/api/statistics/*", "/api/translations/*", "/api/posts/*", "/api/chats/*", "/api/TextsToSpeechs/*");
         registrationBean.setName("securityFilter");
         registrationBean.setOrder(1);
         return registrationBean;
