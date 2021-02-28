@@ -5,6 +5,8 @@ namespace PostsService.Kafka.Deserializers
 {
     /// <summary>
     /// Custom deserializer to parse booleans from Kafka.
+    ///
+    /// Adapted to the response obtained by the offensive text detection service.
     /// </summary>
     public class BooleanDeserializer : IDeserializer<bool>
     {
@@ -12,7 +14,8 @@ namespace PostsService.Kafka.Deserializers
         {
             if (isNull) throw new ArgumentNullException($"Null data encountered deserializing boolean value.");
 
-            return Convert.ToBoolean(data.ToArray());
+            byte[] array = data.ToArray();
+            return array.Length != 0;
         }
     }
 }
