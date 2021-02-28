@@ -21,7 +21,7 @@ services:
      - "9093"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_CREATE_TOPICS: "service_logs:1:1"
+      KAFKA_CREATE_TOPICS: "service_logs:1:1,posts:1:1,topics:1:1,lang_detection:1:1,offensive_text_detection:1:1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
@@ -160,6 +160,27 @@ services:
     environment:
       REDIS_ADDR: redis
       REDIS_PORT: 6379
+  
+  languageidentificationservice:
+    build: ../src/languageidentificationservice/
+    container_name: languageidentificationservice
+    depends_on:
+      - kafka
+      - postsservice
+    expose:
+      - "5000"
+    environment:
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      KAFKA_ENDPOINT: kafka:9092
+      SERVICE_NAME: LANG_INDET_SERVICE
+      LANGUAGE_DETECTION_TOPIC: languageidentification_service
+      POSTS_TOPIC: posts
+
+  translationsservice:
+    build: ../src/translationsservice/
+    container_name: translationsservice
+    expose:
+      - "5000"
 
   apigateway:
     build: ../src/apigateway/
