@@ -2,9 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PostsService.Kafka.Deserializers;
+using PostsService.Model;
+using PostsService.Service;
 
 namespace PostsService.Kafka.Consumers
 {
@@ -15,9 +18,11 @@ namespace PostsService.Kafka.Consumers
     public class OffensiveTextDetectionConsumer : BackgroundService
     {
         private readonly KafkaConsumer<long, bool> consumer;
-        private readonly ILogger<OffensiveTextDetectionConsumer> logger;
+        private readonly ILogger<OffensiveTextDetectionConsumer> _logger;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public OffensiveTextDetectionConsumer(IConfiguration configuration, ILogger<OffensiveTextDetectionConsumer> logger)
+        public OffensiveTextDetectionConsumer(IConfiguration configuration, ILogger<OffensiveTextDetectionConsumer> logger,
+            IServiceScopeFactory scopeFactory)
         {
             string endpoint = configuration["KAFKA_ENDPOINT"];
             string topic = configuration["OFFENSIVE_TEXT_DETECTION_TOPIC"];
@@ -25,7 +30,8 @@ namespace PostsService.Kafka.Consumers
 
             this.consumer = new KafkaConsumer<long, bool>(endpoint, topic, groupId,
                 onOffensiveTextDetected, new LongDeserializer(), new BooleanDeserializer());
-            this.logger = logger;
+            _logger = logger;
+            _scopeFactory = scopeFactory;
         }
 
         /// <summary>
@@ -33,9 +39,26 @@ namespace PostsService.Kafka.Consumers
         /// </summary>
         /// <param name="postId">ID of the post</param>
         /// <param name="isOffensive">Whether the post is considered to be offensive or not</param>
-        private void onOffensiveTextDetected(long postId, bool isOffensive)
+        private async void onOffensiveTextDetected(long postId, bool isOffensive)
         {
-            logger.LogDebug("OnOffensiveText detected was called");
+            _logger.LogInformation($"On offensive text detected was called: id='{postId}', isOffensive='{isOffensive}'");
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                _logger.LogDebug($"Asking for an instance of posts service...");
+                IPostsService postsService = scope.ServiceProvider.GetRequiredService<IPostsService>();
+
+                Post post = await postsService.GetPost(postId);
+                if (post == null)
+                {
+                    _logger.LogDebug($"Post with id '{postId}' was not found. Nothing to update...");
+                    return;
+                }
+
+                post.IsOffensive = isOffensive;
+                _logger.LogDebug($"Calling service to update post: {post}");
+                await postsService.UpdatePost(post);
+            }
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
