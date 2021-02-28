@@ -6,6 +6,14 @@ using Microsoft.AspNetCore.Routing;
 
 namespace WebClient.Filters
 {
+    /// <summary>
+    /// This filter handles authentication in the web client.
+    ///
+    /// A token received from the Easidiomas API Application Entrypoint
+    /// must be present in the session in order to access functionality
+    /// of the web client. If there is no token, the user will be redirected
+    /// to the login page.
+    /// </summary>
     public class LoginFilter : ActionFilterAttribute
     {
 

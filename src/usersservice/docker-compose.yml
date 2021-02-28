@@ -19,6 +19,10 @@ services:
   redis:
     image: redis
     container_name: redis
+    volumes:
+      - type: volume
+        source: redis
+        target: /data
 
   statisticsservice:
     build: ../statisticsservice/
@@ -49,14 +53,15 @@ services:
       - statisticsservice
       - imagesservice
     ports:
-      - "5001:5001"
+      - "5010:5010"
     expose:
-      - "5001"
+      - "5010"
     environment:
-      SERVER_PORT: 5001
+      SERVER_PORT: 5010
       USERS_SERVICE_NEO4J_ADDR: bolt://neo4j:7687
       STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
       IMAGES_SERVICE_WDSL: "http://imagesservice:5000/soapws/images?wsdl"
 
 volumes:
   neo4j:
+  redis:
