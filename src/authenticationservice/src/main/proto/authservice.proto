@@ -5,25 +5,57 @@ option java_package = "com.easidiomas.auth";
 package auth;
 
 service AuthenticationService {
-  rpc GenerateToken (LoginInfo) returns (Token) {}
-  rpc GeneratePassport (Token) returns (Passport) {}
+  rpc RequestToken (TokenRequest) returns (TokenResponse) {}
+  rpc RequestPassport (PassportRequest) returns (PassportResponse) {}
 }
 
-message LoginInfo {
+message TokenRequest {
   string username = 1;
   string password = 2;
 }
 
-message Token {
+message TokenResponse {
+  string tokenGenerated = 1;
+  string tokenPermissions = 2;
+  string tokenExpirationDate = 3;
+  enum ResponseStatus {
+    OK = 0;
+    USER_NOT_FOUND = 1;
+  }
+  ResponseStatus responseStatus = 4;
+  string message = 5;
+}
+
+message PassportRequest {
   string token = 1;
 }
 
+message PassportResponse {
+  // Token data
+  string tokenAuthenticated = 1;
+  string tokenExpirationDate = 2;
+
+  // User data
+  Passport passport = 3;
+
+  // Response data
+  enum ResponseStatus {
+    OK = 0;
+    TOKEN_EXPIRED = 1;
+    TOKEN_NOT_VALID = 2;
+    USER_NOT_FOUND = 3;
+  }
+  ResponseStatus responseStatus = 4;
+  string message = 5;
+}
+
 message Passport {
-  string userId = 1;
-  string username = 2;
-  string name = 3;
-  string surname = 4;
-  string email = 5;
-  string userProfilePicUrl = 6;
-  string expirationDate = 7;
+  string userId = 3;
+  string username = 4;
+  int32 role = 5;
+  string name = 6;
+  string surname = 7;
+  string email = 8;
+  string avatarUrl = 9;
+  string expirationDate = 10;
 }

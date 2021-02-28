@@ -1,0 +1,1 @@
+java -Djavax.xml.accessExternalSchema=all -jar ../tools/wsimport/jaxws-tools.jar -Xnocompile -p com.easidiomas.api.clients.statisticsservice http://localhost:5000/soapws/statistics?wsdl
