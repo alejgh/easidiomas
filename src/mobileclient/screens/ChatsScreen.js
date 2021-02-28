@@ -10,13 +10,19 @@ export default function ChatsScreen({route,navigation}) {
   const [chats, setChats] = useState([]);
 
   const getChats = async function(){
-    let response = await (await fetch(REQUEST_URI+'/chats')).json();
+    let response = await (await fetch(REQUEST_URI+'/chats',{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token':context.token
+      }})).json();
+    console.log('RESPONSE CHATS')
+    console.log(response)
     let newChats = [];
     for(let chat in response){
       let user1 = await getUser(response[chat].user1)
       let user2 = await getUser(response[chat].user2)
-      console.log(user1)
-      console.log(user2)
       if(context.user.id == user1.id)
         newChats.push({id:response[chat].id,key:response[chat].id,user:user2})
       else

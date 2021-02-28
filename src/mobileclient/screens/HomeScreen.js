@@ -23,8 +23,6 @@ export default function Home(props) {
           'token':context.token
         }})).json();
     let data = response.data;
-    console.log('AQUIIIII')
-    console.log(response.data)
     let newPosts = [];
     for(let post in data){
       let user = await getUser('/users/'+data[post].authorId);

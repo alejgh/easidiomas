@@ -2,100 +2,93 @@ package com.easidiomas.chatservice.model;
 
 public class Passport {
 
-	private String userId;
-	private String userURL;
-	private String username;
-	private String name;
-	private String surname;
-	private String email;
-	private String userProfilePicUrl;
-	private String expirationDate;
+	private String userId_;
+	private String username_;
+	private String role_;
+	private String name_;
+	private String surname_;
+	private String email_;
+	private String avatarUrl_;
+	private String expirationDate_;
 
 	public Passport() {
 	}
 
-	public Passport(String userId, String username, String name, String surname, String email, String userProfilePicUrl,
-			String expirationDate, String userURL) {
+	public Passport(String userId_, String username_, String role_, String name_, String surname_, String email_,
+			String avatarUrl_, String expirationDate_) {
 		super();
-		this.userId = userId;
-		this.username = username;
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.userProfilePicUrl = userProfilePicUrl;
-		this.expirationDate = expirationDate;
-		this.userURL = userURL;
+		this.userId_ = userId_;
+		this.username_ = username_;
+		this.role_ = role_;
+		this.name_ = name_;
+		this.surname_ = surname_;
+		this.email_ = email_;
+		this.avatarUrl_ = avatarUrl_;
+		this.expirationDate_ = expirationDate_;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserId_() {
+		return userId_;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserId_(String userId_) {
+		this.userId_ = userId_;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUsername_() {
+		return username_;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUsername_(String username_) {
+		this.username_ = username_;
 	}
 
-	public String getName() {
-		return name;
+	public String getRole_() {
+		return role_;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setRole_(String role_) {
+		this.role_ = role_;
 	}
 
-	public String getSurname() {
-		return surname;
+	public String getName_() {
+		return name_;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setName_(String name_) {
+		this.name_ = name_;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getSurname_() {
+		return surname_;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setSurname_(String surname_) {
+		this.surname_ = surname_;
 	}
 
-	public String getUserProfilePicUrl() {
-		return userProfilePicUrl;
+	public String getEmail_() {
+		return email_;
 	}
 
-	public void setUserProfilePicUrl(String userProfilePicUrl) {
-		this.userProfilePicUrl = userProfilePicUrl;
+	public void setEmail_(String email_) {
+		this.email_ = email_;
 	}
 
-	public String getExpirationDate() {
-		return expirationDate;
+	public String getAvatarUrl_() {
+		return avatarUrl_;
 	}
 
-	public void setExpirationDate(String expirationDate) {
-		this.expirationDate = expirationDate;
+	public void setAvatarUrl_(String avatarUrl_) {
+		this.avatarUrl_ = avatarUrl_;
 	}
 
-	public String getUserURL() {
-		return userURL;
+	public String getExpirationDate_() {
+		return expirationDate_;
 	}
 
-	public void setUserURL(String userURL) {
-		this.userURL = userURL;
-	}
-
-	@Override
-	public String toString() {
-		return "Passport [userId=" + userId + ", username=" + username + ", name=" + name + ", surname=" + surname
-				+ ", email=" + email + ", userProfilePicUrl=" + userProfilePicUrl + ", expirationDate=" + expirationDate
-				+ ", userURL=" + userURL + "]";
+	public void setExpirationDate_(String expirationDate_) {
+		this.expirationDate_ = expirationDate_;
 	}
 
 }
