@@ -21,7 +21,7 @@ services:
      - "9093"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_CREATE_TOPICS: "service_logs:1:1"
+      KAFKA_CREATE_TOPICS: "service_logs:1:1,posts:1:1,topics:1:1,lang_detection:1:1,offensive_text_detection:1:1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
