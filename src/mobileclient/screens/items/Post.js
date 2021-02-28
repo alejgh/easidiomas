@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useContext, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -10,23 +10,33 @@ import {
 } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
+import {AppContext} from '../../App';
+import { set } from 'react-native-reanimated';
 
 export default function Post(props){
 
-    const {post, name, handle, picture} = props
-    const [photo,setPhoto] = useState({ uri: 'https://reactnative.dev/img/tiny_logo.png'});
-    const [touched,setTouched] = useState(false);
-    const [likes,setLikes] = useState(0);
+    const context = useContext(AppContext);
+    const {parentNavigation,content,numLikes} = props
+    const {id,name,username,avatar} = props.user;
+    const [photo,setPhoto] = useState({ uri: avatar});
+    const [text,setText] = useState(content);
+    const [originalText,setOriginalText] = useState(content);
+    const [touched,setTouched] = useState(numLikes);
+    const [likes,setLikes] = useState(numLikes);
     const [time,setTime] = useState('1hr');
     const [liked,setLiked] = useState(false);
-
+    const [translationLabel,setTranslationLabel] = useState('Translate');
 
     const postPressed = function(pressed = false){
-        setTouched(pressed)
+      setTouched(pressed)
     }
 
     const like = function(pressed = false){
-        if (liked){ 
+
+      // TODO
+      // REQUEST
+
+      if (liked){ 
           setLiked(false)
           setLikes(likes-1)
         }else{
@@ -35,13 +45,42 @@ export default function Post(props){
         }
     }
 
+    const textToSpeech = function(){
+      console.log('Text To Speech');
+    }
+
+    const translate = function(){
+      if(translationLabel == 'Original'){
+        setText(originalText)
+        setTranslationLabel('Translate')
+      }else{
+        setText('Traducción')
+        setTranslationLabel('Original')
+      }
+      
+    }
+
+    
+    const navigateToProfile = function(){
+      fetch('http://localhost:5000/api/mock/user'+id)
+      .then((response) => response.json())
+      .then((data) =>{
+        let isOwner = data.id==context.user.id ? true :false;
+        console.log(data)
+        console.log(isOwner)
+        parentNavigation.navigate("Profile",{user:data,isOwner:isOwner});
+      } )
+      .catch((error) => console.error(error))
+     
+    }
+
     return(
       <TouchableHighlight onPressIn={() => postPressed(true)} onPressOut={() => postPressed()}>
         <View style={styles.container}>
             <View style={styles.innerContainer}>
               <View style={styles.photoContainer}>
                 <View style={styles.innerPhotoContainer}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={navigateToProfile}>
                   <Image
                     source={photo}
                     style={styles.photo}/>
@@ -51,15 +90,14 @@ export default function Post(props){
               <View style={styles.info}>
                 <View style={styles.userDetails}>
                   <Text style={styles.userName}>{name}
-                    <Text style={styles.userHandleAndTime}>{handle} · {time}</Text>
+                    <Text style={styles.userHandleAndTime}>{username} · {time}</Text>
                   </Text>
                 </View>
               <View style={styles.postTextContainer}>
-                <Text style={styles.postText}>{post}</Text>
-
+                <Text style={styles.postText}>{text}</Text>
               </View>
               <View style={styles.postActionsContainer}>
-               
+             
                 <TouchableOpacity onPress={()=> like()}  style={styles.likeButton}>
                 { liked ? 
                   <Entypo name={'heart'} size={18} style={{marginLeft:4}} color={liked ? "rgb(224, 36, 94)" : 'rgb(136, 153, 166)'}/>
@@ -69,6 +107,13 @@ export default function Post(props){
                 }
                 <Text style={[styles.likeButtonIcon, {color: liked ? "rgb(224, 36, 94)" : "rgb(136, 153, 166)",fontWeight: liked ? "bold" : "300",}]}>{likes}</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={()=> textToSpeech()}>
+                  <Text style={styles.textAction}>Text to Speech</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> translate()}>
+                  <Text style={styles.textAction}>{translationLabel}</Text>
+                </TouchableOpacity>
+                
               </View>
               
               </View>
@@ -131,10 +176,17 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     marginTop: 4,
     flexDirection: "row-reverse",
-    paddingBottom: 5
+    justifyContent:'space-between',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft:40
+  },
+  textAction:{
+    color:'#1DA1F2',
+    
+    fontStyle:'italic'
   },
   likeButton: {
-    padding: 5,
     flex: 0.25,
     alignItems: "center",
     flexDirection: "row",
@@ -147,3 +199,4 @@ const styles = StyleSheet.create({
     marginLeft: 3
   }
 });
+
