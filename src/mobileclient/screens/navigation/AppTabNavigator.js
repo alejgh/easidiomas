@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React, {useContext} from 'react';
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,13 +7,18 @@ import ChatsStackNavigator from './ChatsStackNavigator';
 import DiscoverStackNavigator from './DiscoverStackNavigator';
 import ProfileStackNavigator from './ProfileStackNavigator';
 import HomeStackNavigator from './HomeStackNavigator';
+import { AppContext } from '../../App';
 
 
 const Tab = createBottomTabNavigator();
 
 export const AppNavigationRef = React.createRef();
+
   
 export default function AppTabNavigator({ navigation }) {
+
+   const context = useContext(AppContext);
+
     return (
     <NavigationContainer independent >
         <Tab.Navigator initialRouteName="Home" ref={AppNavigationRef} screenOptions={({ route }) => ({
@@ -64,7 +69,7 @@ export default function AppTabNavigator({ navigation }) {
           <Tab.Screen name="Chats" component={ChatsStackNavigator} />
           <Tab.Screen name="Profile" component={ProfileStackNavigator}  listeners={({ navigation, route }) => ({
               tabPress: e => {
-                navigation.navigate('Profile',{user:DefaultUser,isOwner:true});
+                navigation.navigate('Profile',{user:context.user,isOwner:true});
               },
             })}/>
         </Tab.Navigator>

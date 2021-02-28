@@ -41,10 +41,7 @@ export default function LoginScreen({navigation}){
         
       context.setToken(token)
       let user = (await getUser(token)).users[0];
-
       context.setUser(user);
-
-
     }
 
 
