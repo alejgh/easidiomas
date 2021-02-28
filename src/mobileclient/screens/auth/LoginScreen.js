@@ -8,9 +8,9 @@ export default function LoginScreen({navigation}){
 
     const context = useContext(AppContext);
     const {REQUEST_URI} = context.CONFIG;
-    const [username,setUsername] = useState('');
+    const [username,setUsername] = useState('mistermboy');
     const [usernameView,setUsernameView] = useState(view);
-    const [password,setPassword] = useState('');
+    const [password,setPassword] = useState('12345');
     const [passwordView,setPasswordView] = useState(view);
 
     const signUp = function(){
