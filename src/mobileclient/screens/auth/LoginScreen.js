@@ -1,7 +1,6 @@
 import React, {useContext,useState} from 'react';
 import {AppContext} from '../../App';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { set } from 'react-native-reanimated';
 
 
 export default function LoginScreen({navigation}){
@@ -18,13 +17,10 @@ export default function LoginScreen({navigation}){
     }
 
     const logIn = async function(){
-
       let hasErrors = updateErrors();
       if(hasErrors)
         return;
         
-
-
       let response = await (await fetch(REQUEST_URI+'/auth/token',{
         method: 'POST',
         headers: {
@@ -33,11 +29,9 @@ export default function LoginScreen({navigation}){
         },
         body: JSON.stringify({username:username,password:password})
       })).json();
-      console.log(response)
+
       let tokenPermission = response.tokenPermissions_;
       let token = response.tokenGenerated_
-
-
        // TODO
       // manejar logins failed
       if(tokenPermission== -1){
@@ -45,13 +39,9 @@ export default function LoginScreen({navigation}){
         return
       }
         
-     // console.log(token)
       context.setToken(token)
       let user = (await getUser(token)).users[0];
-     // console.log(user)
       context.setUser(user);
-
-
     }
 
 

@@ -11,8 +11,12 @@ export default function HomeTabNavigator(props){
 
     const Tab = createMaterialTopTabNavigator();
 
+    const getDateFilters = function(){
+      return '?sortBy=CreatedDate&order=desc';
+    }
+
     const getLanguajeFilters = function(){
-      return '?language='+context.user.learning[0].toLowerCase()+','+context.user.learning[0].toLowerCase();
+      return getDateFilters()+'&language='+context.user.learning[0].toLowerCase()+','+context.user.learning[0].toLowerCase();
     }
 
     return(
@@ -32,7 +36,7 @@ export default function HomeTabNavigator(props){
           },
         }} >
           <Tab.Screen name="Posts">
-            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation} filters={''}/>}
+            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation} filters={getDateFilters()}/>}
           </Tab.Screen>
           <Tab.Screen name="Learn">
             {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation} filters={getLanguajeFilters()}/>}
