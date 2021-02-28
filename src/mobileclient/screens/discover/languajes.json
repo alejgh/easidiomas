@@ -2,19 +2,19 @@
 	{
 		"Name": "Chinese",
 		"Value": "中国人",
-		"Code": "CN",
+		"Code": "cn",
 		"Id": 2
 	},
 	{
 		"Name": "Spanish",
 		"Value": "Spanish",
-		"Code": "ES",
+		"Code": "es",
 		"Id": 1
 	},
 	{
 		"Name": "English",
 		"Value": "English",
-		"Code": "EN",
-		"Id": 2
+		"Code": "en",
+		"Id": 3
 	}
 ]

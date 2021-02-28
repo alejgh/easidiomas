@@ -5,9 +5,9 @@ import SignUpLanguajePicker from './SignUpLanguajePicker';
 export default function SignUpScreen({route,navigation}){
 
     const {errors} = route.params;
-    const [username,setUsername] = useState('');
+    const [username,setUsername] = useState('asd');
     const [usernameView,setUsernameView] = useState(view);
-    const [password,setPassword] = useState('');
+    const [password,setPassword] = useState('asd');
     const [passwordView,setPasswordView] = useState(view);
   
     const next = function(){
