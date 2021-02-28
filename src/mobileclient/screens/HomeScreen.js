@@ -8,17 +8,24 @@ import { AppContext } from '../App';
 export default function Home(props) {
   
   const{parentNavigation,navigation} = props;
-  const {REQUEST_URI} = (useContext(AppContext)).CONFIG;
+  const context = useContext(AppContext);
+  const {REQUEST_URI} = context.CONFIG;
 
   const [posts, setPosts] = useState([]);
   const [links,setLinks] = useState([]);
 
   const loadPosts = async function(url){
-    let response = await (await fetch(REQUEST_URI+url)).json();
+    let response = await (await fetch(REQUEST_URI+url,{
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        }})).json();
     let data = response.data;
     let newPosts = [];
     for(let post in data){
-      let user = await getUser('/user'+data[post].id); // en verdad hay que pasar authorId pero es pa ver nuevas fotos [aprovecha el BUG willyrex]
+      let user = await getUser('/users/'+data[post].authorId); 
       newPosts.push({
         id:data[post].id,
         user:user,
@@ -26,6 +33,8 @@ export default function Home(props) {
         numLikes:data[post].likes
       })
     }
+
+    console.log(newPosts)
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
@@ -38,7 +47,13 @@ export default function Home(props) {
 
 
   const getUser = async function(url){
-    return (await fetch(REQUEST_URI+url)).json();
+    return (await fetch(REQUEST_URI+url,{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token':context.token
+      }})).json();
   }
 
   useEffect(()=>{
