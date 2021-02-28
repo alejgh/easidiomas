@@ -122,7 +122,7 @@ services:
       IMAGES_SERVICE_WDSL: "http://imagesservice:5000/soapws/images?wsdl"
 
   chatsservice:
-    build: ../src/chats
+    build: ../src/chatsservice
     container_name: chatsservice
     depends_on:
       - kafka
