@@ -14,7 +14,7 @@ class SoapResult:
         self.result = result
 
 
-class SoapClient:
+class SoapClient(object):
     """ Allows making request to a given SOAP endpoint.
 
     This class uses the ZEEP Python library (https://docs.python-zeep.org/en/master/index.html#)
@@ -35,14 +35,15 @@ class SoapClient:
         settings = zeep.Settings(strict=False, xml_huge_tree=True)
         self.client = zeep.Client(wsdl=wsdl_endpoint, settings=settings)
     
-    def __getattribute__(self, attr_name, *args, **kwargs):
-        logger.debug(f"Calling method of SOAP Client: {attr_name}")
+    def call_method(self, method_name, *args, **kwargs):
+        logger.debug(f"Calling method of SOAP Client: {method_name}")
         logger.debug(f"Args: {args} - Kwargs: {kwargs}")
         try:
-            res = getattr(client.service, attr_name)(*args, **kwargs)
+            res = getattr(self.client.service, method_name)(*args, **kwargs)
             logger.info(f"SOAP request was successful. Result: {res}")
             return SoapResult(True, res)
         except Exception as e:
             logger.error(f"There was an error calling the SOAP client: {e}")
             logger.debug("Returning unsuccessful SOAP result")
             return SoapResult(False)
+    
