@@ -15,7 +15,7 @@ namespace WebClient.Services
 
         public StatisticsService(IConfiguration config, ILogger<StatisticsService> logger)
         {
-            string statisticsEndpoint = $"{config["EasidiomasAPIEndpoint"]}/statistics";
+            string statisticsEndpoint = $"{config["EASIDIOMAS_API_ENDPOINT"]}/statistics";
             _statisticsClient = new RestClient(statisticsEndpoint);
             _logger = logger;
         }

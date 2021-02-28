@@ -15,7 +15,7 @@ namespace WebClient.Services
 
         public PostsService(IConfiguration config, ILogger<PostsService> logger)
         {
-            string postsEndpoint = $"{config["EasidiomasAPIEndpoint"]}/posts";
+            string postsEndpoint = $"{config["EASIDIOMAS_API_ENDPOINT"]}/posts";
             _postsClient = new RestClient(postsEndpoint);
             _logger = logger;
         }

@@ -14,7 +14,7 @@ namespace WebClient.Services
 
         public UsersService(IConfiguration config, ILogger<UsersService> logger)
         {
-            string usersEndpoint = $"{config["EasidiomasAPIEndpoint"]}/users";
+            string usersEndpoint = $"{config["EASIDIOMAS_API_ENDPOINT"]}/users";
             _usersClient = new RestClient(usersEndpoint);
             _logger = logger;
         }

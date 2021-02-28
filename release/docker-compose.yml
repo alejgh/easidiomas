@@ -158,8 +158,20 @@ services:
       POSTS_SERVICE_PORT: 5000
       STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
 
+############# Web Client ################
+#  webclient:
+#    build: ../src/webclient/
+#    container_name: webclient
+#    depends_on:
+#      - apigateway
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    environment:
+#      EASIDIOMAS_API_ENDPOINT: "http://apigateway:5000/api"
 
-############ ELK AND ITS PUTA MADRE ###############
+
+############ ELK ###############
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:$ELK_VERSION

@@ -14,9 +14,10 @@ namespace WebClient.Services
 
         public LoginService(IConfiguration config, ILogger<LoginService> logger)
         {
-            string loginEndpoint = $"{config["EasidiomasAPIEndpoint"]}/auth/token";
-            _loginClient = new RestClient(loginEndpoint);
             _logger = logger;
+            string loginEndpoint = $"{config["EASIDIOMAS_API_ENDPOINT"]}/auth/token";
+            _logger.LogDebug($"Login Endpoint: {loginEndpoint}");
+            _loginClient = new RestClient(loginEndpoint);
         }
 
         public LoginResult DoLogin(UserLoginData loginData)
@@ -27,6 +28,9 @@ namespace WebClient.Services
 
             var response = _loginClient.Execute<dynamic>(request);
             bool success = response.StatusCode == HttpStatusCode.Created;
+            if (!success)
+                return new LoginResult() { Successful = false, Token = "", Permissions = "-1" };
+
             return new LoginResult() {
                 Successful = success,
                 Token = response.Data["tokenGenerated_"],
