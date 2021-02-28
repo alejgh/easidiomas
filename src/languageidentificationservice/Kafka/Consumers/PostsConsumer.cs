@@ -53,9 +53,9 @@ namespace languageidentificationservice.Kafka.Consumers
 
                 _logger.LogDebug($"Detection [{detection}] done, posting the result to the kafka queue again.");
 
-                StatisticsServiceClient.EndpointConfiguration config = new StatisticsServiceClient.EndpointConfiguration();
-                StatisticsServiceClient client = new StatisticsServiceClient(config, _statisticsServiceAddress);
-                await client.registerPostCreatedEventAsync(postId.ToString(), detection.Text);
+                //StatisticsServiceClient.EndpointConfiguration config = new StatisticsServiceClient.EndpointConfiguration();
+                //StatisticsServiceClient client = new StatisticsServiceClient(config, _statisticsServiceAddress);
+                //await client.registerPostCreatedEventAsync(postId.ToString(), detection.Text);
 
             }
 
