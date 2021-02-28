@@ -15,6 +15,7 @@ export default function Home(props) {
   const [links,setLinks] = useState([]);
 
   const loadPosts = async function(url){
+      console.log(REQUEST_URI+url+filters)
     let response = await (await fetch(REQUEST_URI+url+filters,{
         method: 'GET',
         headers: {
