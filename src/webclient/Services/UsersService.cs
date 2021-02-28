@@ -33,7 +33,7 @@ namespace WebClient.Services
             return JsonConvert.DeserializeObject<PaginatedResponse<User>>(response.Content);
         }
 
-        public bool DeletePost(int postId, string token)
+        public bool DeleteUser(int postId, string token)
         {
             var request = new RestRequest(postId.ToString(), Method.DELETE);
             request.RequestFormat = DataFormat.Json;

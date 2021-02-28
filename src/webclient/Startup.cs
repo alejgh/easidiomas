@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -73,15 +69,10 @@ namespace WebClient
         // Configuration of singletons from services folder used by controllers
         private void ConfigureAppServices(IServiceCollection services)
         {
-<<<<<<< HEAD
             services.AddSingleton<LoginService>();
             services.AddSingleton<PostsService>();
             services.AddSingleton<StatisticsService>();
             services.AddSingleton<UsersService>();
-=======
-            services.AddSingleton<UsersService>();
-            services.AddSingleton<LoginService>();
->>>>>>> main
         }
     }
 }

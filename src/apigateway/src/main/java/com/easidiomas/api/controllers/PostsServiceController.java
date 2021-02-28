@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.easidiomas.auth.Authservice;
+import com.google.gson.Gson;
 
 @RestController
 @RequestMapping(value = "api/posts")
@@ -76,13 +77,10 @@ public class PostsServiceController extends EasidiomasAPIController {
             String headerValue = request.getHeader(nextHeaderName);
             headers.add(nextHeaderName, headerValue);
         }
-        
-<<<<<<< HEAD
-=======
+
         // esto no se muy bien como va. creo que ya debería estar el passport aqui asi que seguramente se pueda borrar
-        if (passport != null) headers.add("passport", passport.toString());
+        if (passport != null) headers.add("passport", new Gson().toJson(passport));
         
->>>>>>> main
         // obtener el body del post
         String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
        
