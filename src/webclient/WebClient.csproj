@@ -7,12 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\External\" />
+    <Folder Include="Model\External\" />
     <Folder Include="Services\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Filters\" />
+    <Folder Include="Util\" />
+    <Folder Include="Views\Posts\" />
+    <Folder Include="Views\Users\" />
+    <Folder Include="Views\Statistics\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="certificate.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

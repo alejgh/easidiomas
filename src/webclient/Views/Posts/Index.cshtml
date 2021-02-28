@@ -1,0 +1,78 @@
+﻿@using WebClient.Model
+@using WebClient.Model.External
+@model ModelData<Post>
+@{
+    ViewData["Title"] = "Posts";
+}
+
+<h1>List of Posts</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Author ID
+            </th>
+            <th>
+                Created At
+            </th>
+            <th>
+                Content
+            </th>
+            <th>
+                Potentially Offensive
+            </th>
+            <th>
+                Language
+            </th>
+            <th>
+                Topics
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model.Data)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => post.AuthorId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => post.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => post.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => post.IsOffensive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => post.Language)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => post.Topics)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@post.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<ul class="pagination">
+    <li class="page-item"><a class="page-link" asp-action="Index" asp-route-offset="0" asp-route-limit="@Model.Count">First</a></li>
+
+    @if (Model.Offset - Model.Count >= 0)
+    {
+        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-offset="@(Model.Offset - Model.Count)" asp-route-limit="@Model.Count">Previous</a></li>
+    }
+
+    @if (Model.Offset+Model.Count < Model.Total)
+    {
+        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-offset="@(Model.Offset + Model.Count)" asp-route-limit="@Model.Count">Next</a></li>
+    }
+
+    <li class="page-item"><a class="page-link" asp-action="Index" asp-route-offset="@(Math.Max(Model.Total - Model.Count, 0))" asp-route-limit="@Model.Count">Last</a></li>
+</ul>
