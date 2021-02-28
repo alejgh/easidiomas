@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 import java.util.Collections;
+import java.util.Date;
 
 @SpringBootApplication
 @EnableNeo4jRepositories
@@ -18,6 +19,8 @@ public class Service {
     private static final int PORT = Integer.parseInt(System.getenv("SERVER_PORT")!=null ? System.getenv("SERVER_PORT"): "5000");
     private static final Logger LOGGER = LoggerFactory.getLogger(Service.class);
 
+    @Autowired
+    private UsersRepository repository;
 
     public static void main(String... args) {
         LOGGER.info("Service starting on port " + PORT);
