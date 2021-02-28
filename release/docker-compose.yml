@@ -1,16 +1,20 @@
 version: "3.8"
 services:
+
+  # Kafka cluster orchestrator.
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zookeeper
     ports:
       - "2181:2181"
-    networks:
-      - event_bus
 
+  # Logging and other events queue.
+  # Needs to contain the ports declaration.
   kafka:
     image: wurstmeister/kafka
     container_name: kafka
+    depends_on:
+      - zookeeper
     ports:
       - "9092:9092"
     expose:
@@ -22,8 +26,37 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - event_bus
+
+  postgres_db:
+    image: postgres
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    expose:
+      - "5432"
+
+  neo4j:
+    image: neo4j
+    container_name: neo4j
+    volumes:
+      - type: volume
+        source: neo4j
+        target: /data
+    expose:
+      - "7474"
+      - "7687"
+    environment:
+      NEO4J_AUTH: neo4j/secret
+
+  redis:
+    image: redis
+    container_name: redis
+
+############# SERVICES ################
   
   topicmodeling:
     build: ../src/topicmodelingservice/
@@ -32,24 +65,19 @@ services:
       - "5001:5001"
     depends_on:
       - kafka
-    networks:
-      - event_bus
     environment:
       KAFKA_ENDPOINT: "kafka:9092"
       KAFKA_INPUT_TOPIC: "posts"
       KAFKA_LOGGING_TOPIC: "service_logs"
-      POSTS_SERVICE_ENDPOINT: "posts_service:8888/soapws/posts.wsdl"
 
   postsservice:
     build: ../src/postsservice/
+    container_name: postsservice
     ports:
       - "5002:80"
     depends_on:
       - kafka
       - postgres_db
-    networks:
-      - event_bus
-      - postgres
     environment:
       KAFKA_ENDPOINT: "kafka:9092"
       POSTGRES_ENDPOINT: "postgres_db"
@@ -64,21 +92,6 @@ services:
       - "5004:5000"
     depends_on:
       - kafka
-    networks:
-      - event_bus
-  
-  postgres_db:
-    image: postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASS}
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - postgres
   
   texttospeech:
     build: ../src/texttospeechservice/
@@ -87,25 +100,65 @@ services:
       - "5003:5000"
     depends_on:
       - kafka
-    networks:
-      - event_bus
     environment: 
       KAFKA_ENDPOINT: "kafka:9092"
   
-  authenticationservice:
+  usersservice:
+    build: ../src/usersservice/
+    container_name: usersservice
+    depends_on:
+      - neo4j
+      - statisticsservice
+    expose:
+      - "5000"
+    environment:
+      SERVER_PORT: 5000
+      USERS_SERVICE_NEO4J_ADDR: bolt://neo4j:7687
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      IMAGES_SERVICE_WDSL: "http://imagesservice:5000/soapws/images?wsdl"
+
+  authservice:
     build: ../src/authenticationservice/
     container_name: authservice
-    environment: 
-      SERVER_PORT: "5000"
+    depends_on:
+      - usersservice
+    expose:
+      - "5000"
+    environment:
+      USERS_SERVICE_ADDR: usersservice:5000
+      USERS_SERVICE_HOST: usersservice
+      USERS_SERVICE_PORT: 5000
+
+  statisticsservice:
+    build: ../src/statisticsservice/
+    container_name: statisticsservice
+    depends_on:
+      - redis
+    expose:
+      - "5000"
+    environment:
+      REDIS_ADDR: redis
+      REDIS_PORT: 6379
 
   apigateway:
     build: ../src/apigateway/
     container_name: apigateway
+    depends_on:
+      - authservice
+      - statisticsservice
     ports:
-      - "8080:5000"
-    environment: 
-      SERVER_PORT: "5000"
-      AUTH_SERVICE_ADDRESS: "authservice:5000"
+      - "5000:5000"
+    expose:
+      - "5000"
+    environment:
+      SERVER_PORT: 5000
+      AUTH_SERVICE_ADDRESS: authservice:5000
+      USERS_SERVICE_HOST: usersservice
+      USERS_SERVICE_PORT: 5000
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+
+
+############ ELK AND ITS PUTA MADRE ###############
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:$ELK_VERSION
@@ -118,23 +171,21 @@ services:
       - type: volume
         source: elasticsearch
         target: /usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+    expose:
+      - "9200"
+      - "9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: $ELASTIC_PASSWORD
       discovery.type: single-node
-    networks:
-      - elk
 
   logstash:
     image: docker.elastic.co/logstash/logstash:$ELK_VERSION
     container_name: logstash
-    ports:
-      - "5044:5044"
-      - "5000:5000"
-      - "9600:9600"
+    expose:
+      - "5044"
+      - "5000"
+      - "9600"
     volumes:
       - type: bind
         source: ./config/logstash.yml
@@ -147,9 +198,6 @@ services:
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: $ELASTIC_PASSWORD
-    networks:
-      - elk
-      - event_bus
     depends_on:
       - elasticsearch
 
@@ -165,21 +213,11 @@ services:
         read_only: true
     environment:
       ELASTIC_PASSWORD: $ELASTIC_PASSWORD
-    networks:
-      - elk
     depends_on:
       - elasticsearch
-
-
-networks:
-  elk:
-    driver: bridge
-  event_bus:
-    driver: bridge
-  postgres:
-    driver: bridge
 
 
 volumes:
   elasticsearch:
   postgres:
+  neo4j:

@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  neo4j:
+    image: neo4j
+    container_name: neo4j
+    expose:
+      - "7474"
+      - "7687"
+    environment:
+      NEO4J_AUTH: neo4j/secret
+
+  usersservice:
+    build: ../usersservice/
+    container_name: usersservice
+    depends_on:
+      - neo4j
+    ports:
+      - "5001:5001"
+    expose:
+      - "5001"
+    environment:
+      SERVER_PORT: 5001
+      USERS_SERVICE_NEO4J_ADDR: bolt://neo4j:7687
+
+  authservice:
+    build: ./
+    container_name: authservice
+    depends_on:
+      - usersservice
+    expose:
+      - "5002"
+    ports:
+    - "5002:5002"
+    environment:
+      SERVER_PORT: 5002
+      USERS_SERVICE_ADDR: usersservice:5001

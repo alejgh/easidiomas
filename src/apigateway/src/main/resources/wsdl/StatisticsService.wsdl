@@ -1,0 +1,295 @@
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.statisticsservice.easidiomas.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="IStatisticsServiceService" targetNamespace="http://service.statisticsservice.easidiomas.com/">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://service.statisticsservice.easidiomas.com/" elementFormDefault="unqualified" targetNamespace="http://service.statisticsservice.easidiomas.com/" version="1.0">
+            <xs:element name="getSystemStatistics" type="tns:getSystemStatistics"/>
+            <xs:element name="getSystemStatisticsResponse" type="tns:getSystemStatisticsResponse"/>
+            <xs:element name="getUserStatistics" type="tns:getUserStatistics"/>
+            <xs:element name="getUserStatisticsResponse" type="tns:getUserStatisticsResponse"/>
+            <xs:element name="registerChatCreatedEvent" type="tns:registerChatCreatedEvent"/>
+            <xs:element name="registerChatCreatedEventResponse" type="tns:registerChatCreatedEventResponse"/>
+            <xs:element name="registerPostCreatedEvent" type="tns:registerPostCreatedEvent"/>
+            <xs:element name="registerPostCreatedEventResponse" type="tns:registerPostCreatedEventResponse"/>
+            <xs:element name="registerTextToSpeechCreatedEvent" type="tns:registerTextToSpeechCreatedEvent"/>
+            <xs:element name="registerTextToSpeechCreatedEventResponse" type="tns:registerTextToSpeechCreatedEventResponse"/>
+            <xs:element name="registerTranslationCreatedEvent" type="tns:registerTranslationCreatedEvent"/>
+            <xs:element name="registerTranslationCreatedEventResponse" type="tns:registerTranslationCreatedEventResponse"/>
+            <xs:element name="registerUserCreatedEvent" type="tns:registerUserCreatedEvent"/>
+            <xs:element name="registerUserCreatedEventResponse" type="tns:registerUserCreatedEventResponse"/>
+            <xs:complexType name="registerTranslationCreatedEvent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="registerTranslationCreatedEventResponse">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="registerUserCreatedEvent">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="registerUserCreatedEventResponse">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="getSystemStatistics">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="getSystemStatisticsResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="return" type="tns:systemStatistics"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="systemStatistics">
+                <xs:sequence>
+                    <xs:element name="createdChats" type="xs:int"/>
+                    <xs:element name="createdPosts">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                            <xs:element minOccurs="0" name="value" type="xs:int"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="registeredUsers" type="tns:registeredUsersData"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="registeredUsersData">
+                <xs:sequence>
+                    <xs:element name="learning">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                            <xs:element minOccurs="0" name="value" type="xs:int"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="nnative">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                            <xs:element minOccurs="0" name="value" type="xs:int"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="total" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="registerPostCreatedEvent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="registerPostCreatedEventResponse">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="registerTextToSpeechCreatedEvent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="registerTextToSpeechCreatedEventResponse">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="registerChatCreatedEvent">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="registerChatCreatedEventResponse">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="getUserStatistics">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="getUserStatisticsResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="return" type="tns:userStatistics"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="userStatistics">
+                <xs:sequence>
+                    <xs:element name="createdPosts">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                            <xs:element minOccurs="0" name="value" type="xs:int"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="textToSpeechMade" type="xs:int"/>
+                    <xs:element name="translationsMade" type="xs:int"/>
+                    <xs:element minOccurs="0" name="userId" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="registerTranslationCreatedEvent">
+        <wsdl:part element="tns:registerTranslationCreatedEvent" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerUserCreatedEvent">
+        <wsdl:part element="tns:registerUserCreatedEvent" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerUserCreatedEventResponse">
+        <wsdl:part element="tns:registerUserCreatedEventResponse" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerTextToSpeechCreatedEvent">
+        <wsdl:part element="tns:registerTextToSpeechCreatedEvent" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerPostCreatedEventResponse">
+        <wsdl:part element="tns:registerPostCreatedEventResponse" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemStatisticsResponse">
+        <wsdl:part element="tns:getSystemStatisticsResponse" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getUserStatisticsResponse">
+        <wsdl:part element="tns:getUserStatisticsResponse" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerChatCreatedEvent">
+        <wsdl:part element="tns:registerChatCreatedEvent" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getUserStatistics">
+        <wsdl:part element="tns:getUserStatistics" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerTextToSpeechCreatedEventResponse">
+        <wsdl:part element="tns:registerTextToSpeechCreatedEventResponse" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerChatCreatedEventResponse">
+        <wsdl:part element="tns:registerChatCreatedEventResponse" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemStatistics">
+        <wsdl:part element="tns:getSystemStatistics" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerPostCreatedEvent">
+        <wsdl:part element="tns:registerPostCreatedEvent" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="registerTranslationCreatedEventResponse">
+        <wsdl:part element="tns:registerTranslationCreatedEventResponse" name="parameters"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="IStatisticsService">
+        <wsdl:operation name="registerTranslationCreatedEvent">
+            <wsdl:input message="tns:registerTranslationCreatedEvent" name="registerTranslationCreatedEvent"></wsdl:input>
+            <wsdl:output message="tns:registerTranslationCreatedEventResponse" name="registerTranslationCreatedEventResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerUserCreatedEvent">
+            <wsdl:input message="tns:registerUserCreatedEvent" name="registerUserCreatedEvent"></wsdl:input>
+            <wsdl:output message="tns:registerUserCreatedEventResponse" name="registerUserCreatedEventResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemStatistics">
+            <wsdl:input message="tns:getSystemStatistics" name="getSystemStatistics"></wsdl:input>
+            <wsdl:output message="tns:getSystemStatisticsResponse" name="getSystemStatisticsResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerPostCreatedEvent">
+            <wsdl:input message="tns:registerPostCreatedEvent" name="registerPostCreatedEvent"></wsdl:input>
+            <wsdl:output message="tns:registerPostCreatedEventResponse" name="registerPostCreatedEventResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerTextToSpeechCreatedEvent">
+            <wsdl:input message="tns:registerTextToSpeechCreatedEvent" name="registerTextToSpeechCreatedEvent"></wsdl:input>
+            <wsdl:output message="tns:registerTextToSpeechCreatedEventResponse" name="registerTextToSpeechCreatedEventResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerChatCreatedEvent">
+            <wsdl:input message="tns:registerChatCreatedEvent" name="registerChatCreatedEvent"></wsdl:input>
+            <wsdl:output message="tns:registerChatCreatedEventResponse" name="registerChatCreatedEventResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getUserStatistics">
+            <wsdl:input message="tns:getUserStatistics" name="getUserStatistics"></wsdl:input>
+            <wsdl:output message="tns:getUserStatisticsResponse" name="getUserStatisticsResponse"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="IStatisticsServiceServiceSoapBinding" type="tns:IStatisticsService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="registerTranslationCreatedEvent">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="registerTranslationCreatedEvent">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="registerTranslationCreatedEventResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerUserCreatedEvent">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="registerUserCreatedEvent">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="registerUserCreatedEventResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerTextToSpeechCreatedEvent">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="registerTextToSpeechCreatedEvent">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="registerTextToSpeechCreatedEventResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerPostCreatedEvent">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="registerPostCreatedEvent">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="registerPostCreatedEventResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemStatistics">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="getSystemStatistics">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getSystemStatisticsResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="registerChatCreatedEvent">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="registerChatCreatedEvent">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="registerChatCreatedEventResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getUserStatistics">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="getUserStatistics">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getUserStatisticsResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="IStatisticsServiceService">
+        <wsdl:port binding="tns:IStatisticsServiceServiceSoapBinding" name="IStatisticsServicePort">
+            <soap:address location="http://localhost:5000/soapws/statistics"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
