@@ -15,6 +15,7 @@ namespace PostsService.Kafka
         {
             var conf = new ProducerConfig();
             conf.BootstrapServers = config["KAFKA_ENDPOINT"];
+            conf.RequestTimeoutMs = 180000; // 180 seconds -> 3 min
             this.kafkaProducer = new ProducerBuilder<byte[], byte[]>(conf).Build();
         }
 

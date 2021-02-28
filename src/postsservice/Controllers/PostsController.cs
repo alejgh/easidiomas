@@ -5,6 +5,7 @@ using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PostsService.Kafka;
 using PostsService.Model;
 using PostsService.Service;
@@ -134,17 +135,25 @@ namespace PostsService.Controllers
         {
             _logger.LogInformation($"DELETE for post with id '{id}' has been called");
 
-            // TODO: verificar cómo nos llega el passport del api entrypoint
             _logger.LogDebug("Retrieving user role from headers");
-            string role = "USER";
-            if (Request.Headers.TryGetValue("passport.userRole", out var passportUserRole))
+            int role = 0;
+            if (Request.Headers.TryGetValue("passport", out var passportStr))
             {
-                role = passportUserRole;
+                try
+                {
+                    _logger.LogDebug($"Passport is present in header: {passportStr}");
+                    dynamic passport = JsonConvert.DeserializeObject<dynamic>(passportStr);
+                    _logger.LogDebug($"Passport loaded: {passport}");
+                    role = passport.role_;
+                } catch (Exception e)
+                {
+                    _logger.LogError($"Exception parsing passport: {e.Message}");
+                }
             }
 
             _logger.LogDebug($"User role is '{role}'");
 
-            if (!role.ToUpper().Equals("ADMIN")) return Unauthorized();
+            if (role != 1) return Unauthorized();
 
             Post post = await _service.GetPost(id);
             if (post == null) return NotFound();
@@ -156,12 +165,14 @@ namespace PostsService.Controllers
 
         private long? RetrieveUserIdFromPassport()
         {
-            // TODO: verificar cómo nos llega el passport del api entrypoint
             _logger.LogDebug("Retrieving user id from headers");
             long? userID = null;
-            if (Request.Headers.TryGetValue("passport.userID", out var passportUserID))
+            if (Request.Headers.TryGetValue("passport", out var passportStr))
             {
-                userID = Convert.ToInt64(passportUserID);
+                _logger.LogDebug($"Passport is present in header: {passportStr}");
+                dynamic passport = JsonConvert.DeserializeObject<dynamic>(passportStr);
+                _logger.LogDebug($"Passport loaded: {passport}");
+                userID = Convert.ToInt64(passport.userId_);
             }
             _logger.LogDebug($"User id is '{userID}'");
             return userID;

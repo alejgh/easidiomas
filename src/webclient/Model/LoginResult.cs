@@ -1,9 +1,10 @@
 ﻿using System;
-namespace WebClient.Models
+namespace WebClient.Model
 {
     public class LoginResult
     {
         public bool Successful { get; set; }
         public string Token { get; set; }
+        public string Permissions { get; set; }
     }
 }
