@@ -3,6 +3,8 @@
 target/
 .classpath
 .project
+*.iml
+*.jar
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
