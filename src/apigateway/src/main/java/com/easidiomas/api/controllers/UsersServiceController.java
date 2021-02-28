@@ -51,7 +51,7 @@ public class UsersServiceController extends EasidiomasAPIController {
         return this.doRedirect(request, "/api/users/" + id);
     }
 
-    @GetMapping(value = ":generateData", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/generateData", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity generateData(HttpServletRequest request) throws IOException, URISyntaxException {
         LOGGER.info(String.format("Request to path [%s] received.", request.getRequestURL()));
         LOGGER.info(String.format("Getting the passport from the header for request [%s].", request.getRequestURL()));
@@ -59,7 +59,7 @@ public class UsersServiceController extends EasidiomasAPIController {
 
         LOGGER.info(String.format("Requesting to the users service the list of users paginated [%s].", request.getRequestURL()));
         LOGGER.info(String.format("Redirecting request to [%s:%s].", USERS_SERVICE_HOST, USERS_SERVICE_PORT));
-        return this.doRedirect(request, "/api/users:generateData");
+        return this.doRedirect(request, "/api/users/generateData");
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

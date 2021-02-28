@@ -36,7 +36,7 @@ public class UsersController {
     @Autowired
     public UsersRepository repository;
 
-    @GetMapping(value = "api/users:generateData")
+    @GetMapping(value = "api/users/generateData")
     public ResponseEntity generateData() throws MalformedURLException {
 
         new DataGenerator().loadSomeData(repository, 100, 50);
