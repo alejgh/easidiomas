@@ -11,6 +11,7 @@ import {
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import {AppContext} from '../../App';
+import { set } from 'react-native-reanimated';
 
 export default function Post(props){
 
@@ -18,17 +19,23 @@ export default function Post(props){
     const {parentNavigation,content,numLikes} = props
     const {id,name,username,avatar} = props.user;
     const [photo,setPhoto] = useState({ uri: avatar});
-    const [touched,setTouched] = useState(false);
+    const [text,setText] = useState(content);
+    const [originalText,setOriginalText] = useState(content);
+    const [touched,setTouched] = useState(numLikes);
     const [likes,setLikes] = useState(numLikes);
     const [time,setTime] = useState('1hr');
     const [liked,setLiked] = useState(false);
-
+    const [translationLabel,setTranslationLabel] = useState('Translate');
 
     const postPressed = function(pressed = false){
       setTouched(pressed)
     }
 
     const like = function(pressed = false){
+
+      // TODO
+      // REQUEST
+
       if (liked){ 
           setLiked(false)
           setLikes(likes-1)
@@ -38,6 +45,22 @@ export default function Post(props){
         }
     }
 
+    const textToSpeech = function(){
+      console.log('Text To Speech');
+    }
+
+    const translate = function(){
+      if(translationLabel == 'Original'){
+        setText(originalText)
+        setTranslationLabel('Translate')
+      }else{
+        setText('Traducción')
+        setTranslationLabel('Original')
+      }
+      
+    }
+
+    
     const navigateToProfile = function(){
       fetch('http://localhost:5000/api/mock/user'+id)
       .then((response) => response.json())
@@ -71,11 +94,10 @@ export default function Post(props){
                   </Text>
                 </View>
               <View style={styles.postTextContainer}>
-                <Text style={styles.postText}>{content}</Text>
-
+                <Text style={styles.postText}>{text}</Text>
               </View>
               <View style={styles.postActionsContainer}>
-               
+             
                 <TouchableOpacity onPress={()=> like()}  style={styles.likeButton}>
                 { liked ? 
                   <Entypo name={'heart'} size={18} style={{marginLeft:4}} color={liked ? "rgb(224, 36, 94)" : 'rgb(136, 153, 166)'}/>
@@ -85,6 +107,13 @@ export default function Post(props){
                 }
                 <Text style={[styles.likeButtonIcon, {color: liked ? "rgb(224, 36, 94)" : "rgb(136, 153, 166)",fontWeight: liked ? "bold" : "300",}]}>{likes}</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={()=> textToSpeech()}>
+                  <Text style={styles.textAction}>Text to Speech</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> translate()}>
+                  <Text style={styles.textAction}>{translationLabel}</Text>
+                </TouchableOpacity>
+                
               </View>
               
               </View>
@@ -147,10 +176,17 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     marginTop: 4,
     flexDirection: "row-reverse",
-    paddingBottom: 5
+    justifyContent:'space-between',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft:40
+  },
+  textAction:{
+    color:'#1DA1F2',
+    
+    fontStyle:'italic'
   },
   likeButton: {
-    padding: 5,
     flex: 0.25,
     alignItems: "center",
     flexDirection: "row",

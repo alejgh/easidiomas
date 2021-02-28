@@ -6,14 +6,17 @@ import Chat from './items/Chat';
 export default function ChatsScreen({route,navigation}) {
 
   const context = useContext(AppContext);
+  const {REQUEST_URI} = context.CONFIG;
   const [chats, setChats] = useState([]);
 
   const getChats = async function(){
-    let response = await (await fetch('http://localhost:5000/api/mock/chats')).json();
+    let response = await (await fetch(REQUEST_URI+'/chats')).json();
     let newChats = [];
     for(let chat in response){
       let user1 = await getUser(response[chat].user1)
       let user2 = await getUser(response[chat].user2)
+      console.log(user1)
+      console.log(user2)
       if(context.user.id == user1.id)
         newChats.push({id:response[chat].id,key:response[chat].id,user:user2})
       else
@@ -23,7 +26,8 @@ export default function ChatsScreen({route,navigation}) {
   }
   
   const getUser = async function(url){
-    return (await fetch('http://localhost:5000/'+url)).json();
+    //Esto va a cambiar por el tema de que ahora nos viene el id no la url
+    return (await fetch(REQUEST_URI+'/'+url.replace('api/mock/',''))).json();
   }
 
 

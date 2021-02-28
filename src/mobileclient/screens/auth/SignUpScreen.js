@@ -32,21 +32,11 @@ export default function SignUpScreen({navigation}){
         </View>
         <View style={styles.inputView} >
           <TextInput  
-            style={styles.inputText}
-            placeholder="Email *" 
-            placeholderTextColor="#E1E8ED"/>
-        </View>
-        <View style={styles.inputView} >
-          <TextInput  
             secureTextEntry
             style={styles.inputText}
             placeholder="Password *" 
             placeholderTextColor="#E1E8ED"/>
         </View>
-
-    
-        
-        
 
         <TouchableOpacity style={styles.nextBtn} onPress={next}>
           <Text style={styles.nextText}>Next</Text>

@@ -1,21 +1,20 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Post from './items/Post';
 import { FloatingAction } from "react-native-floating-action";
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { AppContext } from '../App';
 
 export default function Home(props) {
   
   const{parentNavigation,navigation} = props;
+  const {REQUEST_URI} = (useContext(AppContext)).CONFIG;
 
   const [posts, setPosts] = useState([]);
   const [links,setLinks] = useState([]);
 
   const loadPosts = async function(url){
-    console.log(links)
-    if(links?.next =='url_pagina_siguiente')  // A ver como es esto en verdad (cuando no hay más que pone ahí?)
-      return;
-    let response = await (await fetch('http://localhost:5000/api/mock'+url)).json();
+    let response = await (await fetch(REQUEST_URI+url)).json();
     let data = response.data;
     let newPosts = [];
     for(let post in data){
@@ -32,9 +31,14 @@ export default function Home(props) {
     setLinks(response.links)
   }
 
+  const loadNext = function(){
+    if(links.next)
+      loadPosts(links.next)
+  }
+
 
   const getUser = async function(url){
-    return (await fetch('http://localhost:5000/api/mock'+url)).json();
+    return (await fetch(REQUEST_URI+url)).json();
   }
 
   useEffect(()=>{
@@ -56,7 +60,7 @@ export default function Home(props) {
         numColumns={1}
         onEndReachedThreshold={0.01}
         onEndReached={info => {
-          loadPosts(links.next);
+          loadNext();
         }}
         keyExtractor={(item) => item.id} 
         data={posts} 
