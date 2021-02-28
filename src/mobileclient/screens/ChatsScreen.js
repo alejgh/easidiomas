@@ -42,7 +42,7 @@ export default function ChatsScreen({route,navigation}) {
         keyExtractor={(item) => item.id} 
         data={chats} 
         renderItem={({ item }) => ( 
-            <Chat user={item.user} navigation={navigation} sreen={'Room'}/>
+            <Chat user={item.user} chatId={item.id} navigation={navigation} sreen={'Room'}/>
         )}
       />
 

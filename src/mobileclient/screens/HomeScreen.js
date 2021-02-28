@@ -15,7 +15,6 @@ export default function Home(props) {
   const [links,setLinks] = useState([]);
 
   const loadPosts = async function(url){
-      console.log(REQUEST_URI+url+filters)
     let response = await (await fetch(REQUEST_URI+url+filters,{
         method: 'GET',
         headers: {
@@ -24,9 +23,11 @@ export default function Home(props) {
           'token':context.token
         }})).json();
     let data = response.data;
+    console.log('AQUIIIII')
+    console.log(response.data)
     let newPosts = [];
     for(let post in data){
-      let user = await getUser('/users/'+data[post].authorId); 
+      let user = await getUser('/users/'+data[post].authorId);
       newPosts.push({
         id:data[post].id,
         user:user,
@@ -35,7 +36,6 @@ export default function Home(props) {
       })
     }
 
-    console.log(newPosts)
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
@@ -81,7 +81,7 @@ export default function Home(props) {
         keyExtractor={(item) => item.id} 
         data={posts} 
         renderItem={({ item }) => ( 
-            <Post key={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} numLikes={item.numLikes}/>
+            <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} numLikes={item.numLikes}/>
         )}
       />
 
