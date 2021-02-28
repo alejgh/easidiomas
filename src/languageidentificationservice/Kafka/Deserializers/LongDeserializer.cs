@@ -11,7 +11,7 @@ namespace languageidentificationservice.Kafka.Deserializers
         public long Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
         {
             var bytes = data.ToArray();
-            return BitConverter.ToInt64(bytes.ToArray());
+            return BitConverter.ToInt64(bytes.Reverse().ToArray());
         }
     }
 }
