@@ -14,18 +14,28 @@ export default function DiscoverScreen(props) {
   const [links,setLinks] = useState([]);
 
   const loadResults = async function(url){
-    if(links?.next =='url_pagina_siguiente')  // A ver como es esto en verdad (cuando no hay más que pone ahí?)
-      return;
-    let response = await (await fetch(REQUEST_URI+url)).json();
-    //setResults([...results,response.users]) -> I´m not sure why this is not working...
+    let response = await (await fetch(REQUEST_URI+url,{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token':context.token
+      }
+    })).json();
     console.log(response)
+    //setResults([...results,response.users]) -> I´m not sure why this is not working...
     setResults(results.concat(response?.users))
     setLinks(response.links)
   }
 
+  const loadNext = function(){
+    if(links.next)
+    loadResults(links.next)
+  }
+
 
   useEffect(()=>{
-    loadResults('/search');
+    loadResults('/users');
   },[])
 
   return (
@@ -34,7 +44,7 @@ export default function DiscoverScreen(props) {
           numColumns={1}
           onEndReachedThreshold={0.01}
           onEndReached={info => {
-            loadResults(links.next);
+            loadNext();
           }}
           keyExtractor={(item) => item.id} 
           data={results} 
