@@ -82,6 +82,6 @@ export const DefaultUser = {
   learning: ['en', 'cn'],
   speaks: 'es',
   birthDate: '<long_time_since_epoch>',
-  avatar: 'https://bootdey.com/img/Content/avatar/avatar2.png'
+  avatar: '/assets/avatar.png'
 }
   

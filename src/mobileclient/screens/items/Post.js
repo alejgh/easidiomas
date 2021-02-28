@@ -16,7 +16,8 @@ import { Audio } from 'expo-av';
 export default function Post(props){
 
     const context = useContext(AppContext);
-    const {parentNavigation,content,numLikes} = props
+    const {REQUEST_URI} = context.CONFIG;
+    const {parentNavigation,content,numLikes,postId} = props
     const {id,name,username,avatar} = props.user;
     const [photo,setPhoto] = useState({ uri: avatar});
     const [text,setText] = useState(content);
@@ -33,20 +34,35 @@ export default function Post(props){
       setTouched(pressed)
     }
 
-    const like = function(pressed = false){
-
-      // TODO
-      // REQUEST
+    const like = async function(){
+      let newLikes = 0;
       if (liked){ 
-          setLiked(false)
-          setLikes(likes-1)
-        }else{
-          setLiked(true)
-          setLikes(likes+1)
-        }
+        newLikes=likes+1;
+        setLiked(false)
+      }else{
+        newLikes=likes+1;
+        setLiked(true)
+      }
 
-        
+      setLikes(newLikes)
 
+      let payload =JSON.stringify({
+          id:postId,
+          content:content,
+          likes:newLikes
+      })
+
+      let response = await fetch(REQUEST_URI+'/posts/'+postId,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        },
+        body: payload
+      });
+
+      console.log(response.status)
     }
 
     const textToSpeech = async function(){
