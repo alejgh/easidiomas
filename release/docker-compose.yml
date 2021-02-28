@@ -42,6 +42,10 @@ services:
   neo4j:
     image: neo4j
     container_name: neo4j
+    volumes:
+      - type: volume
+        source: neo4j
+        target: /data
     expose:
       - "7474"
       - "7687"
@@ -103,11 +107,14 @@ services:
     container_name: usersservice
     depends_on:
       - neo4j
+      - statisticsservice
     expose:
       - "5000"
     environment:
       SERVER_PORT: 5000
       USERS_SERVICE_NEO4J_ADDR: bolt://neo4j:7687
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      IMAGES_SERVICE_WDSL: "http://imagesservice:5000/soapws/images?wsdl"
 
   authservice:
     build: ../src/authenticationservice/
@@ -212,3 +219,4 @@ services:
 volumes:
   elasticsearch:
   postgres:
+  neo4j:

@@ -40,6 +40,28 @@ public class UsersServiceController extends EasidiomasAPIController {
         return this.doRedirect(request, "/api/users");
     }
 
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity index(HttpServletRequest request, @PathVariable String id) throws IOException, URISyntaxException {
+        LOGGER.info(String.format("Request to path [%s] received.", request.getRequestURL()));
+        LOGGER.info(String.format("Getting the passport from the header for request [%s].", request.getRequestURL()));
+        Authservice.Passport passport = super.getPassport(request);
+
+        LOGGER.info(String.format("Requesting to the users service the list of users paginated [%s].", request.getRequestURL()));
+        LOGGER.info(String.format("Redirecting request to [%s:%s].", USERS_SERVICE_HOST, USERS_SERVICE_PORT));
+        return this.doRedirect(request, "/api/users/" + id);
+    }
+
+    @GetMapping(value = "/generateData", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity generateData(HttpServletRequest request) throws IOException, URISyntaxException {
+        LOGGER.info(String.format("Request to path [%s] received.", request.getRequestURL()));
+        LOGGER.info(String.format("Getting the passport from the header for request [%s].", request.getRequestURL()));
+        Authservice.Passport passport = super.getPassport(request);
+
+        LOGGER.info(String.format("Requesting to the users service the list of users paginated [%s].", request.getRequestURL()));
+        LOGGER.info(String.format("Redirecting request to [%s:%s].", USERS_SERVICE_HOST, USERS_SERVICE_PORT));
+        return this.doRedirect(request, "/api/users/generateData");
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(HttpServletRequest request) throws IOException, URISyntaxException {
         LOGGER.info(String.format("Request to path [%s] received.", request.getRequestURL()));
