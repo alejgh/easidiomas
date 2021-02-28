@@ -7,6 +7,7 @@ import com.easidiomas.auth.Authservice;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.*;
@@ -21,6 +22,12 @@ public class SecurityFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
+
+        // POST: /api/users must not be filtered
+        if(req.getRequestURI().equals("/api/users") && req.getMethod().equals(HttpMethod.POST.name())) {
+            chain.doFilter(request, response);
+            return;
+        }
         LOGGER.info(String.format("Security filter dispatched for request on path [%s]", req.getRequestURL()));
 
         MutableHttpServletRequest mutableRequest = new MutableHttpServletRequest(req);
@@ -38,7 +45,14 @@ public class SecurityFilter implements Filter {
             // Validate the token and put the passport in the header of the request.
             Authservice.Passport passport = null;
             try {
-                passport = new AuthenticationServiceClient().requestPassport(stringToken);
+                final Authservice.PassportResponse passportResponse = new AuthenticationServiceClient().requestPassport(stringToken);
+                if(passportResponse.getResponseStatus() == Authservice.PassportResponse.ResponseStatus.OK) {
+                    passport = passportResponse.getPassport();
+                } else {
+                    LOGGER.info(String.format("Request to path [%s] contains a token [%s] but is not valid", req.getRequestURL(), stringToken));
+                    res.sendError(HttpStatus.UNAUTHORIZED.value(), "The provided token is no longer valid.");
+                    return;
+                }
             } catch (Exception e) {
                 LOGGER.info(String.format("Request to path [%s] contains a token [%s] but is not valid", req.getRequestURL(), stringToken));
                 res.sendError(HttpStatus.UNAUTHORIZED.value(), "The provided token is no longer valid.");
@@ -49,6 +63,7 @@ public class SecurityFilter implements Filter {
 
             LOGGER.info(String.format("Passing request to path [%s] to the specific controller", req.getRequestURL()));
             chain.doFilter(mutableRequest, res);
+            return;
         }
     }
 }

@@ -6,6 +6,8 @@ import com.easidiomas.usersservice.model.ResultPageWrapper;
 import com.easidiomas.usersservice.model.User;
 import com.easidiomas.usersservice.model.UserInfo;
 import com.easidiomas.usersservice.persistence.UsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import java.util.*;
 @RestController
 public class UsersController {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
+
     private Pipeline filters;
 
     @Autowired
@@ -32,7 +36,13 @@ public class UsersController {
                                 @Nullable @RequestParam Integer minAge,
                                 @Nullable @RequestParam Integer maxAge,
                                 @Nullable @RequestParam String[] speaks,
-                                @Nullable @RequestParam String[] wantsToLearn) {
+                                @Nullable @RequestParam String[] wantsToLearn,
+                                @Nullable @RequestParam String username,
+                                @Nullable @RequestParam String password) {
+
+        LOGGER.debug("Logging a debug message");
+        LOGGER.info("Logging an info message");
+        LOGGER.error("Logging an error message");
 
         this.filters = new Pipeline(repository.findAll());
         if(!Objects.isNull(minAge))
@@ -43,6 +53,10 @@ public class UsersController {
             this.filters.registerFilter(new SpeaksLanguageFilter(new HashSet<>(Arrays.asList(speaks))));
         if(!Objects.isNull(wantsToLearn))
             this.filters.registerFilter(new WantsToLearnLanguageFilter(new HashSet<>(Arrays.asList(wantsToLearn))));
+        if(!Objects.isNull(username))
+            this.filters.registerFilter(new UsernameFilter((username)));
+        if(!Objects.isNull(password))
+            this.filters.registerFilter(new PasswordFilter((password)));
 
         List<User> hits = this.filters.executePipelineAndGetResult();
         hits.sort(Comparator.comparing(User::getId));
@@ -70,10 +84,12 @@ public class UsersController {
         userToSave.setPassword(user.getPassword());
         userToSave.setName(user.getName());
         userToSave.setSurname(user.getSurname());
-        userToSave.setBirthDate(new Date(user.getBirthDate()));
+        userToSave.setBirthDate(user.getBirthDate());
         userToSave.setLearning(user.getLearning());
         userToSave.setSpeaks(user.getSpeaks());
-
+        userToSave.setRole(0);
+        // Call images service HERE
+        userToSave.setAvatarUrl("http://CALL_THE_IMAGES_SERVICE_ASHOLE/");
         User savedUser = repository.save(userToSave);
         return ResponseEntity.created(new URI("http://easidiomas.com/users/" + savedUser.getId())).body(savedUser);
     }

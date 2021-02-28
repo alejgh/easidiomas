@@ -12,7 +12,7 @@ public class AuthenticationServiceClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationServiceController.class);
 
-    private final String serviceTarget = System.getenv("AUTH_SERVICE_ADDRESS")!=null ? System.getenv("AUTH_SERVICE_ADDRESS"): "loclhots:5000";
+    private final String serviceTarget = System.getenv("AUTH_SERVICE_ADDRESS")!=null ? System.getenv("AUTH_SERVICE_ADDRESS"): "localhost:5000";
     private final AuthenticationServiceGrpc.AuthenticationServiceBlockingStub authService;
 
     public AuthenticationServiceClient() {
@@ -24,18 +24,18 @@ public class AuthenticationServiceClient {
         LOGGER.info(String.format("Connected to authentication service on address [%s]", serviceTarget));
     }
 
-    public Authservice.Token requestToken(String username, String password) {
-        Authservice.LoginInfo loginInfo = Authservice.LoginInfo.newBuilder()
+    public Authservice.TokenResponse requestToken(String username, String password) {
+        Authservice.TokenRequest tokenRequest = Authservice.TokenRequest.newBuilder()
                 .setUsername(username)
                 .setPassword(password)
                 .build();
-        return authService.generateToken(loginInfo);
+        return authService.requestToken(tokenRequest);
     }
 
-    public Authservice.Passport requestPassport(String stringToken) {
-        Authservice.Token token = Authservice.Token.newBuilder()
+    public Authservice.PassportResponse requestPassport(String stringToken) {
+        Authservice.PassportRequest token = Authservice.PassportRequest.newBuilder()
                 .setToken(stringToken)
                 .build();
-        return authService.generatePassport(token);
+        return authService.requestPassport(token);
     }
 }
