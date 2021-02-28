@@ -80,9 +80,6 @@ export default function LoginScreen({navigation}){
       }else{
         setPasswordView(view);
       }
-
-
-
       return hasErrors;
     }
 
