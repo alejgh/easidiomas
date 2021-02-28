@@ -31,7 +31,8 @@ namespace WebClient.Controllers
             _logger.LogInformation("Index of statistics has been called");
             if (HttpContext.Session.TryGetValue("Token", out var token))
             {
-                Statistics statistics = _statisticsService.GetStatistics(token.ToString());
+                Statistics statistics = _statisticsService.GetStatistics(
+                    System.Text.Encoding.Default.GetString(token));
                 _logger.LogDebug("Statistics fetched from service");
                 return View(statistics);
             }

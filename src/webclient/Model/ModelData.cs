@@ -15,12 +15,12 @@ namespace WebClient.Model
         public int Total { get; set; }
         public T[] Data { get; set; }
 
-        public ModelData(PaginatedResponse<T> paginatedResponse, int offset)
+        public ModelData(BasePaginatedResponse<T> paginatedResponse, int offset)
         {
             Offset = offset;
             Count = paginatedResponse.Count;
             Total = paginatedResponse.Total;
-            Data = paginatedResponse.Data;
+            Data = paginatedResponse.GetData();
         }
     }
 }

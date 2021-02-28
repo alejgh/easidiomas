@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
 namespace WebClient.Model.External
 {
-    public class PaginatedResponse<T>
+    public abstract class BasePaginatedResponse<T>
     {
         public class PaginationLinks
         {
@@ -18,6 +17,7 @@ namespace WebClient.Model.External
 
         public int Count { get; set; }
         public int Total { get; set; }
-        public T[] Data { get; set; }
+
+        public abstract T[] GetData();
     }
 }

@@ -139,11 +139,16 @@ namespace PostsService.Controllers
             int role = 0;
             if (Request.Headers.TryGetValue("passport", out var passportStr))
             {
-                _logger.LogDebug($"Passport is present in header: {passportStr}");
-                Passport passport = JsonConvert.DeserializeObject<Passport>(passportStr);
-                _logger.LogDebug($"Passport loaded: {passport}");
-                // TODO: CHANGE
-                role = 1;
+                try
+                {
+                    _logger.LogDebug($"Passport is present in header: {passportStr}");
+                    dynamic passport = JsonConvert.DeserializeObject<dynamic>(passportStr);
+                    _logger.LogDebug($"Passport loaded: {passport}");
+                    role = passport.role_;
+                } catch (Exception e)
+                {
+                    _logger.LogError($"Exception parsing passport: {e.Message}");
+                }
             }
 
             _logger.LogDebug($"User role is '{role}'");
@@ -160,12 +165,14 @@ namespace PostsService.Controllers
 
         private long? RetrieveUserIdFromPassport()
         {
-            // TODO: verificar cómo nos llega el passport del api entrypoint
             _logger.LogDebug("Retrieving user id from headers");
             long? userID = null;
-            if (Request.Headers.TryGetValue("passport.userID", out var passportUserID))
+            if (Request.Headers.TryGetValue("passport", out var passportStr))
             {
-                userID = Convert.ToInt64(passportUserID);
+                _logger.LogDebug($"Passport is present in header: {passportStr}");
+                dynamic passport = JsonConvert.DeserializeObject<dynamic>(passportStr);
+                _logger.LogDebug($"Passport loaded: {passport}");
+                userID = Convert.ToInt64(passport.userId_);
             }
             _logger.LogDebug($"User id is '{userID}'");
             return userID;

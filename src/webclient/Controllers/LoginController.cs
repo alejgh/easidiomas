@@ -48,7 +48,7 @@ namespace WebClient.Controllers
         /// </summary>
         [Route("/login")]
         [HttpPost]
-        public IActionResult Login([Bind("Username", "Password")] UserLoginData userData)
+        public IActionResult Login([Bind("username", "password")] UserLoginData userData)
         {
             _logger.LogInformation("POST controller for login has been called");
 
@@ -56,9 +56,20 @@ namespace WebClient.Controllers
             {
                 // Add token to session
                 _logger.LogDebug("Model state was valid. Calling login service to validate credentials");
-                LoginResult loginResult = _loginService.DoLogin(userData.Username, userData.Password);
+                LoginResult loginResult = _loginService.DoLogin(userData);
                 if (loginResult.Successful)
                 {
+                    if (loginResult.Permissions != "1")
+                    {
+                        // user is not admin
+                        TempData.Put("Notification", new NotificationInfo
+                        {
+                            Message = "Not authorized",
+                            ClassName = "error"
+                        });
+                        return View();
+                    }
+
                     _logger.LogDebug($"Credentials are valid -> Adding token to session ({loginResult.Token})");
                     HttpContext.Session.SetString("Token", loginResult.Token);
                     TempData.Put("Notification", new NotificationInfo

@@ -31,7 +31,8 @@ namespace PostsService.Data
                 $"Username={config["POSTGRES_USER"]};Password={config["POSTGRES_PASS"]};Database={config["POSTGRES_DB"]};";
             logger.LogDebug($"Connecting with following data: {connectionString}");
 
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(connectionString,
+                                     options => options.EnableRetryOnFailure());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

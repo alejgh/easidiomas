@@ -30,10 +30,11 @@ namespace WebClient.Controllers
         {
             if (HttpContext.Session.TryGetValue("Token", out var token))
             {
-                PaginatedResponse<User> posts = _usersService.GetUsers(token.ToString());
+                UsersPaginatedResponse users = _usersService.GetUsers(
+                    System.Text.Encoding.Default.GetString(token));
 
-                _logger.LogDebug(posts.ToString());
-                return View(new ModelData<User>(posts, offset));
+                _logger.LogDebug(users.ToString());
+                return View(new ModelData<User>(users, offset));
             }
 
             TempData.Put("Notification", new NotificationInfo
@@ -61,7 +62,8 @@ namespace WebClient.Controllers
             bool hasToken = HttpContext.Session.TryGetValue("Token", out var token);
             if (!hasToken) return RedirectToAction("Login", "Login");
 
-            bool success = _usersService.DeleteUser(id.Value, token.ToString());
+            bool success = _usersService.DeleteUser(id.Value,
+                    System.Text.Encoding.Default.GetString(token));
             if (success)
             {
                 TempData.Put("Notification", new NotificationInfo

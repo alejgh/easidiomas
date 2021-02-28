@@ -20,7 +20,7 @@ namespace WebClient.Services
             _logger = logger;
         }
 
-        public PaginatedResponse<Post> GetPosts(int offset, int limit, string token)
+        public PostsPaginatedResponse GetPosts(int offset, int limit, string token)
         {
             var request = new RestRequest(Method.GET);
             request.RequestFormat = DataFormat.Json;
@@ -33,7 +33,7 @@ namespace WebClient.Services
             if (!success) return null;
 
             // rest sharp serialization was not working for complex objs like this one
-            return JsonConvert.DeserializeObject<PaginatedResponse<Post>>(response.Content);
+            return JsonConvert.DeserializeObject<PostsPaginatedResponse>(response.Content);
         }
 
         public bool DeletePost(int postId, string token)

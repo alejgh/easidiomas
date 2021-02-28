@@ -7,3 +7,33 @@
 
 <h1>System Statistics</h1>
 
+<h2>Users registered</h2>
+<p>Total: @Model.RegisteredUsers.Total</p>
+<h3>Languages being learned</h3>
+@foreach (var entry in Model.RegisteredUsers.learning.Entry)
+{
+    <p>@entry.Key : @entry.Value</p>
+}
+
+<h3>Native languages</h3>
+@foreach (var entry in Model.RegisteredUsers.nnative.Entry)
+{
+    <p>@entry.Key : @entry.Value</p>
+}
+
+
+<h2>Posts created</h2>
+@foreach (var entry in Model.CreatedPosts.Entry)
+{
+    <p>@entry.Key : @entry.Value</p>
+}
+
+
+<h2>Chats created</h2>
+<p>@Model.CreatedChats</p>
+
+<script>
+    var createdChats = @Model.CreatedChats;
+    var createdPosts = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CreatedPosts))');
+    console.log(createdPosts);
+</script>

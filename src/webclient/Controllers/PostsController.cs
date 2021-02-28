@@ -43,7 +43,8 @@ namespace WebClient.Controllers
         {
             _logger.LogInformation($"Index of posts has been called. [offset={offset}, limit={limit}]");
             if (HttpContext.Session.TryGetValue("Token", out var token)) {
-                PaginatedResponse<Post> posts = _postsService.GetPosts(offset, limit, token.ToString());
+                PostsPaginatedResponse posts = _postsService.GetPosts(offset, limit,
+                    System.Text.Encoding.Default.GetString(token));
                 _logger.LogDebug("Posts fetched from service");
                 return View(new ModelData<Post>(posts, offset));
             }
@@ -83,7 +84,8 @@ namespace WebClient.Controllers
             bool hasToken = HttpContext.Session.TryGetValue("Token", out var token);
             if (!hasToken) return RedirectToAction("Login", "Login");
 
-            bool success = _postsService.DeletePost(id.Value, token.ToString());
+            bool success = _postsService.DeletePost(id.Value,
+                    System.Text.Encoding.Default.GetString(token));
             if (success)
             {
                 _logger.LogDebug("Post deleted successfully");

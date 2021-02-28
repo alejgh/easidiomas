@@ -21,7 +21,7 @@ namespace WebClient.Controllers
         public IActionResult Index()
         {
             _logger.LogInformation("Welcome page controller has been called");
-            return View();
+            return RedirectToAction("Index", "Statistics");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

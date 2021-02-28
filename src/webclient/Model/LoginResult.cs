@@ -5,5 +5,6 @@ namespace WebClient.Model
     {
         public bool Successful { get; set; }
         public string Token { get; set; }
+        public string Permissions { get; set; }
     }
 }

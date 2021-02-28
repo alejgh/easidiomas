@@ -19,16 +19,19 @@ namespace WebClient.Services
             _logger = logger;
         }
 
-        public LoginResult DoLogin(string username, string password)
+        public LoginResult DoLogin(UserLoginData loginData)
         {
             var request = new RestRequest(Method.POST);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("username", username);
-            request.AddHeader("password", password);
+            request.AddJsonBody(loginData);
 
             var response = _loginClient.Execute<dynamic>(request);
             bool success = response.StatusCode == HttpStatusCode.Created;
-            return new LoginResult() { Successful = success, Token = response.Data["response"] };
+            return new LoginResult() {
+                Successful = success,
+                Token = response.Data["tokenGenerated_"],
+                Permissions = response.Data["tokenPermissions_"]
+            };
         }
     }
 }

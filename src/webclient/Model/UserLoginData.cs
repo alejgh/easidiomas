@@ -9,11 +9,11 @@ namespace WebClient.Model
     public class UserLoginData
     {
         [Required]
-        [StringLength(60, MinimumLength=2)]
-        public string Username { get; set; }
+        [StringLength(60, MinimumLength = 2)]
+        public string username { get; set; }
 
         [Required]
         [StringLength(60, MinimumLength = 2)]
-        public string Password { get; set; }
+        public string password { get; set; }
     }
 }
