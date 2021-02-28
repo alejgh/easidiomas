@@ -1,38 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Post from './items/Post';
-import randomWords from 'random-words'
+import { FloatingAction } from "react-native-floating-action";
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { AppContext } from '../App';
 
-export default function Home() {
-  const [people, setPeople] = useState([
-    { name: 'shaun', id: '1' },
-    { name: 'yoshi', id: '2' },
-    { name: 'mario', id: '3' },
-    { name: 'luigi', id: '4' },
-    { name: 'peach', id: '5' },
-    { name: 'toad', id: '6' },
-    { name: 'bowser', id: '7' },
-    { name: 'shaun', id: '8' },
-    { name: 'yoshi', id: '9' },
-    { name: 'mario', id: '10' },
-    { name: 'luigi', id: '11' },
-    { name: 'peach', id: '12' },
-    { name: 'toad', id: '13' },
-    { name: 'bowser', id: '14' },
-  ]);
+export default function Home(props) {
+  
+  const{parentNavigation,navigation,filters} = props;
+  const context = useContext(AppContext);
+  const {REQUEST_URI} = context.CONFIG;
 
+  const [posts, setPosts] = useState([]);
+  const [links,setLinks] = useState([]);
+
+  const loadPosts = async function(url){
+    let response = await (await fetch(REQUEST_URI+url+filters,{
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        }})).json();
+    let data = response.data;
+    let newPosts = [];
+    for(let post in data){
+      let user = await getUser('/users/'+data[post].authorId); 
+      newPosts.push({
+        id:data[post].id,
+        user:user,
+        content:data[post].content,
+        numLikes:data[post].likes
+      })
+    }
+
+    console.log(newPosts)
+    //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
+    setPosts(posts.concat(newPosts))
+    setLinks(response.links)
+  }
+
+  const loadNext = function(){
+    if(links.next)
+      loadPosts(links.next)
+  }
+
+
+  const getUser = async function(url){
+    return (await fetch(REQUEST_URI+url,{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token':context.token
+      }})).json();
+  }
+
+  useEffect(()=>{
+    loadPosts('/posts');
+  },[])
+
+  const actions = [
+    {
+      text: "Accessibility",
+      name: "bt_accessibility",
+      icon: <Ionicons name={'add-outline'}  size={25} color={'#fff'} />,
+      position: 1
+    },]
 
   return (
     <View style={styles.container}>
 
       <FlatList 
         numColumns={1}
+        onEndReachedThreshold={0.01}
+        onEndReached={info => {
+          loadNext();
+        }}
         keyExtractor={(item) => item.id} 
-        data={people} 
+        data={posts} 
         renderItem={({ item }) => ( 
-            <Post name={item.name} handle={"@"+item.name} post={randomWords({min: 18, max: 40}).join(" ")}/>
+            <Post key={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} numLikes={item.numLikes}/>
         )}
       />
+
+      <FloatingAction
+          color={'#1DA1F2'}
+          animated={false}
+          actions={actions}
+          overrideWithAction
+          onPressItem={name => {
+            navigation.navigate("New Post");
+          }}
+        />
 
     </View>
   );
