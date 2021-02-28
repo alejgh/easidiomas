@@ -158,6 +158,27 @@ services:
     environment:
       REDIS_ADDR: redis
       REDIS_PORT: 6379
+  
+  languageidentificationservice:
+    build: ../src/languageidentificationservice/
+    container_name: languageidentificationservice
+    depends_on:
+      - kafka
+      - postsservice
+    expose:
+      - "5000"
+    environment:
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      KAFKA_ENDPOINT: kafka:9092
+      SERVICE_NAME: LANG_INDET_SERVICE
+      LANGUAGE_DETECTION_TOPIC: languageidentification_service
+      POSTS_TOPIC: posts
+
+  translationsservice:
+    build: ../src/translationsservice/
+    container_name: translationsservice
+    expose:
+      - "5000"
 
   apigateway:
     build: ../src/apigateway/
