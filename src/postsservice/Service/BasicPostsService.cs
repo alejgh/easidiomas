@@ -61,17 +61,18 @@ namespace PostsService.Service
                 .Where(p => postsFilter.User == null ? true : p.AuthorId == postsFilter.User)
                 .Where(p => postsFilter.Language == null ? true : languages.Contains(p.Language));
 
-            // now pagination
-            postsQueryable = postsQueryable
-                .Skip(paginationFilter.Offset)
-                .Take(paginationFilter.Limit);
-
             // sorting...
             // at this point the name of the property has been validated to exist
             if (sortingInfo.Order.Equals("asc"))
                 postsQueryable = postsQueryable.OrderBy(p => EF.Property<object>(p, sortingInfo.SortBy));
             else
                 postsQueryable = postsQueryable.OrderByDescending(p => EF.Property<object>(p, sortingInfo.SortBy));
+
+            // now pagination
+            postsQueryable = postsQueryable
+                .Skip(paginationFilter.Offset)
+                .Take(paginationFilter.Limit);
+
 
             // and get the posts!!
             return postsQueryable.ToListAsync();
