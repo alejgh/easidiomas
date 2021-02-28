@@ -15,7 +15,11 @@ export default function Home(props) {
   const [links,setLinks] = useState([]);
 
   const loadPosts = async function(url){
-    let response = await (await fetch(REQUEST_URI+url+filters,{
+    let nexFilters = filters;
+    if(url.includes('?')){
+      nexFilters = filters.replace('?','&') 
+    }
+    let response = await (await fetch(REQUEST_URI+url+nexFilters,{
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -43,7 +47,6 @@ export default function Home(props) {
     if(links?.next){
       loadPosts(links.next.replace('api/','/'))
     }
-      
   }
 
 
