@@ -214,6 +214,8 @@ services:
       STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
       TTS_SERVICE_HOST: texttospeechservice
       TTS_SERVICE_PORT: 5000
+      TRANSLATIONS_SERVICE_HOST: translationsservice
+      TRANSLATIONS_SERVICE_PORT: 5000
 
 ############# Web Client ################
 #  webclient:
