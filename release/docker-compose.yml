@@ -124,7 +124,7 @@ services:
   chatsservice:
     build: ../src/chats
     container_name: chatsservice
-    depens_on:
+    depends_on:
       - kafka
       - mongo
     expose:
