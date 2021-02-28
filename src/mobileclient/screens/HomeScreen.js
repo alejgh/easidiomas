@@ -7,7 +7,7 @@ import { AppContext } from '../App';
 
 export default function Home(props) {
   
-  const{parentNavigation,navigation} = props;
+  const{parentNavigation,navigation,filters} = props;
   const context = useContext(AppContext);
   const {REQUEST_URI} = context.CONFIG;
 
@@ -15,7 +15,7 @@ export default function Home(props) {
   const [links,setLinks] = useState([]);
 
   const loadPosts = async function(url){
-    let response = await (await fetch(REQUEST_URI+url,{
+    let response = await (await fetch(REQUEST_URI+url+filters,{
         method: 'GET',
         headers: {
           'Accept': 'application/json',

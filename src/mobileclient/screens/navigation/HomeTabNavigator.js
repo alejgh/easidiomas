@@ -1,13 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import HomeScreen from '../HomeScreen';
+import { AppContext } from '../../App';
 
 export default function HomeTabNavigator(props){
 
     const {parentNavigation,navigation} = props;
+    const context = useContext(AppContext);
 
     const Tab = createMaterialTopTabNavigator();
+
+    const getLanguajeFilters = function(){
+      return '?language='+context.user.learning[0]+','+context.user.learning[0];
+    }
 
     return(
     <NavigationContainer independent  initialRouteName="Results">
@@ -26,10 +32,10 @@ export default function HomeTabNavigator(props){
           },
         }} >
           <Tab.Screen name="Posts">
-            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation}/>}
+            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation} filters={''}/>}
           </Tab.Screen>
           <Tab.Screen name="Learn">
-            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation}/>}
+            {props =><HomeScreen navigation={navigation} parentNavigation={parentNavigation} filters={getLanguajeFilters()}/>}
           </Tab.Screen>
         </Tab.Navigator>
     </NavigationContainer>
