@@ -112,6 +112,7 @@ services:
     depends_on:
       - neo4j
       - statisticsservice
+      - imagesservice
     expose:
       - "5000"
     environment:

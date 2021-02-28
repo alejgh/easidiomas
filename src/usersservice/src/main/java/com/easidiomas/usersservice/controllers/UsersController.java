@@ -1,5 +1,9 @@
 package com.easidiomas.usersservice.controllers;
 
+import com.easidiomas.auth.Authservice;
+import com.easidiomas.usersservice.clients.imagesservice.IImageManager;
+import com.easidiomas.usersservice.clients.imagesservice.IImageManagerService;
+import com.easidiomas.usersservice.clients.imagesservice.ImageProcessingException_Exception;
 import com.easidiomas.usersservice.clients.statisticsservice.IStatisticsService;
 import com.easidiomas.usersservice.clients.statisticsservice.IStatisticsServiceService;
 import com.easidiomas.usersservice.filters.*;
@@ -9,20 +13,31 @@ import com.easidiomas.usersservice.model.User;
 import com.easidiomas.usersservice.model.UserInfo;
 import com.easidiomas.usersservice.persistence.DataGenerator;
 import com.easidiomas.usersservice.persistence.UsersRepository;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPBinding;
+import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 @RestController
 public class UsersController {
@@ -30,6 +45,7 @@ public class UsersController {
     private final static Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
 
     private static final String STATS_SERVICE_WDSL = System.getenv("STATS_SERVICE_WDSL")!=null ? System.getenv("STATS_SERVICE_WDSL"): "http://localhost:5000/soapws/statistics?wsdl";
+    private static final String IMAGES_SERVICE_WDSL = System.getenv("IMAGES_SERVICE_WDSL")!=null ? System.getenv("IMAGES_SERVICE_WDSL"): "http://localhost:5000/soapws/images?wsdl";
 
     private Pipeline filters;
 
@@ -90,7 +106,7 @@ public class UsersController {
 
     // POST: /api/users
     @PostMapping(value = "/api/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity add(@RequestBody UserInfo user) throws URISyntaxException, MalformedURLException {
+    public ResponseEntity add(@RequestBody UserInfo user) throws URISyntaxException {
         if(repository.findByUsername(user.getUsername()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken");
         }
@@ -103,8 +119,31 @@ public class UsersController {
         userToSave.setLearning(user.getLearning());
         userToSave.setSpeaks(user.getSpeaks());
         userToSave.setRole(0);
-        // Call images service HERE
-        userToSave.setAvatarUrl("http://CALL_THE_IMAGES_SERVICE_ASHOLE/");
+
+        IImageManagerService imagesService = new IImageManagerService(new URL(IMAGES_SERVICE_WDSL));
+        IImageManager imagesProcessor = imagesService.getIImageManagerPort();
+        byte[] imageBytes = DatatypeConverter.parseBase64Binary(user.getBase64Image());
+        Image imgUpload = null;
+        try {
+            imgUpload = ImageIO.read(new ByteArrayInputStream(imageBytes));
+        } catch (IOException e) {
+            LOGGER.error("Error while processing the image bytes.");
+            LOGGER.error(e.getMessage());
+        }
+        //enable MTOM in client
+        BindingProvider bp = (BindingProvider) imagesProcessor;
+        SOAPBinding binding = (SOAPBinding) bp.getBinding();
+        binding.setMTOMEnabled(true);
+
+        try {
+            userToSave.setAvatarUrl(imagesProcessor.uploadImage(imgUpload));
+        } catch (Exception e) {
+            LOGGER.error("Error while calling the images service at address " + IMAGES_SERVICE_WDSL
+                    + " and image: " + user.getBase64Image());
+            LOGGER.error(e.getMessage());
+            userToSave.setAvatarUrl("https://static2.elcomercio.es/www/pre2017/multimedia/RC/201501/12/media/cortadas/avatar--575x323.jpg");
+        }
+
         User savedUser = repository.save(userToSave);
 
         // Register the created user in the statistics service
@@ -133,7 +172,22 @@ public class UsersController {
 
     // PUT: /api/users/{id}
     @PutMapping(value = "api/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity update(@PathVariable String id, @RequestBody User newUser) {
+    public ResponseEntity update(HttpServletRequest request, @PathVariable String id, @RequestBody User newUser) {
+
+        LOGGER.info("Request to update user " + id);
+
+        // validate the passport.
+        String passportHeader = request.getHeader("passport");
+        if(passportHeader == null || passportHeader.isEmpty()) {
+            LOGGER.error("The passport header is null or empty");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        LOGGER.error("The passport header is present: " + passportHeader);
+        LOGGER.error("Deserializing the passport");
+        Authservice.Passport passport = new Gson().fromJson(request.getHeader("passport"), Authservice.Passport.class);
+        LOGGER.error("Passport deserialized: " + passport);
+
+        // Validate the userId.
         Long userId = null;
         try{
             userId = Long.parseLong(id);
@@ -141,7 +195,15 @@ public class UsersController {
             // log the exception
             return ResponseEntity.badRequest().body("the id of the user should be a long.");
         }
-        // Get passport from the request.
+
+        // Validate that the user requesting the change is the one authenticated.
+        if(!passport.getUserId().equals(Long.toString(userId))) {
+            LOGGER.warn(String.format("The user requesting the update was [%s] and the passport belongs to [%s].", userId, passport.getUserId()));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        LOGGER.info("The user has privileges to perform the update over user " + id);
+
         User userInRepo = repository.findById(userId)
                 .map(user -> {
                     user.setLearning(newUser.getLearning());
@@ -155,7 +217,23 @@ public class UsersController {
 
     // DELETE: /pai/users/{id}
     @DeleteMapping(value = "api/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity remove(@PathVariable String id) {
+    public ResponseEntity remove(HttpServletRequest request, @PathVariable String id) {
+        String passportHeader = request.getHeader("passport");
+        if(passportHeader == null || passportHeader.isEmpty()) {
+            LOGGER.error("The passport header is null or empty");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        LOGGER.error("The passport header is present: " + passportHeader);
+        LOGGER.error("Deserializing the passport");
+        Authservice.Passport passport = new Gson().fromJson(request.getHeader("passport"), Authservice.Passport.class);
+        LOGGER.error("Passport deserialized: " + passport);
+
+        // Un buen número mágico ahí to gocho. 1 es ADMIN.
+        if(passport.getRole() != 1) {
+            LOGGER.warn("The authenticated user is not an admin");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not an administrator user");
+        }
+
         Long userId = null;
         try{
             userId = Long.parseLong(id);
