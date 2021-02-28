@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.easidiomas.auth.Authservice;
@@ -87,9 +88,14 @@ public class PostsServiceController extends EasidiomasAPIController {
         // enviamos la peticion a la nueva uri
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-        ResponseEntity<String> resp =
-            restTemplate.exchange(thirdPartyApi, HttpMethod.resolve(request.getMethod()), entity, String.class);
-
+        ResponseEntity<String> resp;
+        try {
+            resp =
+                    restTemplate.exchange(thirdPartyApi, HttpMethod.resolve(request.getMethod()), entity, String.class);
+        } catch (HttpClientErrorException e) {
+            resp =
+                    ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+        }
         return resp;
     }
 }

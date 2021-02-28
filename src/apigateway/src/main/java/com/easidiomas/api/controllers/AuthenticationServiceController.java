@@ -1,10 +1,7 @@
 package com.easidiomas.api.controllers;
 
 import com.easidiomas.api.clients.authenticationservice.AuthenticationServiceClient;
-<<<<<<< HEAD
-=======
 import com.easidiomas.api.model.LoginInfo;
->>>>>>> main
 import com.easidiomas.api.util.StringResponse;
 import com.easidiomas.auth.Authservice;
 import com.google.gson.Gson;

@@ -57,8 +57,6 @@ services:
   topicmodeling:
     build: ../src/topicmodelingservice/
     container_name: topicmodelingservice
-    ports:
-      - "5001:5001"
     depends_on:
       - kafka
     environment:
@@ -70,7 +68,7 @@ services:
     build: ../src/postsservice/
     container_name: postsservice
     ports:
-      - "5002:80"
+      - "5002:5000"
     hostname: postsservice
     depends_on:
       - kafka
