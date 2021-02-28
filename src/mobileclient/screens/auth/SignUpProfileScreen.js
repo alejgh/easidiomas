@@ -2,6 +2,7 @@ import React, {useState,useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, Image,TouchableOpacity } from 'react-native';
 import SignUpLanguajePicker from './SignUpLanguajePicker';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import { AppContext } from '../../App';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -11,8 +12,6 @@ export default function SignUpProfileScreen({route,navigation}){
     const {REQUEST_URI} = (useContext(AppContext)).CONFIG;
     const {username,password} = route.params;
 
-   
-
     const [name,setName] = useState('');
     const [nameView,setNameView] = useState(view);
     const [surname,setSurname] = useState('');
@@ -20,31 +19,18 @@ export default function SignUpProfileScreen({route,navigation}){
     const [birthDate,setBirthdate] = useState('Birth Date *');
     const [birthDateView,setBirthDateView] = useState(view);
     const [showDate, setShowDate] = useState(false);
-    const [native,setNative] = useState('');
+    const [native,setNative] = useState('es');
     const [nativeView,setNativeView] = useState(langView);
-    const [learning1,setLearning1] = useState('');
+    const [learning1,setLearning1] = useState('en');
     const [leraning1View,setLeraning1View] = useState(langView);
-    const [learning2,setLearning2] = useState('');
+    const [learning2,setLearning2] = useState('cn');
     const [leraning2View,setLeraning2View] = useState(langView);
 
-
-
     const [image, setImage] = useState('https://www.bootdey.com/img/Content/avatar/avatar2.png');
+    const [base64Image, setBase64Image] = useState('');
     const [errors,setErrors] = useState('');
     
     const signUp = async function(){
-      //TODOO
-      console.log({
-        username:username,
-        password:password,
-        name:name,
-        surname:surname,
-        birthDate: new Date(birthDate).getTime(),
-        native:native,
-        learning1:learning1,
-        learning2:learning2
-      })
-
       let errors = updateErrors();
       console.log(errors)
       if(!errors){
@@ -56,12 +42,13 @@ export default function SignUpProfileScreen({route,navigation}){
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
+            base64Image:base64Image,
             username:username,
             password:password,
             name:name,
             surname:surname,
             birthDate: new Date(birthDate).getTime(),
-            native:native,
+            speaks:native,
             learning:[learning1,learning2]})
         });
   
@@ -133,15 +120,18 @@ export default function SignUpProfileScreen({route,navigation}){
       }
 
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
   
-
       if (!result.cancelled) {
-        setImage(result.uri);
+        if(!result.uri.endsWith('.png')){
+          let fileBase64 = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });      
+          setBase64Image(fileBase64);
+          setImage(result.uri);
+        }
       }
 
     };
