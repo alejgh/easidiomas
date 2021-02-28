@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using PostsService.Kafka.Deserializers;
 using PostsService.Model;
 using PostsService.Service;
+using StatisticsService;
 
 namespace PostsService.Kafka.Consumers
 {
@@ -21,12 +22,15 @@ namespace PostsService.Kafka.Consumers
         private readonly ILogger<LanguageDetectionConsumer> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
 
+        private readonly string _statisticsServiceAddress;
+
         public LanguageDetectionConsumer(IConfiguration configuration, ILogger<LanguageDetectionConsumer> logger,
             IServiceScopeFactory scopeFactory)
         {
             string endpoint = configuration["KAFKA_ENDPOINT"];
             string topic = configuration["LANGUAGE_DETECTION_TOPIC"];
             string groupId = configuration["SERVICE_NAME"];
+            _statisticsServiceAddress = configuration["STATISTICS_SERVICE_ENDPOINT"];
 
             _consumer = new KafkaConsumer<long, string>(endpoint, topic, groupId,
                 onLanguageIdentification, new LongDeserializer());
@@ -60,7 +64,10 @@ namespace PostsService.Kafka.Consumers
                 await postsService.UpdatePost(post);
             }
 
-            // TODO: call the statistics service with information about this post
+            // call the statistics service with information about this post
+            StatisticsServiceClient.EndpointConfiguration config = new StatisticsServiceClient.EndpointConfiguration();
+            StatisticsServiceClient client = new StatisticsServiceClient(config, _statisticsServiceAddress);
+            await client.registerPostCreatedEventAsync(postId.ToString(), language);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)

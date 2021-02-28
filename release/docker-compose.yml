@@ -88,6 +88,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASS: ${POSTGRES_PASS}
       POSTGRES_DB: ${POSTGRES_DB}
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
 
   imagesservice:
     build: ../src/imagesservice/
