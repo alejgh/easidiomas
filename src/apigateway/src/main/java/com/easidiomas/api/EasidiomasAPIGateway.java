@@ -17,7 +17,7 @@ import java.util.Collections;
 public class EasidiomasAPIGateway {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EasidiomasAPIGateway.class);
-    private static final int PORT = Integer.parseInt(System.getenv("SERVER_PORT")!=null ? System.getenv("SERVER_PORT"): "5001");
+    private static final int PORT = Integer.parseInt(System.getenv("SERVER_PORT")!=null ? System.getenv("SERVER_PORT"): "5003");
 
     public static void main(String... args) {
         LOGGER.info("Service starting on port " + PORT);

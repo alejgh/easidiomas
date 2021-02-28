@@ -14,9 +14,9 @@ import java.io.IOException;
 public class AuthServer {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServer.class);
     // Port where the server will be listening for gRPC calls.
-    private static final int PORT = Integer.parseInt(System.getProperty("SERVER_PORT", "5000"));
+    private static final int PORT = Integer.parseInt(System.getenv("SERVER_PORT")!=null ? System.getenv("SERVER_PORT"): "5000");
 
-    // Google gRPC server obeject.
+    // Google gRPC server object.
     private Server server;
 
     public static void main(String[] args) throws InterruptedException, IOException {

@@ -1,12 +1,17 @@
 import logging
 import zeep
 
-from .soap_result import SoapResult
-from ..config import SERVICE_KEY
+from flask import current_app as app
 
 
-logger = logging.getLogger(SERVICE_KEY)
+logger = logging.getLogger(app.config['SERVICE_KEY'])
 logger.setLevel(logging.DEBUG)
+
+
+class SoapResult:
+    def __init__(self, successful, result=None):
+        self.successful = successful
+        self.result = result
 
 
 class SoapClient:
@@ -36,7 +41,7 @@ class SoapClient:
         try:
             res = getattr(client.service, attr_name)(*args, **kwargs)
             logger.info(f"SOAP request was successful. Result: {res}")
-            return SoapResult(True, result)
+            return SoapResult(True, res)
         except Exception as e:
             logger.error(f"There was an error calling the SOAP client: {e}")
             logger.debug("Returning unsuccessful SOAP result")
