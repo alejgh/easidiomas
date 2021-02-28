@@ -49,9 +49,9 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user = passport.getUserURL();
+		String user = passport.getUserId();
 		if (user == null) {
-			LOGGER.error(String.format("Missing userURL in passport header"));
+			LOGGER.error(String.format("Missing userId in passport header"));
 			return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
 		}
 
@@ -69,7 +69,7 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user1 = passport.getUserURL();
+		String user1 = passport.getUserId();
 		String user2 = payload.get("user2");
 		if (user1 == null || user2 == null) {
 			LOGGER.error(String.format("Missing some parram"));
@@ -101,7 +101,7 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user = passport.getUserURL();
+		String user = passport.getUserId();
 		if (user == null) {
 			LOGGER.error(String.format("Missing userURL in passport header"));
 			return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
@@ -134,9 +134,9 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user = passport.getUserURL();
+		String user = passport.getUserId();
 		String text = payload.get("text");
-		String sender = passport.getUserURL();
+		String sender = passport.getUserId();
 		if (user == null || text == null || sender == null) {
 			LOGGER.error(String.format("Missing some parram"));
 			return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
