@@ -84,7 +84,6 @@ namespace PostsService.Controllers
             _logger.LogInformation($"Calling service to fetch post with id '{id}'");
             Post originalPost = await _service.GetPost(id);
             if (originalPost == null) return NotFound();
-            else if (userID.Value != originalPost.AuthorId) return Unauthorized(); // a user can't modify posts made by others!
 
             try
             {

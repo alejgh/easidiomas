@@ -19,6 +19,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +32,13 @@
     <Folder Include="Kafka\Deserializers\" />
     <Folder Include="Kafka\Consumers\" />
     <Folder Include="Service\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>
