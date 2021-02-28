@@ -1,6 +1,9 @@
 ﻿using System;
-namespace WebClient.Models
+namespace WebClient.Model
 {
+    /// <summary>
+    /// Class used to send notifications to the views.
+    /// </summary>
     [Serializable]
     public class NotificationInfo
     {

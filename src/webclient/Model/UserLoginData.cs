@@ -1,8 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebClient.Models
+namespace WebClient.Model
 {
+    /// <summary>
+    /// Data fetched from the login view.
+    /// </summary>
     public class UserLoginData
     {
         [Required]

@@ -5,6 +5,7 @@ using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PostsService.Kafka;
 using PostsService.Model;
 using PostsService.Service;
@@ -134,17 +135,20 @@ namespace PostsService.Controllers
         {
             _logger.LogInformation($"DELETE for post with id '{id}' has been called");
 
-            // TODO: verificar cómo nos llega el passport del api entrypoint
             _logger.LogDebug("Retrieving user role from headers");
-            string role = "USER";
-            if (Request.Headers.TryGetValue("passport.userRole", out var passportUserRole))
+            int role = 0;
+            if (Request.Headers.TryGetValue("passport", out var passportStr))
             {
-                role = passportUserRole;
+                _logger.LogDebug($"Passport is present in header: {passportStr}");
+                Passport passport = JsonConvert.DeserializeObject<Passport>(passportStr);
+                _logger.LogDebug($"Passport loaded: {passport}");
+                // TODO: CHANGE
+                role = 1;
             }
 
             _logger.LogDebug($"User role is '{role}'");
 
-            if (!role.ToUpper().Equals("ADMIN")) return Unauthorized();
+            if (role != 1) return Unauthorized();
 
             Post post = await _service.GetPost(id);
             if (post == null) return NotFound();

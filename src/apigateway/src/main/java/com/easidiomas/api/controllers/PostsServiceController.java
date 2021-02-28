@@ -77,9 +77,6 @@ public class PostsServiceController extends EasidiomasAPIController {
             headers.add(nextHeaderName, headerValue);
         }
         
-        // esto no se muy bien como va. creo que ya debería estar el passport aqui asi que seguramente se pueda borrar
-        if (passport != null) headers.add("passport", passport.toString());
-        
         // obtener el body del post
         String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
        

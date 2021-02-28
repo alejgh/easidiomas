@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using WebClient.Models;
+using WebClient.Model;
 using WebClient.Services;
 using WebClient.Util;
 
@@ -30,26 +24,34 @@ namespace WebClient.Controllers
 
 
         // GET: /login
+        /// <summary>
+        /// Retrieves the login view where a user can introduce his credentials.
+        /// </summary>
+        /// <returns></returns>
         [Route("/login")]
         [HttpGet]
         public IActionResult Login()
         {
-            _logger.LogInformation("Error page from home controller has been called");
+            _logger.LogInformation("Login page from LoginController has been called");
             return View();
         }
 
 
         // POST: /login
+        /// <summary>
+        /// Performs a login in the system.
+        ///
+        /// If the login credentials do not pass model validation, or the username
+        /// and password combination is not valid, an error message will be returned.
+        /// Otherwise, the user's token will be stored in the headers so the user
+        /// can access the system functionality.
+        /// </summary>
         [Route("/login")]
         [HttpPost]
         public IActionResult Login([Bind("Username", "Password")] UserLoginData userData)
         {
             _logger.LogInformation("POST controller for login has been called");
 
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
-            };
             if (ModelState.IsValid)
             {
                 // Add token to session
@@ -74,6 +76,22 @@ namespace WebClient.Controllers
             }
 
             return View();
+        }
+
+
+        // GET: /logout
+        [Route("/logout")]
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            _logger.LogInformation("Logout page from home controller has been called");
+            HttpContext.Session.Remove("Token");
+            TempData.Put("Notification", new NotificationInfo
+            {
+                Message = "Logged out successfully",
+                ClassName = "success"
+            });
+            return RedirectToAction("Login", "Login");
         }
     }
 }

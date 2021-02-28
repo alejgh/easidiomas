@@ -1,5 +1,5 @@
 ﻿using System;
-namespace WebClient.Models
+namespace WebClient.Model
 {
     public class LoginResult
     {

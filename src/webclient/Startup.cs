@@ -73,8 +73,10 @@ namespace WebClient
         // Configuration of singletons from services folder used by controllers
         private void ConfigureAppServices(IServiceCollection services)
         {
-            services.AddSingleton<UsersService>();
             services.AddSingleton<LoginService>();
+            services.AddSingleton<PostsService>();
+            services.AddSingleton<StatisticsService>();
+            services.AddSingleton<UsersService>();
         }
     }
 }
