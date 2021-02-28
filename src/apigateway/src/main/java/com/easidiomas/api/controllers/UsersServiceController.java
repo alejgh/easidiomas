@@ -75,7 +75,6 @@ public class UsersServiceController extends EasidiomasAPIController {
     private ResponseEntity<String> doRedirect(HttpServletRequest request, String path) throws URISyntaxException, IOException {
         // obtener uri a la que enviar la nueva peticion
         URI thirdPartyApi = new URI("http", null, USERS_SERVICE_HOST, USERS_SERVICE_PORT, path, request.getQueryString(), null);
-        Authservice.Passport passport = super.getPassport(request);
 
         // copiar headers a la nueva peticion
         HttpHeaders headers = new HttpHeaders();
@@ -84,9 +83,6 @@ public class UsersServiceController extends EasidiomasAPIController {
             String headerValue = request.getHeader(nextHeaderName);
             headers.add(nextHeaderName, headerValue);
         }
-
-        // esto no se muy bien como va. creo que ya debería estar el passport aqui asi que seguramente se pueda borrar
-        if (passport != null) headers.add("passport", new Gson().toJson(passport));
 
         // obtener el body del post
         String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
