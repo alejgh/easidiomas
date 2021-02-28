@@ -3,6 +3,7 @@ package com.easidiomas.chatservice.controller;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +53,7 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user = passport.getUserId();
+		String user = passport.getUserId_();
 		if (user == null) {
 			LOGGER.error(String.format("Missing userId in passport header"));
 			return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
@@ -73,14 +74,15 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user1 = passport.getUserId();
+		String user1 = passport.getUserId_();
 		String user2 = payload.get("user2");
 		if (user1 == null || user2 == null) {
 			LOGGER.error(String.format("Missing some parram"));
 			return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
 		}
 
-		if (chatsService.findChatByUser1AndUser2(user1, user2) != null) {
+		ChatDTO res = chatsService.findChatByUser1AndUser2(user1, user2);
+		if (res != null) {
 			LOGGER.error(String.format("Chat between user [%s] and user [%s] already exists.", user1, user2));
 			return new ResponseEntity<String>("Conflict", HttpStatus.CONFLICT);
 		}
@@ -111,7 +113,7 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user = passport.getUserId();
+		String user = passport.getUserId_();
 		if (user == null) {
 			LOGGER.error(String.format("Missing userURL in passport header"));
 			return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
@@ -144,10 +146,9 @@ public class ChatsController {
 			return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 
-		String user = passport.getUserId();
+		String user = passport.getUserId_();
 		String text = payload.get("text");
-		String sender = passport.getUserId();
-		if (user == null || text == null || sender == null) {
+		if (user == null || text == null ) {
 			LOGGER.error(String.format("Missing some parram"));
 			return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
 		}
@@ -160,7 +161,7 @@ public class ChatsController {
 
 		if (hasPermission(user, chat)) {
 			LOGGER.info(String.format("Trying to post a new message for chat [%s]", chat));
-			Message message = new Message(text, sender);
+			Message message = new Message(text, user);
 			chat.addMessage(message);
 			chatsService.save(chat);
 			LOGGER.info(String.format("New message created in chat [%s]", chat));

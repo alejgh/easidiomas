@@ -13,7 +13,7 @@ public interface ChatsRepository extends MongoRepository<ChatDTO, String> {
 	ChatDTO findChatById(String id);
 
 	List<ChatDTO> findAllChatsByUser1OrUser2(String user1, String user2);
-	
+
 	ChatDTO findChatByUser1AndUser2(String user1, String user2);
 
 }

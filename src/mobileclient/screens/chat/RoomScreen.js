@@ -6,13 +6,14 @@ import { StyleSheet,SafeAreaView } from 'react-native';
 export default function RoomScreen(props) {
 
     const context = useContext(AppContext);
-    const {parentNavigation} = props;
+    const {REQUEST_URI} = context;
+    const {parentNavigation,chatId} = props;
     const {user} = props.route.params;
  
     const [messages, setMessages] = useState([]);
 
     const getMessages = async function(){
-      let response = await (await fetch('http://localhost:5000/api/mock/chats/messages')).json();
+      let response = await (await fetch(REQUEST_URI+'/chats/'+chatId+'/messages')).json();
       let newMessages = [];
       for(let msg in response){
         let sender = await getUser(response[msg].sender)

@@ -13,6 +13,7 @@ export default function ProfileScreen(props) {
   
     const {parentNavigation,navigation,isOwner} = props;
     const {avatar,name,surname,username,learning,speaks} = props.user;
+    console.log(avatar)
     const context = useContext(AppContext);
    
     const editProfile = function(){
