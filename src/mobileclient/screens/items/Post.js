@@ -11,7 +11,7 @@ import {
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import {AppContext} from '../../App';
-import { set } from 'react-native-reanimated';
+import { Audio } from 'expo-av';
 
 export default function Post(props){
 
@@ -26,6 +26,8 @@ export default function Post(props){
     const [time,setTime] = useState('1hr');
     const [liked,setLiked] = useState(false);
     const [translationLabel,setTranslationLabel] = useState('Translate');
+    const [player,setPlayer] = useState(new Audio.Sound());
+    const [isPlaying,setIsPlaying] = useState(false);
 
     const postPressed = function(pressed = false){
       setTouched(pressed)
@@ -35,7 +37,6 @@ export default function Post(props){
 
       // TODO
       // REQUEST
-
       if (liked){ 
           setLiked(false)
           setLikes(likes-1)
@@ -43,10 +44,24 @@ export default function Post(props){
           setLiked(true)
           setLikes(likes+1)
         }
+
+        
+
     }
 
-    const textToSpeech = function(){
-      console.log('Text To Speech');
+    const textToSpeech = async function(){
+      const audio = "";
+      if(!isPlaying){
+        let uri = "data:audio/mpeg;base64,"+audio;
+        await player.unloadAsync();
+        if(!player._loaded)
+          await player.loadAsync({uri:uri});
+        await player.playFromPositionAsync(0);
+        setIsPlaying(true);
+      }else{
+        await player.stopAsync();
+        setIsPlaying(false);
+      }
     }
 
     const translate = function(){
@@ -62,7 +77,16 @@ export default function Post(props){
 
     
     const navigateToProfile = function(){
-      fetch('http://localhost:5000/api/mock/user'+id)
+      //TODO
+      /*
+      return (await fetch(REQUEST_URI+url,{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token':context.token
+      }})).json();*/
+      fetch(REQ+id)
       .then((response) => response.json())
       .then((data) =>{
         let isOwner = data.id==context.user.id ? true :false;

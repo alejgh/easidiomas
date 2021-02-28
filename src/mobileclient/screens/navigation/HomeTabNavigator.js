@@ -12,7 +12,7 @@ export default function HomeTabNavigator(props){
     const Tab = createMaterialTopTabNavigator();
 
     const getLanguajeFilters = function(){
-      return '?language='+context.user.learning[0]+','+context.user.learning[0];
+      return '?language='+context.user.learning[0].toLowerCase()+','+context.user.learning[0].toLowerCase();
     }
 
     return(
