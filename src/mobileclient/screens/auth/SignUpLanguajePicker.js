@@ -5,21 +5,22 @@ import data from '../discover/languajes.json';
 
 export default function SignUpLanguajePicker(props) {
 
-    const {labelTag} = props;
+    const {labelTag,view,setSelected} = props;
     const [newLabel,setNewLabel] = useState(labelTag);
 
     const [selectedLanguaje,setSelectedLanguaje] = useState(data[0])
 
     const handleSelected = function(selected){
-		setSelectedLanguaje(selected);
-        if(selected)
-          setNewLabel(labelTag.replace('*','')+'\n'+selected.Code)
-        return selected;
+      setSelected(selected.Code)
+      setSelectedLanguaje(selected);
+      if(selected)
+        setNewLabel(labelTag.replace('*','')+'\n'+selected.Code)
+      return selected;
 	}
 
   return (
     <PickerModal renderSelectView={(disabled, selected, showModal) =>
-        <View style={styles.inputView} >
+        <View style={view} >
             <TouchableOpacity onPress={showModal}>
               <TextInput  
                 style={styles.inputText}
@@ -53,15 +54,6 @@ const styles = StyleSheet.create({
       borderColor:'#fff',
       borderRadius:10,
       justifyContent:'center',
-    },
-    inputView:{
-      backgroundColor:"#465881",
-      borderRadius:20,
-      height:50,
-      width:90,
-      justifyContent:"center",
-      padding:16,
-      margin:5
     },
     languajeLabel:{
       textAlign:'center',

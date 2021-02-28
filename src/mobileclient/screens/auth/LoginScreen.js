@@ -8,14 +8,23 @@ export default function LoginScreen({navigation}){
 
     const context = useContext(AppContext);
     const {REQUEST_URI} = context.CONFIG;
-    const [username,setUsername] = useState('@mistermboy');
-    const [password,setPassword] = useState('12345');
+    const [username,setUsername] = useState('');
+    const [usernameView,setUsernameView] = useState(view);
+    const [password,setPassword] = useState('');
+    const [passwordView,setPasswordView] = useState(view);
 
     const signUp = function(){
-        navigation.navigate("Sign Up");
+        navigation.navigate("Sign Up",{errors:''});
     }
 
     const logIn = async function(){
+
+      let hasErrors = updateErrors();
+      if(hasErrors)
+        return;
+        
+
+
       let response = await (await fetch(REQUEST_URI+'/auth/token',{
         method: 'POST',
         headers: {
@@ -56,10 +65,31 @@ export default function LoginScreen({navigation}){
         }})).json();
     }
 
+    const updateErrors = function(){
+      let hasErrors = false;
+      if(username.length<=0){
+        hasErrors=true;
+        setUsernameView(errorsView);
+      }else{
+        setUsernameView(view);
+      }
+
+      if(password.length<=0){
+        hasErrors=true;
+        setPasswordView(errorsView)
+      }else{
+        setPasswordView(view);
+      }
+
+
+
+      return hasErrors;
+    }
+
     return (
       <View style={styles.container}>
         <Text style={styles.logo}>Easidiomas</Text>
-        <View style={styles.inputView} >
+        <View style={usernameView} >
           <TextInput  
             onChangeText={text => setUsername(text)}
             defaultValue={username}
@@ -68,10 +98,10 @@ export default function LoginScreen({navigation}){
             placeholderTextColor="#E1E8ED"
             />
         </View>
-        <View style={styles.inputView} >
+        <View style={passwordView} >
           <TextInput  
-           onChangeText={text => setPassword(text)}
-           defaultValue={password}
+            onChangeText={text => setPassword(text)}
+            defaultValue={password}
             secureTextEntry
             style={styles.inputText}
             placeholder="Password *" 
@@ -138,5 +168,29 @@ const styles = StyleSheet.create({
     color:"white",
     marginTop:20,
     fontSize:15
+  },
+  errors:{
+    color:'red'
   }
 });
+
+
+export const view = { width:"82%",
+  backgroundColor:"#465881",
+  borderRadius:25,
+  height:50,
+  marginBottom:20,
+  justifyContent:"center",
+  padding:20
+}
+
+export const errorsView = { width:"82%",
+  backgroundColor:"#465881",
+  borderRadius:25,
+  height:50,
+  marginBottom:20,
+  justifyContent:"center",
+  padding:20,
+  borderWidth:1,
+  borderColor:'red'
+}
