@@ -4,6 +4,7 @@
         <Kafka name="Kafka" topic="service_logs" key="images_service">
             <PatternLayout pattern="%message"/>
             <Property name="bootstrap.servers">kafka:9092</Property>
+            <Property name="request.timeout.ms">180000</Property><!-- 180 seconds -->
         </Kafka>
         <Async name="Async">
             <AppenderRef ref="Kafka"/>
