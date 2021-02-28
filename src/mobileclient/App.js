@@ -45,5 +45,5 @@ const styles = StyleSheet.create({
     learning: ['en', 'cn'],
     speaks: 'es',
     birthDate: '<long_time_since_epoch>',
-    avatar: '/assets/avatar.png'
+    avatar: 'https://www.bootdey.com/img/Content/avatar/avatar2.png'
   }

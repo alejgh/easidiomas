@@ -34,7 +34,7 @@ export default function ProfileScreen(props) {
     return (
       <View style={styles.container}>
           <View style={styles.header}></View>
-          <Image style={styles.avatar} source={{uri: avatar}}/>
+          <Image style={styles.avatar} source={{uri:avatar.replace('https','http')}}/>
           <View style={styles.bodyContent}>
             <Text style={styles.nameLabel} >{name}{' '}{surname}</Text>
             <Text style={styles.usernameLabel}>{username}</Text>

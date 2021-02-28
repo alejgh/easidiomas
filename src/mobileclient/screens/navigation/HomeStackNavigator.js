@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import NewPostScreen from '../home/NewPostScreen';
 import HomeTabNavigator from './HomeTabNavigator';
+import {AppContext} from '../../App';
 
 export const HomeContext = React.createContext();
 export const navigationRef = React.createRef();
@@ -16,17 +17,29 @@ export function navigate(name, params) {
 export default function HomeStackNavigator({navigation}){
 
     const Stack = createStackNavigator();
+    const context = useContext(AppContext);
+    const {REQUEST_URI} = context.CONFIG;
   
     const [newPost,setNewPost] = useState(null);
 
     function PostBtn() {
-
+        const appContext = useContext(AppContext);
         const context = useContext(HomeContext);
-        const createPost = function(){
-            // TODO 
-            // CREATE A NEW POST REQUEST
-            //console.log(context.newPost);
-            //navigation.navigate("Home");
+        const createPost = async function(){
+            console.log(REQUEST_URI+'/posts')
+            let response = await fetch(REQUEST_URI+'/posts',{
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'token':appContext.token
+                },
+                body: JSON.stringify({
+                    content:context.newPost
+                })
+            });
+            console.log(response.status)
+            navigate("Home")
         }
         return (
             <TouchableOpacity onPress={() => createPost()} style={styles.postBtn}>
