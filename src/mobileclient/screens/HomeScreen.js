@@ -40,8 +40,10 @@ export default function Home(props) {
   }
 
   const loadNext = function(){
-    if(links.next)
-      loadPosts(links.next)
+    if(links?.next){
+      loadPosts(links.next.replace('api/','/'))
+    }
+      
   }
 
 
