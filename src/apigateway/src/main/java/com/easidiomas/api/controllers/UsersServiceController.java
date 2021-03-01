@@ -38,13 +38,6 @@ public class UsersServiceController extends EasidiomasAPIController {
         return this.doRedirect(request, "/api/users/" + id);
     }
 
-    @GetMapping(value = "/generateData", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity generateData(HttpServletRequest request) throws IOException, URISyntaxException {
-        super.logRequest(request, LOGGER);
-        super.logRedirect(LOGGER, USERS_SERVICE_HOST, USERS_SERVICE_PORT);
-        return this.doRedirect(request, "/api/users/generateData");
-    }
-
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(HttpServletRequest request) throws IOException, URISyntaxException {
         super.logRequest(request, LOGGER);
