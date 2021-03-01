@@ -118,7 +118,7 @@ posts = [
     }
 ]
 
-post_authors = [0, 2, 3, 1, 1]
+post_authors = [0, 2, 3, 1, 0, 1]
 
 for user_idx, post in zip(post_authors, posts):
     u = users[user_idx]
