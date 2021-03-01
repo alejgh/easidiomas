@@ -9,6 +9,9 @@
 |**Servicios que Ofrece:**|Traducir un texto|
 |**Bases de datos:**|N/A|
 
+## Descripción
+Este servicio se conecta al servicio de traducción de Google. Para ello se hace uso del cliente .Net que ofrecen a través del gestor de paquetes NuGet.
+
 ## Enpoint ofrecido
 ### 1.- Realizar una traducción
 __POST: /api/translations__
