@@ -41,18 +41,19 @@ En el diagrama anterior se puede ver que el sistema consta de 3 grandes segmento
 
 | Servicio                                              | Lenguaje      | Descripción                                                                                                                       |
 | ---------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| [webclient](./src/webclient)                           | React            | Expone por HTTP el sitio web que pueden usar los administradores del sistema. |
-| [androidclient](./src/androidclient)                     | Native React            | Cliente android que expone la funcionalidad del sistema a los usuarios.                                                           |
-| [authenticationservice](./src/authenticationservice) | .Net            | Provee un mecanismo de autenticación para los usuarios registrados y de verificación de identidad en las peticiones a los servicios.                        |
-| [userservice](./src/userservice)             | Java       | Permite crear, actualizar, borrar y buscar usuarios. |
+| [webclient](./src/webclient)                           | .NET            | Expone por HTTP el sitio web que pueden usar los administradores del sistema. |
+| [mobileclient](./src/mobileclient)                     | Native React            | Cliente móvil que expone la funcionalidad del sistema a los usuarios.                                                           |
+| [authenticationservice](./src/authenticationservice) | .NET            | Provee un mecanismo de autenticación para los usuarios registrados y de verificación de identidad en las peticiones a los servicios.                        |
+| [userservice](./src/usersservice)             | Java       | Permite crear, actualizar, borrar y buscar usuarios. |
 | [postsservice](./src/postsservice)               | Java       | Permite crear, actualizar, borrar y buscar posts.                                     |
-| [chatsservice](./src/messagesservice)             | .Net            | Permite crear, actualizar, borrar y buscar conversaciones individuales.                                 |
-| [translationservice](./src/translationservice)                   | .Net        |A demanda de otros servicios traduce el texto que sea necesario al idioma seleccionado.                                                                                   |
+| [chatsservice](./src/chatsservice)             | .NET            | Permite crear, actualizar, borrar y buscar conversaciones individuales.                                 |
+| [translationsservice](./src/translationsservice)                   | .NET        |A demanda de otros servicios traduce el texto que sea necesario al idioma seleccionado.|
 | [texttospeechservice](./src/texttospeechservice)             | Python            | Para una entrada de texto genera un audio que representa la entrada convertida a habla humana en el mismo idioma.                            |
 | [statisticsservice](./src/statisticsservice) | Java        | Permite centralizar todas las estadísticas relativas a las entidades del sistema en un mismo sitio. No es un sistema de monitorización del sistema si no más bien una caché de estadística. En este sistema se pueden encontrar datos como el número de mensajes por usuario, el número de usuarios registrados en las últimas 24h, etc.                                                                      |
-| [offensivetextdetectionservice](./src/offensivetextdetectionservice)                         | Python          | Continuamente busca texto que puea ser ofensivo dentro de los posts nuevos.                                                                                   |
-| [languageidentservice](./src/languageidentservice)                 | Java | Para los posts nuevos identifica el lenguaje en el que están escritos y etiqueta dichos posts.                                              |
+| [offensivetextdetectionservice](./src/offensivetextdetectionservice)                         | Python          | Continuamente busca texto que pueda ser ofensivo dentro de los posts nuevos.|
+| [languageidentificationservice](./src/languageidentificationservice)                 | Java | Para los posts nuevos identifica el lenguaje en el que están escritos y etiqueta dichos posts.                                              |
 | [topicmodelingservice](./src/topicmodelingservice)                 | Python | Para los posts nuevos se identifican los posibles tópicos que contenga el post.                                              |
+| [imagesservice](./src/imagesservice) | Java | Procesa imagenes (en nuestro caso, los avatares de los nuevos usuarios del sistema) y las sube a un bucket de Google Cloud Storage para poder acceder públicamente a éstas |
 
 ## Documentación
 La documentación que acompaña a Easidiomas es la siguiente:
