@@ -170,6 +170,6 @@ for msg, chat_idx, author_idx in zip(messages, messages_chat, messages_author):
     token = do_login(users[author_idx])
     logger.debug(f"Creating new message between users {user1['id']} and {user2['id']}")
     headers = {'token': token}
-    r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + chat + "/messages",
+    r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + str(chat) + "/messages",
         json=msg, headers=headers, verify=False)
     logger.debug(f"Response code: {r_chat.status_code}")
