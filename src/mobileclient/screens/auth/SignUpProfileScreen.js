@@ -35,13 +35,7 @@ export default function SignUpProfileScreen({route,navigation}){
       let errors = updateErrors();
       
       if(!errors){
-        
         setLoading(true)
-        setTimeout(()=>{
-          setLoading(false)
-        },1000)
-  
-
         let response = await fetch(REQUEST_URI+'/users',{
           method: 'post',
           headers: {
@@ -59,8 +53,7 @@ export default function SignUpProfileScreen({route,navigation}){
             learning:[learning1,learning2]})
         });
   
-        console.log('STATUS')
-        console.log(response.status)
+        setLoading(false)
         if(response.status == 201)
           navigation.navigate("Login");
         else

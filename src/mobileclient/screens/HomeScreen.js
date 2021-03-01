@@ -1,5 +1,5 @@
 import React, { useState,useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, FlatList } from 'react-native';
 import Post from './items/Post';
 import { FloatingAction } from "react-native-floating-action";
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -13,8 +13,10 @@ export default function Home(props) {
 
   const [posts, setPosts] = useState([]);
   const [links,setLinks] = useState([]);
+  const [loading,setLoading] = useState(false);
 
   const loadPosts = async function(url){
+    setLoading(true)
     let nexFilters = filters;
     if(url.includes('?')){
       nexFilters = filters.replace('?','&') 
@@ -42,6 +44,7 @@ export default function Home(props) {
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
+    setLoading(false)
   }
 
   const loadNext = function(){
@@ -75,7 +78,9 @@ export default function Home(props) {
 
   return (
     <View style={styles.container}>
-
+    {loading ? 
+        <ActivityIndicator  size="large" color="#fff"/>
+        :
       <FlatList 
         numColumns={1}
         onEndReachedThreshold={0.01}
@@ -88,7 +93,7 @@ export default function Home(props) {
             <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} languaje={item.language} numLikes={item.numLikes}/>
         )}
       />
-
+        }
       <FloatingAction
           color={'#1DA1F2'}
           animated={false}

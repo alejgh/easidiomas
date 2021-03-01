@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import {AppContext} from '../App';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import Chat from './items/Chat';
 
 export default function DiscoverScreen(props) {
@@ -12,8 +12,10 @@ export default function DiscoverScreen(props) {
 
   const [results, setResults] = useState([]);
   const [links,setLinks] = useState([]);
+  const [loading,setLoading] = useState(false);
 
   const loadResults = async function(url){
+    setLoading(true)
     let response = await (await fetch(REQUEST_URI+url,{
       method: 'GET',
       headers: {
@@ -30,11 +32,12 @@ export default function DiscoverScreen(props) {
 
     setResults(results.concat(response?.users))
     setLinks(response.links)
+    setLoading(false)
   }
 
   const loadNext = function(){
     if(links.next)
-    loadResults(links.next)
+      loadResults(links.next)
   }
 
 
@@ -44,6 +47,9 @@ export default function DiscoverScreen(props) {
 
   return (
       <View style={styles.container}>
+        {loading ? 
+         <ActivityIndicator  size="large" color="#fff"/>
+         :
         <FlatList 
           numColumns={1}
           onEndReachedThreshold={0.01}
@@ -56,6 +62,7 @@ export default function DiscoverScreen(props) {
               <Chat user={item} navigation={parentNavigation} sreen={'Profile'}/>
           )}
         />
+          }
 
     </View>
   );

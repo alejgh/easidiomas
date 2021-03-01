@@ -22,12 +22,8 @@ export default function LoginScreen({navigation}){
         return;
       
       setLoading(true)
-      setTimeout(()=>{
-        setLoading(false)
-      },1000)
 
-
-      let response = await fetch(REQUEST_URI+'/auth/token',{
+      let response = await (await fetch(REQUEST_URI+'/auth/token',{
         method: 'POST',
         disableAllSecurity: true,
         headers: {
@@ -35,7 +31,7 @@ export default function LoginScreen({navigation}){
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({username:username,password:password})
-      });
+      })).json();
 
       console.log(response)
 
@@ -51,6 +47,7 @@ export default function LoginScreen({navigation}){
       context.setToken(token)
       let user = (await getUser(token)).users[0];
       context.setUser(user);
+      setLoading(false)
     }
 
 
