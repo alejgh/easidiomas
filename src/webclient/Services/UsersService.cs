@@ -40,7 +40,8 @@ namespace WebClient.Services
             request.AddHeader("token", token);
 
             var response = _usersClient.Execute(request);
-            return response.StatusCode == HttpStatusCode.NoContent;
+            return response.StatusCode == HttpStatusCode.OK;
+
         }
     }
 }

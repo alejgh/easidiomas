@@ -138,7 +138,7 @@ $.validator.addMethod( "bankorgiroaccountNL", function( value, element ) {
  * - Last 3 characters - branch code, optional (shall not start with 'X' except in case of 'XXX' for primary office) (letters and digits)
  */
 $.validator.addMethod( "bic", function( value, element ) {
-    return this.optional( element ) || /^([A-Z]{6}[A-Z2-9][A-NP-Z1-9])(X{3}|[A-WY-Z0-9][A-Z0-9]{2})?$/.test( value.toUpperCase() );
+    return this.optional( element ) || /^([A-Z]{6}[A-Z2-9][A-NP-Z1-9])(X{3}|[A-WY-Z0-9][A-Z0-9]{2})?$/.test( value?.toUpperCase() );
 }, "Please specify a valid BIC code" );
 
 /*
@@ -545,7 +545,7 @@ $.validator.addMethod( "iban", function( value, element ) {
 	}
 
 	// Remove spaces and to upper case
-	var iban = value.replace( / /g, "" ).toUpperCase(),
+	var iban = value.replace( / /g, "" )?.toUpperCase(),
 		ibancheckdigits = "",
 		leadingZeroes = true,
 		cRest = "",
@@ -727,10 +727,10 @@ $.validator.addMethod( "nieES", function( value, element ) {
 
 	var nieRegEx = new RegExp( /^[MXYZ]{1}[0-9]{7,8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/gi );
 	var validChars = "TRWAGMYFPDXBNJZSQVHLCKET",
-		letter = value.substr( value.length - 1 ).toUpperCase(),
+		letter = value.substr( value.length - 1 )?.toUpperCase(),
 		number;
 
-	value = value.toString().toUpperCase();
+	value = value.toString()?.toUpperCase();
 
 	// Quick format test
 	if ( value.length > 10 || value.length < 9 || !nieRegEx.test( value ) ) {
@@ -760,7 +760,7 @@ $.validator.addMethod( "nifES", function( value, element ) {
 		return true;
 	}
 
-	value = value.toUpperCase();
+	value = value?.toUpperCase();
 
 	// Basic format test
 	if ( !value.match( "((^[A-Z]{1}[0-9]{7}[A-Z0-9]{1}$|^[T]{1}[A-Z0-9]{8}$)|^[0-9]{8}[A-Z]{1}$)" ) ) {
@@ -1125,7 +1125,7 @@ $.validator.addMethod( "vinUS", function( v ) {
 			d *= f;
 		} else {
 			for ( n = 0; n < LL.length; n++ ) {
-				if ( d.toUpperCase() === LL[ n ] ) {
+				if ( d?.toUpperCase() === LL[ n ] ) {
 					d = VL[ n ];
 					d *= f;
 					if ( isNaN( cdv ) && n === 8 ) {

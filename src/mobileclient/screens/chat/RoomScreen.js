@@ -13,7 +13,6 @@ export default function RoomScreen(props) {
     const [messages, setMessages] = useState([]);
 
     const getMessages = async function(){
-      console.log(props.route)
       let response = await (await fetch(REQUEST_URI+'/chats/'+chatId+'/messages',{
         method: 'GET',
         headers: {
@@ -48,7 +47,6 @@ export default function RoomScreen(props) {
         }
         
       }
-      console.log(newMessages)
       setMessages(newMessages.reverse());
     }
 

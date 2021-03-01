@@ -39,7 +39,6 @@ export default function ProfileScreen(props) {
       let chatId;
       for(let chat in chats){
         if(chats[chat].user1 == id || chats[chat].user2== id){
-          console.log('EXISTE')
           alreadyExist = true;
           chatId=chats[chat].id;
         }
@@ -60,7 +59,6 @@ export default function ProfileScreen(props) {
         let data = await response.json();
         chatId = data.id;
       }
-      console.log(chatId)
       parentNavigation.navigate('Chats',{startChat:true,user:props.user,chatId:chatId});
     }
 
@@ -75,11 +73,11 @@ export default function ProfileScreen(props) {
             <View style={styles.languajesContainer}>
               <View style={styles.learningContainer}>
                 <Text style={styles.learningLabel}>Native</Text>
-                <Text style={styles.learningLabel}>{speaks.toUpperCase()}</Text>
+                <Text style={styles.learningLabel}>{speaks?.toUpperCase()}</Text>
               </View>
               <View style={styles.learningContainer}>
                 <Text style={styles.learningLabel}>Learning</Text>
-                <Text style={styles.learningLabel}>{learning[0].toUpperCase()+'-'+learning[1].toUpperCase()}</Text>
+                <Text style={styles.learningLabel}>{learning[0]?.toUpperCase()+'-'+learning[1]?.toUpperCase()}</Text>
               </View>
             </View>
             {
