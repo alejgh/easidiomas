@@ -6,9 +6,9 @@ export default function LoginScreen({navigation}){
 
     const context = useContext(AppContext);
     const {REQUEST_URI} = context.CONFIG;
-    const [username,setUsername] = useState('mistermboy');
+    const [username,setUsername] = useState('');
     const [usernameView,setUsernameView] = useState(view);
-    const [password,setPassword] = useState('12345');
+    const [password,setPassword] = useState('');
     const [passwordView,setPasswordView] = useState(view);
     const [loading,setLoading] = useState(false);
 
@@ -33,7 +33,6 @@ export default function LoginScreen({navigation}){
         body: JSON.stringify({username:username,password:password})
       })).json();
 
-      console.log(response)
 
       let tokenPermission = response.tokenPermissions_;
       let token = response.tokenGenerated_

@@ -4206,7 +4206,7 @@ var rmsPrefix = /^-ms-/,
 
 // Used by camelCase as callback to replace()
 function fcamelCase( _all, letter ) {
-	return letter.toUpperCase();
+	return letter?.toUpperCase();
 }
 
 // Convert dashed to camelCase; used by the css and data modules
@@ -6649,7 +6649,7 @@ var cssPrefixes = [ "Webkit", "Moz", "ms" ],
 function vendorPropName( name ) {
 
 	// Check for vendor prefixed names
-	var capName = name[ 0 ].toUpperCase() + name.slice( 1 ),
+	var capName = name[ 0 ]?.toUpperCase() + name.slice( 1 ),
 		i = cssPrefixes.length;
 
 	while ( i-- ) {
@@ -6753,7 +6753,7 @@ function boxModelAdjustment( elem, dimension, box, isBorderBox, styles, computed
 		// offsetWidth/offsetHeight is a rounded sum of content, padding, scroll gutter, and border
 		// Assuming integer scroll gutter, subtract the rest and round down
 		delta += Math.max( 0, Math.ceil(
-			elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+			elem[ "offset" + dimension[ 0 ]?.toUpperCase() + dimension.slice( 1 ) ] -
 			computedVal -
 			delta -
 			extra -
@@ -6780,7 +6780,7 @@ function getWidthOrHeight( elem, dimension, extra ) {
 		valueIsBorderBox = isBorderBox,
 
 		val = curCSS( elem, dimension, styles ),
-		offsetProp = "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 );
+		offsetProp = "offset" + dimension[ 0 ]?.toUpperCase() + dimension.slice( 1 );
 
 	// Support: Firefox <=54
 	// Return a confounding non-pixel value or feign ignorance, as appropriate.
@@ -7056,7 +7056,7 @@ jQuery.each( [ "height", "width" ], function( _i, dimension ) {
 			// faking a content-box to get border and padding (gh-3699)
 			if ( isBorderBox && scrollboxSizeBuggy ) {
 				subtract -= Math.ceil(
-					elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+					elem[ "offset" + dimension[ 0 ]?.toUpperCase() + dimension.slice( 1 ) ] -
 					parseFloat( styles[ dimension ] ) -
 					boxModelAdjustment( elem, dimension, "border", false, styles ) -
 					0.5
@@ -9566,7 +9566,7 @@ jQuery.extend( {
 		}
 
 		// Uppercase the type
-		s.type = s.type.toUpperCase();
+		s.type = s.type?.toUpperCase();
 
 		// Determine if request has content
 		s.hasContent = !rnoContent.test( s.type );

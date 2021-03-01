@@ -61,8 +61,6 @@ export default function Post(props){
         },
         body: payload
       });
-
-      console.log(response.status)
     }
 
     const textToSpeech = async function(){
@@ -81,7 +79,6 @@ export default function Post(props){
         body: payload
       });
 
-      console.log(response.status)
       const audio = (await response.json()).result;
       if(!isPlaying){
         let uri = "data:audio/mpeg;base64,"+audio;

@@ -2,35 +2,28 @@ import React, { useEffect, useState, useContext } from 'react';
 import {AppContext} from '../App';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import Chat from './items/Chat';
-import { DiscoverContext } from './navigation/DiscoverStackNavigator';
 import { nativeViewProps } from 'react-native-gesture-handler/dist/src/handlers/NativeViewGestureHandler';
 
 export default function DiscoverScreen(props) {
 
   const appContex = useContext(AppContext);
-  const context = useContext(DiscoverContext);
   
   const {REQUEST_URI} = appContex.CONFIG;
 
-  const {navigation,parentNavigation} = props;
+  const {navigation,parentNavigation,getFilters,native,setNative,learning1,setLearning1,learning2,setLearning2,minAge,maxAge,setMinAge,setMaxAge} = props;
+  const {route} = props;
 
   const [results, setResults] = useState([]);
   const [links,setLinks] = useState([]);
   const [loading,setLoading] = useState(false);
+  const [first,setFirst] = useState(true);
+  const [filters,setFilters] = useState(null);
 
-  const loadResults = async function(url,loadAnimation = true){
-    if(loadAnimation)
+  const loadResults = async function(url){
+    if(first)
       setLoading(true)
-/*
-    let filt = '';
-    if(props.route?.params?.filter){
-      console.log('entra')
-      filt=context.filters;
-    }else{
-      console.log('no entra')
-    }*/
-      
-    
+
+    console.log(REQUEST_URI+url)
     let response = await (await fetch(REQUEST_URI+url,{
       method: 'GET',
       headers: {
@@ -39,33 +32,58 @@ export default function DiscoverScreen(props) {
         'token':appContex.token
       }
     })).json();
+
+
+    let newUsers = [];
+    for(let usr in response.users){
+      console.log('TODOOOOOO')
+      console.log(response.users[usr].role)
+      if(response.users[usr].role!=1){
+        newUsers.push(response.users[usr])
+      }
+    }
     //setResults([...results,response.users]) -> I´m not sure why this is not working...
 
     // TODO
     // SACAR EL USUARIO QUE ES EL QUE ESTÁ LOGUEADO
 
-    setResults(results.concat(response?.users))
+    setResults(results.concat(newUsers))
     setLinks(response.links)
-    if(loadAnimation)
+    if(first)
       setLoading(false)
   }
 
+
   const loadNext = function(){
     if(links.next)
-      loadResults(links.next,false)
+      loadResults(links.next)
   }
 
+  
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      console.log(route?.params?.filters)
+      setFilters(route?.params?.filters);
       loadResults('/users');
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [route,navigation]);
+
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadResults('/users');
+      setFirst(false);
+    });
+
+    return unsubscribe;
+  });
 
 
   useEffect(()=>{
     loadResults('/users');
+    setFirst(false);
   },[])
 
   return (

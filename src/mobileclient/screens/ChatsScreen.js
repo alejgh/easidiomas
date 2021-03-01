@@ -22,7 +22,6 @@ export default function ChatsScreen({route,navigation}) {
 
     let newChats = [];
     for(let chat in response){
-      console.log(response[chat])
       let user1 = await getUser(response[chat].user1)
       let user2 = await getUser(response[chat].user2)
       if(context.user.id == user1.id)
