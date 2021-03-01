@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@MTOM
 @WebService(endpointInterface = "com.easidiomas.statisticsservice.service.IStatisticsService", serviceName = "statisticsService")
 public class StatisticsService implements IStatisticsService {
 

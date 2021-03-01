@@ -10,7 +10,7 @@ logger.setLevel(logging.DEBUG)
 
 # Wait for services to be ready
 logger.debug("Waiting for services to be ready!")
-time.sleep(300)
+time.sleep(180)
 logger.debug("Starting to populate system")
 
 API_GATEWAY_ENDPOINT = os.environ.get('API_GATEWAY_ENDPOINT') or 'https://156.35.82.22:8443/api'
@@ -109,6 +109,9 @@ posts = [
         대한독립만세!!! 
         #삼일절     
         #대한독립만세"""
+    },
+    {
+        'content': "fuck you"
     }
 ]
 
@@ -167,6 +170,6 @@ for msg, chat_idx, author_idx in zip(messages, messages_chat, messages_author):
     token = do_login(users[author_idx])
     logger.debug(f"Creating new message between users {user1['id']} and {user2['id']}")
     headers = {'token': token}
-    r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + str(chat['id']) + "/messages",
+    r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + chat + "/messages",
         json=msg, headers=headers, verify=False)
     logger.debug(f"Response code: {r_chat.status_code}")
