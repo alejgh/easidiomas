@@ -9,9 +9,6 @@
         <jaxws:serviceBean>
             <bean class="com.easidiomas.statisticsservice.service.StatisticsService" />
         </jaxws:serviceBean>
-        <jaxws:properties>
-            <entry key="mtom-enabled" value="true" />
-        </jaxws:properties>
     </jaxws:server>
 
 </beans>
