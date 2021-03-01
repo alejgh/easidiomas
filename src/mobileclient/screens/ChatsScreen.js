@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import {AppContext} from '../App';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList,ActivityIndicator } from 'react-native';
 import Chat from './items/Chat';
 
 export default function ChatsScreen({route,navigation}) {
@@ -8,8 +8,10 @@ export default function ChatsScreen({route,navigation}) {
   const context = useContext(AppContext);
   const {REQUEST_URI} = context.CONFIG;
   const [chats, setChats] = useState([]);
+  const [loading,setLoading] = useState(false);
 
   const getChats = async function(){
+    setLoading(true)
     let response = await (await fetch(REQUEST_URI+'/chats',{
       method: 'GET',
       headers: {
@@ -29,6 +31,7 @@ export default function ChatsScreen({route,navigation}) {
         newChats.push({id:response[chat].id,key:response[chat].id,user:user1})
     }
     setChats(newChats)
+    setLoading(false)
   }
   
   const getUser = async function(id){
@@ -47,6 +50,9 @@ export default function ChatsScreen({route,navigation}) {
 
   return (
     <View style={styles.container}>
+      {loading ? 
+        <ActivityIndicator  size="large" color="#fff"/>
+        :
       <FlatList 
         numColumns={1}
         keyExtractor={(item) => item.id} 
@@ -55,7 +61,7 @@ export default function ChatsScreen({route,navigation}) {
             <Chat user={item.user} chatId={item.id} navigation={navigation} sreen={'Room'}/>
         )}
       />
-
+        }
     </View>
   );
 }

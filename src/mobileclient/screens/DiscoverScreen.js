@@ -14,8 +14,9 @@ export default function DiscoverScreen(props) {
   const [links,setLinks] = useState([]);
   const [loading,setLoading] = useState(false);
 
-  const loadResults = async function(url){
-    setLoading(true)
+  const loadResults = async function(url,loadAnimation = true){
+    if(loadAnimation)
+      setLoading(true)
     let response = await (await fetch(REQUEST_URI+url,{
       method: 'GET',
       headers: {
@@ -32,12 +33,13 @@ export default function DiscoverScreen(props) {
 
     setResults(results.concat(response?.users))
     setLinks(response.links)
-    setLoading(false)
+    if(loadAnimation)
+      setLoading(false)
   }
 
   const loadNext = function(){
     if(links.next)
-      loadResults(links.next)
+      loadResults(links.next,false)
   }
 
 

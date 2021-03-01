@@ -7,6 +7,15 @@ import { AppContext } from '../App';
 
 export default function Home(props) {
   
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadPosts('/posts');
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
   const{parentNavigation,navigation,filters} = props;
   const context = useContext(AppContext);
   const {REQUEST_URI} = context.CONFIG;
@@ -15,8 +24,9 @@ export default function Home(props) {
   const [links,setLinks] = useState([]);
   const [loading,setLoading] = useState(false);
 
-  const loadPosts = async function(url){
-    setLoading(true)
+  const loadPosts = async function(url,loadAnimation = true){
+    if(loadAnimation)
+      setLoading(true)
     let nexFilters = filters;
     if(url.includes('?')){
       nexFilters = filters.replace('?','&') 
@@ -40,16 +50,18 @@ export default function Home(props) {
         language:data[post].language
       })
     }
-
+    console.log('EOOOOOOO')
+    console.log(newPosts[0])
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
-    setLoading(false)
+    if(loadAnimation)
+      setLoading(false)
   }
 
   const loadNext = function(){
     if(links?.next){
-      loadPosts(links.next.replace('api/','/'))
+      loadPosts(links.next.replace('api/','/'),false)
     }
   }
 
@@ -100,7 +112,7 @@ export default function Home(props) {
           actions={actions}
           overrideWithAction
           onPressItem={name => {
-            navigation.navigate("New Post");
+            navigation.navigate("New Post",{loadPosts:loadPosts});
           }}
         />
 

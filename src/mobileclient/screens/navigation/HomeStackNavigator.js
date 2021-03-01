@@ -26,7 +26,6 @@ export default function HomeStackNavigator({navigation}){
         const appContext = useContext(AppContext);
         const context = useContext(HomeContext);
         const createPost = async function(){
-            console.log(REQUEST_URI+'/posts')
             let response = await fetch(REQUEST_URI+'/posts',{
                 method: 'POST',
                 headers: {
