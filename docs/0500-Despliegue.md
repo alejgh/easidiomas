@@ -4,7 +4,7 @@ Para realizar el despliegue del sistema se emplean contenedores para albergar to
 ## Plataformas y herramientas utilizadas
 Como plataforma de despliegue principal se emplean contendores. En concreto, de Docker. Por lo tanto, pese a que cada conteder emplé para el despliegue tecnologías como Flask, Springboot u similares su despliegue, por decirlo de alguna forma, es homogéneo. Además, para evitar tener que desplegar cada contenedor de forma individual se proveen ficheros de especificación. Estos ficheros se encargan de especificar el estado deseado del entorno de despliegue. Por ejemplo, el nombre de un contenedor, el volúmen que se le conecta o las variables de entorno a inyectar.
 
-## Configuraciones para el despliegue y puesta en producción
+## Configuraciones para el despliegue y puesta en producción
 En nuestro caso, toda la configuración se realiza desde el fichero `docker-compose.yml` y `docker-swarm.yml`.  Para poder hacerlo dinámico y adaptarnos a distintas eventualizades cada servicio recive un conjunto de variables de entorno a través de los ficheros `docker-xxxxx.yml` que configuran los puertos y las direcciones de los servicios de los que dependen. De esta forma si cambiamos de dirección o de puerto un contenedor, el impacto de la acción es menor.
 
 Para desplegar, si sólo contamos con un ordenador o nodo, necesitaremos tener Docker instalado. Desde las versionas más recientes Docker viene con `docker-compose` istalado. Sin embargo, puedes verificar si lo tienes instalado con `docker-compose --version`.
@@ -39,5 +39,3 @@ Otro error que nos puede pasar es que en una ejecución previa algún contenedor
 También existe la posibilidad que los créditos de las APIs externas empleadas se terminen o que los provedores dejen de dar servicio. En este caso habría que configurar unas nuevas credenciales dentro de cada uno de los servicios que empleen esa integración. O directamente emplear otra API.
 
 Finalmente, otro error que podemos tener es hayamos cambiado el nombre de algún servicio en el fichero `docker-xxxxx.yml` y por tanto el nombre del servicio en el DNS interno de Docker sea distinto. Esto haría que las conexiones entre servisios no funcionasen. Para solucionarlo tenemos que asegurarnos que cuando cambiamos un servicio de nombre tenemos que actualziar también todas las referencias al nombre del servicio que se hacen desde el resto del fichero de configuración.
-
-## Referencias utilizadas
