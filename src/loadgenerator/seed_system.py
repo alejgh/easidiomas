@@ -8,9 +8,12 @@ logging.getLogger().addHandler(logging.StreamHandler())
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
+SLEEP_TIME = int(os.environ.get('SLEEP_TIME')) or 180
+
 # Wait for services to be ready
 logger.debug("Waiting for services to be ready!")
-time.sleep(180)
+logger.debug(f"Sleeping for {SLEEP_TIME} seconds...")
+time.sleep(SLEEP_TIME)
 logger.debug("Starting to populate system")
 
 API_GATEWAY_ENDPOINT = os.environ.get('API_GATEWAY_ENDPOINT') or 'https://156.35.82.22:8443/api'
