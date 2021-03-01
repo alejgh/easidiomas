@@ -38,7 +38,7 @@ export default function Post(props){
     const like = async function(){
       let newLikes = 0;
       if (liked){ 
-        newLikes=likes+1;
+        newLikes=likes-1;
         setLiked(false)
       }else{
         newLikes=likes+1;
@@ -147,7 +147,7 @@ export default function Post(props){
               <View style={styles.info}>
                 <View style={styles.userDetails}>
                   <Text style={styles.userName}>{name}
-                    <Text style={styles.userHandleAndTime}>{username} · {time}</Text>
+                    <Text style={styles.userHandleAndTime}>{'@'+username} · {time}</Text>
                   </Text>
                 </View>
               <View style={styles.postTextContainer}>

@@ -11,10 +11,11 @@ export default function SignUpLanguajePicker(props) {
     const [selectedLanguaje,setSelectedLanguaje] = useState(data[0])
 
     const handleSelected = function(selected){
+      console.log(selected)
       setSelected(selected.Code)
       setSelectedLanguaje(selected);
-      if(selected)
-        setNewLabel(labelTag.replace('*','')+'\n'+selected.Code)
+      if(selected?.Code)
+        setNewLabel(labelTag.replace('*','')+'\n'+selected?.Code?.toUpperCase())
       return selected;
 	}
 
