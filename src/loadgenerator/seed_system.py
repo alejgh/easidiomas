@@ -183,7 +183,6 @@ for msg, chat_idx, author_idx in zip(messages, messages_chat, messages_author):
     logger.debug(f"Response code: {r_msg.status_code}")
     logger.debug(f"Response: {r_msg.text}")
 
-
 while True:
     logger.debug("Doing get to users")
     token = do_login(users[0])
