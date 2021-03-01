@@ -12,7 +12,7 @@
 # Funcionamiento
 Para poder acceder al cliente movil en primer lugar es necesario tener instalada la aplicación ["Expo Go"](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=es&gl=US) en nuestro dispositivo movil (en Iphone debería poderse tamibén aunque no se ha probado). A continuación, realizar un "npm install" sobre la raiz del directorio [mobileclient](../src/mobileclient). Una vez se hayan instalado todas las dependencias, ejecutar el comando "npm start".
 
-Cuando se encuntre deplegado podremos observar un código QR en nuestra consola como se muestra abajo.
+Cuando se encuentre deplegado podremos observar un código QR en nuestra consola como se muestra abajo.
 ![](../../docs/imgs/npm-start.png )
 
 Este código  QR deberá ser escaneado desde nuestra aplicación Expo Go. IMPORTANTE! Es necesario que el dispositivo movil y el ordenador se encuentren dentro de la misma red.
