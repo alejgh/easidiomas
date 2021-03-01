@@ -139,7 +139,7 @@ for user1_idx, user2_idx in user_chats:
     r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/", json={'user2': user2['id']}, headers=headers, verify=False)
     logger.debug(f"Response code: {r_chat.status_code}")
     logger.debug(f"Response: {r_chat.text}")
-    chats.append(json.loads(r.text)['id'])
+    chats.append(json.loads(r_chat.text)['id'])
 
 logger.debug(f"Chats: {chats}")
 
@@ -173,7 +173,7 @@ for msg, chat_idx, author_idx in zip(messages, messages_chat, messages_author):
     logger.debug(f"Creating new message between users {user1['id']} and {user2['id']}")
     headers = {'token': token}
     logger.debug(f"Endpoint: {API_GATEWAY_ENDPOINT + '/chats/' + str(chat) + '/messages'}")
-    r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + str(chat) + "/messages",
+    r_msg = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + str(chat) + "/messages",
         json=msg, headers=headers, verify=False)
-    logger.debug(f"Response code: {r_chat.status_code}")
-    logger.debug(f"Response: {r_chat.text}")
+    logger.debug(f"Response code: {r_msg.status_code}")
+    logger.debug(f"Response: {r_msg.text}")
