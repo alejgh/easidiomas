@@ -58,25 +58,25 @@ En el diagrama anterior se puede ver que el sistema consta de 3 grandes segmento
 ## Documentación
 La documentación que acompaña a Easidiomas es la siguiente:
 
-|Título Documento|Descripción|
-|----------------|-----------|
-|[Reparto de tareas](./docs/0100-Reparto-de-tareas.md)||
-|[Presentación del problema](./docs/0200-Presentacion-del-problema.md)||
-|[Especificación de los servicios](./docs/0300-Especificacion-de-servicios.md)||
-|[- Servicio de API pública](./docs/0301-API-publica.md)||
-|[- Servicio de autenticación](./docs/0302-Servicio-de-autenticacion.md)||
-|[- Servicio de chats](./docs/0303-Servicio-de-chats.md)||
-|[- Servicio de imágenes](./docs/0304-Servicio-de-imagenes.md)||
-|[- Servicio de identificación de idioma](./docs/0305-Servicio-de-indentificacion-de-idioma.md)||
-|[- Generador de tráfico](./docs/0306-Generador-de-trafico.md)||
-|[- Cliente móvil](./docs/0307-Cliente-movil.md)||
-|[- Sistema de detección de texto ofensivo](./docs/0308-Sistema-de-deteccion-de-texto-ofensivo.md)||
-|[- Servicio de posts](./docs/0309-Servicio-de-posts.md)||
-|[- Servicio de estadísticas](./docs/0310-Servicio-de-estadisticas.md)||
-|[- Servicio de texto a audio](./docs/0311-Servicio-de-texto-a-audio.md)||
-|[- Servicio de extracción de tópicos](./docs/0312-Servicio-de-extraccion-de-topicos.md)||
-|[- Servicio de traducción](./docs/0313-Servicio-de-traduccion.md)||
-|[- Servicio de usuarios](./docs/0314-Servicio-de-usuarios.md)||
-|[- Cliente web](./docs/0315-Cliente-Web.md)||
-|[Arquitectura](./docs/0400-Arquitectura.md)||
-|[Despliegue](./docs/0500-Despliegue.md)||
+|Título Documento|
+|----------------|
+|[Reparto de tareas](./docs/0100-Reparto-de-tareas.md)|
+|[Presentación del problema](./docs/0200-Presentacion-del-problema.md)|
+|[Especificación de los servicios](./docs/0300-Especificacion-de-servicios.md)|
+|[- Servicio de API pública](./docs/0301-API-publica.md)|
+|[- Servicio de autenticación](./docs/0302-Servicio-de-autenticacion.md)|
+|[- Servicio de chats](./docs/0303-Servicio-de-chats.md)|
+|[- Servicio de imágenes](./docs/0304-Servicio-de-imagenes.md)|
+|[- Servicio de identificación de idioma](./docs/0305-Servicio-de-indentificacion-de-idioma.md)|
+|[- Generador de tráfico](./docs/0306-Generador-de-trafico.md)|
+|[- Cliente móvil](./docs/0307-Cliente-movil.md)|
+|[- Sistema de detección de texto ofensivo](./docs/0308-Sistema-de-deteccion-de-texto-ofensivo.md)|
+|[- Servicio de posts](./docs/0309-Servicio-de-posts.md)|
+|[- Servicio de estadísticas](./docs/0310-Servicio-de-estadisticas.md)|
+|[- Servicio de texto a audio](./docs/0311-Servicio-de-texto-a-audio.md)|
+|[- Servicio de extracción de tópicos](./docs/0312-Servicio-de-extraccion-de-topicos.md)|
+|[- Servicio de traducción](./docs/0313-Servicio-de-traduccion.md)|
+|[- Servicio de usuarios](./docs/0314-Servicio-de-usuarios.md)|
+|[- Cliente web](./docs/0315-Cliente-Web.md)|
+|[Arquitectura](./docs/0400-Arquitectura.md)|
+|[Despliegue](./docs/0500-Despliegue.md)|
