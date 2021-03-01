@@ -1,88 +1,108 @@
-version: "3.8"
+version: '3.9'
 services:
+  
+####### THIRD PARTY SERVICES START #######
+  
+  # Apache Zookeper, Kafka master.
   zookeeper:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
     image: wurstmeister/zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    networks:
-      - event_bus
 
+  # Apache Kafka.
   kafka:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
     image: wurstmeister/kafka
-    container_name: kafka
     ports:
-      - "9092:9092"
-    expose:
-     - "9093"
+      - published: 9092
+        target: 9092
+        protocol: tcp
+        mode: host
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_CREATE_TOPICS: "service_logs:1:1"
+      KAFKA_CREATE_TOPICS: "service_logs:1:1,posts:1:1,topics:1:1,lang_detection:1:1,offensive_text_detection:1:1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - event_bus
-  
-  topicmodeling:
-    build: ../src/topicmodelingservice/
-    container_name: topicmodelingservice
-    ports:
-      - "5001:5001"
-    depends_on:
-      - kafka
-    networks:
-      - event_bus
+
+  # Postgres.
+  postgres_db:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: postgres
     environment:
-      KAFKA_ENDPOINT: "kafka:9092"
-      KAFKA_INPUT_TOPIC: "posts"
-      KAFKA_LOGGING_TOPIC: "service_logs"
-      POSTS_SERVICE_ENDPOINT: "posts_service:8888/soapws/posts.wsdl"
-  
-  authenticationservice:
-    build: ../src/authenticationservice/
-    container_name: authservice
-    environment: 
-      SERVER_PORT: "5000"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      PGDATA: /data/postgres
 
-  apigateway:
-    build: ../src/apigateway/
-    container_name: apigateway
-    ports:
-      - "8080:5000"
-    environment: 
-      SERVER_PORT: "5000"
-      AUTH_SERVICE_ADDRESS: "authservice:5000"
+  # Neo4J.
+  neo4j:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: neo4j
+    environment:
+      NEO4J_AUTH: neo4j/secret
 
+  # Redis.
+  redis:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: redis
+
+  # Redis.
+  mongo:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: mongo
+
+  # Elasticsearch.
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:$ELK_VERSION
-    container_name: elasticsearch
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
     volumes:
       - type: bind
         source: ./config/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
-      - type: volume
-        source: elasticsearch
-        target: /usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
+      ELASTIC_PASSWORD: devPass45
       discovery.type: single-node
-    networks:
-      - elk
-
+    
+  # Logstash.
   logstash:
-    image: docker.elastic.co/logstash/logstash:$ELK_VERSION
-    container_name: logstash
-    ports:
-      - "5044:5044"
-      - "5000:5000"
-      - "9600:9600"
+    depends_on:
+      - elasticsearch
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: docker.elastic.co/logstash/logstash:7.11.0
     volumes:
       - type: bind
         source: ./config/logstash.yml
@@ -94,37 +114,259 @@ services:
         read_only: true
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
-    networks:
-      - elk
-      - event_bus
+      ELASTIC_PASSWORD: devPass45
+
+  # Kibana.
+  kibana:
     depends_on:
       - elasticsearch
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:$ELK_VERSION
-    container_name: kibana
-    ports:
-      - "5601:5601"
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: docker.elastic.co/kibana/kibana:7.11.0
     volumes:
       - type: bind
         source: ./config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
         read_only: true
+    ports:
+    - published: 5601
+      target: 5601
     environment:
-      ELASTIC_PASSWORD: $ELASTIC_PASSWORD
-    networks:
-      - elk
+      ELASTIC_PASSWORD: devPass45
+
+####### THIRD PARTY SERVICES END #######
+############ SERVICES START ############
+
+  # Topicmodeling.
+  topicmodeling:
     depends_on:
-      - elasticsearch
+    - kafka
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/topicmodeling_service
+    environment:
+      KAFKA_ENDPOINT: "kafka:9092"
+      KAFKA_INPUT_TOPIC: "posts"
+      KAFKA_LOGGING_TOPIC: "service_logs"
 
+  # Offensive text detection.
+  offensivetextdetectionservice:
+    depends_on:
+    - kafka
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/offensivetextdetection_service
+    environment:
+      KAFKA_ENDPOINT: "kafka:9092"
+      KAFKA_INPUT_TOPIC: "posts"
+      KAFKA_LOGGING_TOPIC: "service_logs"
 
-networks:
-  elk:
-    driver: bridge
-  event_bus:
-    driver: bridge
+  # Post service.
+  postsservice:
+    depends_on:
+    - kafka
+    - postgres_db
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/posts_service
+    environment:
+      KAFKA_ENDPOINT: "kafka:9092"
+      POSTGRES_ENDPOINT: "postgres_db"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASS: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
 
+  # Images service.
+  imagesservice:
+    depends_on:
+    - kafka
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/images_service
 
-volumes:
-  elasticsearch:
+  # Text to Speech service.
+  texttospeechservice:
+    depends_on:
+    - kafka
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/texttospeech_service
+    environment: 
+      KAFKA_ENDPOINT: "kafka:9092"
+      KAFKA_ENDPOINT: "kafka:9092"
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+
+  # Users service.
+  usersservice:
+    depends_on:
+    - kafka
+    - neo4j
+    - imagesservice
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/users_service
+    environment:
+      SERVER_PORT: 5000
+      USERS_SERVICE_NEO4J_ADDR: bolt://neo4j:7687
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      IMAGES_SERVICE_WDSL: "http://imagesservice:5000/soapws/images?wsdl"
+
+  # Chats service.
+  chatsservice:
+    depends_on:
+    - kafka
+    - mongo
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/chats_service
+    environment:
+      DB_HOST: mongo
+      DB_PORT: 27017
+      SERVER_PORT: 5000
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+
+  # Chats service.
+  authservice:
+    depends_on:
+    - usersservice
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/auth_service
+    environment:
+      USERS_SERVICE_ADDR: usersservice:5000
+      USERS_SERVICE_HOST: usersservice
+      USERS_SERVICE_PORT: 5000
+
+  # Statistics service.
+  statisticsservice:
+    depends_on:
+    - redis
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/statistics_service
+    environment:
+      REDIS_ADDR: redis
+      REDIS_PORT: 6379
+
+  # Language identification service.
+  languageidentificationservice:
+    depends_on:
+    - kafka
+    - postsservice
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/languageidentification_service
+    environment:
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
+      KAFKA_ENDPOINT: kafka:9092
+      SERVICE_NAME: LANG_INDET_SERVICE
+      LANGUAGE_DETECTION_TOPIC: languageidentification_service
+      POSTS_TOPIC: posts
+
+  # Language identification service.
+  translationsservice:
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/translations_service
+    environment: 
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
+
+  # Public API service.
+  apigateway:
+    depends_on:
+      - authservice
+      - statisticsservice
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 2
+    image: registry.easidiomas.wcr.es:7777/apigateway_service
+    ports:
+    - published: 8443 # Safe port
+      target: 8443
+    - published: 5000 # Unsafe port
+      target: 5000
+    environment:
+      AUTH_SERVICE_ADDRESS: authservice:5000
+      USERS_SERVICE_HOST: usersservice
+      USERS_SERVICE_PORT: 5000
+      CHATS_SERVICE_HOST: chatsservice
+      CHATS_SERVICE_PORT: 5000
+      POSTS_SERVICE_HOST: postsservice
+      POSTS_SERVICE_PORT: 5000
+      STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      TTS_SERVICE_HOST: texttospeechservice
+      TTS_SERVICE_PORT: 5000
+      TRANSLATIONS_SERVICE_HOST: translationsservice
+      TRANSLATIONS_SERVICE_PORT: 5000
+    
+  # Web Client.
+  webclient:
+    depends_on:
+      - apigateway
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/web_client
+    ports:
+    - published: 443 # Safe port
+      target: 443
+    - published: 80 # Unsafe port
+      target: 80
+    environment:
+      EASIDIOMAS_API_ENDPOINT: "https://apigateway:8443/api"
+
+  # Load Generator.
+  loadgenerator:
+    depends_on:
+      - apigateway
+    deploy:
+      placement:
+        constraints:
+        - node.role == worker
+      replicas: 1
+    image: registry.easidiomas.wcr.es:7777/load_generator
+    environment:
+      API_GATEWAY_ENDPOINT: "https://apigateway:8443/api"
+      SLEEP_TIME: "90"
