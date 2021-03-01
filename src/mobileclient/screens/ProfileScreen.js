@@ -11,11 +11,11 @@ import {
 
 export default function ProfileScreen(props) {
   
-    const {parentNavigation,navigation,isOwner} = props;
-    const {avatar,name,surname,username,learning,speaks} = props.user;
-    console.log(avatar)
     const context = useContext(AppContext);
-   
+    const {REQUEST_URI} = context.CONFIG;
+    const {parentNavigation,navigation,isOwner} = props;
+    const {id,avatar,name,surname,username,learning,speaks} = props.user;
+
     const editProfile = function(){
       navigation.navigate('Edit Profile');
     }
@@ -24,10 +24,22 @@ export default function ProfileScreen(props) {
       context.setUser(null);
     }
 
-    const sendMessage = function(){
+    const sendMessage = async function(){
+
+      let response = await fetch(REQUEST_URI+'/chats',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        },
+        body: JSON.stringify({
+          user2:id
+        })
+      });
+
+      console.log(response.status)
       parentNavigation.navigate('Chats',{startChat:true,user:props.user});
-      // TODO
-      // Crear conversación REQUEST
     }
 
 
@@ -37,8 +49,7 @@ export default function ProfileScreen(props) {
           <Image style={styles.avatar} source={{uri:avatar.replace('https','http')}}/>
           <View style={styles.bodyContent}>
             <Text style={styles.nameLabel} >{name}{' '}{surname}</Text>
-            <Text style={styles.usernameLabel}>{username}</Text>
-            
+            <Text style={styles.usernameLabel}>{username}</Text> 
             <View style={styles.languajesContainer}>
               <View style={styles.learningContainer}>
                 <Text style={styles.learningLabel}>Native</Text>

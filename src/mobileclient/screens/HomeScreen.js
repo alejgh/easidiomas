@@ -34,7 +34,8 @@ export default function Home(props) {
         id:data[post].id,
         user:user,
         content:data[post].content,
-        numLikes:data[post].likes
+        numLikes:data[post].likes,
+        language:data[post].language
       })
     }
 
@@ -84,7 +85,7 @@ export default function Home(props) {
         keyExtractor={(item) => item.id} 
         data={posts} 
         renderItem={({ item }) => ( 
-            <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} numLikes={item.numLikes}/>
+            <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} languaje={item.language} numLikes={item.numLikes}/>
         )}
       />
 

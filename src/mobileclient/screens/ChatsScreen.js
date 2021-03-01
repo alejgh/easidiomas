@@ -17,10 +17,10 @@ export default function ChatsScreen({route,navigation}) {
         'Content-Type': 'application/json',
         'token':context.token
       }})).json();
-    console.log('RESPONSE CHATS')
-    console.log(response)
+
     let newChats = [];
     for(let chat in response){
+      console.log(response[chat])
       let user1 = await getUser(response[chat].user1)
       let user2 = await getUser(response[chat].user2)
       if(context.user.id == user1.id)
@@ -31,11 +31,15 @@ export default function ChatsScreen({route,navigation}) {
     setChats(newChats)
   }
   
-  const getUser = async function(url){
-    //Esto va a cambiar por el tema de que ahora nos viene el id no la url
-    return (await fetch(REQUEST_URI+'/'+url.replace('api/mock/',''))).json();
+  const getUser = async function(id){
+    return (await fetch(REQUEST_URI+'/users/'+id,{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token':context.token
+      }})).json();
   }
-
 
   useEffect(()=>{
     getChats()

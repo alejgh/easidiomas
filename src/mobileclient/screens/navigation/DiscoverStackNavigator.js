@@ -22,8 +22,8 @@ export default function DiscoverStackNavigator({navigation}) {
     const [native,setNative] = useState(data[0]);
     const [learning1,setLearning1] = useState(data[1]);
     const [learning2,setLearning2] = useState(data[2]);
-    const [minAge,setMinAge] = useState(18);
-    const [maxAge,setMaxAge] = useState(40); 
+    const [minAge,setMinAge] = useState(0);
+    const [maxAge,setMaxAge] = useState(100); 
 
     const Stack = createStackNavigator();
 
@@ -37,10 +37,19 @@ export default function DiscoverStackNavigator({navigation}) {
 
     function ApplyFiltersBtn() {
 
-        const apply = function(){
+        const apply = async function(){
             // TODO 
             // NEW SEARCH REQUEST
-            //navigation.navigate("Discover");
+            const filters = '?learning=en'
+            let response = await (await fetch(REQUEST_URI+url+filters,{
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'token':context.token
+                }
+            })).json();
+            console.log(response)
             navigate('Discover')
         }
         return (

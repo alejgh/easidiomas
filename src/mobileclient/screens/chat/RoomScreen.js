@@ -6,18 +6,27 @@ import { StyleSheet,SafeAreaView } from 'react-native';
 export default function RoomScreen(props) {
 
     const context = useContext(AppContext);
-    const {REQUEST_URI} = context;
-    const {parentNavigation,chatId} = props;
-    const {user} = props.route.params;
+    const {REQUEST_URI} = context.CONFIG;
+    const {parentNavigation} = props;
+    const {user,chatId} = props.route.params;
  
     const [messages, setMessages] = useState([]);
 
     const getMessages = async function(){
-      let response = await (await fetch(REQUEST_URI+'/chats/'+chatId+'/messages')).json();
+      let response = await (await fetch(REQUEST_URI+'/chats/'+chatId+'/messages',{
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        }})).json();
       let newMessages = [];
+  
       for(let msg in response){
         let sender = await getUser(response[msg].sender)
-        if(sender.username == context.user.username){
+        console.log('SENDEEER')
+        console.log(sender)
+        if(sender.id == context.user.id){
           newMessages.push({
             _id: response[msg].id,
             text: response[msg].text,
@@ -34,17 +43,25 @@ export default function RoomScreen(props) {
             user: {
               _id: 2,
               name: user.name,
-              avatar: user.avatar
+              avatar: user.avatar.replace('https','http')
             }
           })
         }
         
       }
+      console.log(newMessages)
       setMessages(newMessages.reverse());
     }
 
-    const getUser = async function(url){
-      return (await fetch('http://localhost:5000/'+url)).json();
+
+    const getUser = async function(id){
+      return (await fetch(REQUEST_URI+'/users/'+id,{
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        }})).json();
     }
 
     useEffect(()=>{
@@ -61,13 +78,22 @@ export default function RoomScreen(props) {
             });
         }
     },[])
-  
-  
+
 
   // helper method that is sends a message
   async function handleSend(newMessage = []) {
     setMessages(GiftedChat.append(messages, newMessage));
-    await fetch('http://localhost:5000/api/mock/chats/messages/add');
+    let response = await fetch(REQUEST_URI+'/chats/'+chatId+'/messages',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token':context.token
+      },
+      body: JSON.stringify({text:newMessage[0].text})
+    });
+
+    console.log(response.status)
     getMessages();
   }
 

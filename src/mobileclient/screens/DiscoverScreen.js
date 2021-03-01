@@ -24,6 +24,10 @@ export default function DiscoverScreen(props) {
     })).json();
     console.log(response)
     //setResults([...results,response.users]) -> I´m not sure why this is not working...
+
+    // TODO
+    // SACAR EL USUARIO QUE ES EL QUE ESTÁ LOGUEADO
+
     setResults(results.concat(response?.users))
     setLinks(response.links)
   }

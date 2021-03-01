@@ -17,9 +17,9 @@ export default function Post(props){
 
     const context = useContext(AppContext);
     const {REQUEST_URI} = context.CONFIG;
-    const {parentNavigation,content,numLikes,postId} = props
+    const {parentNavigation,language,content,numLikes,postId} = props
     const {id,name,username,avatar} = props.user;
-    const [photo,setPhoto] = useState({ uri: avatar});
+    const [photo,setPhoto] = useState({ uri: avatar.replace('https','http')});
     const [text,setText] = useState(content);
     const [originalText,setOriginalText] = useState(content);
     const [touched,setTouched] = useState(numLikes);
@@ -66,7 +66,22 @@ export default function Post(props){
     }
 
     const textToSpeech = async function(){
-      const audio = "";
+
+      let response = await fetch(REQUEST_URI+'/TextsToSpeechs',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        },
+        body: JSON.stringify({
+          language:language,
+          text:content
+        })
+      });
+
+      console.log(response.status)
+      const audio = (await response.json()).audio;
       if(!isPlaying){
         let uri = "data:audio/mpeg;base64,"+audio;
         await player.unloadAsync();
@@ -80,12 +95,33 @@ export default function Post(props){
       }
     }
 
-    const translate = function(){
+    const translate = async function(){
+
+      //TODO
+      //REQUEST
+      let response = await fetch(REQUEST_URI+'/translations',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        },
+        body: JSON.stringify({
+          sourceLanguaje:language,
+          targetLanguaje:context.user.speaks,
+          text:content
+        })
+      });
+
+
+      console.log(response.status)
+      const translation = (await response.json()).translation;
+
       if(translationLabel == 'Original'){
         setText(originalText)
         setTranslationLabel('Translate')
       }else{
-        setText('Traducción')
+        setText(translation)
         setTranslationLabel('Original')
       }
       
@@ -93,7 +129,10 @@ export default function Post(props){
 
     
     const navigateToProfile = function(){
-      //TODO
+      //TODOOOOOOOOO
+
+
+
       /*
       return (await fetch(REQUEST_URI+url,{
       method: 'GET',

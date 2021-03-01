@@ -1,10 +1,12 @@
 import React, { useEffect,useContext,useState } from 'react';
 import { StyleSheet, TextInput , View, Image } from 'react-native';
+import { AppContext } from '../../App';
 import {HomeContext} from '../navigation/HomeStackNavigator';
 
 export default function NewPostScreen(props) {
 
   const context = useContext(HomeContext);
+  const appContext = useContext(AppContext);
   const {parentNavigation} = props;
   const [value,setValue] = useState(null);
 
@@ -28,7 +30,7 @@ export default function NewPostScreen(props) {
   return (
     <View style={styles.container}>
        <View style={styles.avatarContainer}>
-          <Image style={styles.photo} source={{ uri: 'https://reactnative.dev/img/tiny_logo.png'}}/>
+          <Image style={styles.photo} source={{ uri: appContext.user.avatar.replace('https','http')}}/>
        </View>
        <View style={styles.inputContainer}>
         <TextInput
