@@ -129,28 +129,7 @@ export default function Post(props){
 
     
     const navigateToProfile = function(){
-      //TODOOOOOOOOO
-
-
-
-      /*
-      return (await fetch(REQUEST_URI+url,{
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'token':context.token
-      }})).json();*/
-      fetch(REQ+id)
-      .then((response) => response.json())
-      .then((data) =>{
-        let isOwner = data.id==context.user.id ? true :false;
-        console.log(data)
-        console.log(isOwner)
-        parentNavigation.navigate("Profile",{user:data,isOwner:isOwner});
-      } )
-      .catch((error) => console.error(error))
-     
+      parentNavigation.navigate("Profile",{user:props.user,isOwner:false});
     }
 
     return(
