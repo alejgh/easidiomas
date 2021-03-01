@@ -85,9 +85,6 @@ export default function ProfileScreen(props) {
             {
             isOwner ?
               <View>
-                  <TouchableOpacity style={styles.buttonContainer} onPress={()=> editProfile()}>
-                      <Text style={styles.usernameLabel}>Edit Profile</Text>  
-                  </TouchableOpacity>      
                   <TouchableOpacity style={styles.buttonContainer} onPress={()=> logOut()}>
                       <Text style={styles.usernameLabel}>Log Out</Text>  
                   </TouchableOpacity>
