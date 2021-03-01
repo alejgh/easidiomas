@@ -26,20 +26,42 @@ export default function ProfileScreen(props) {
 
     const sendMessage = async function(){
 
-      let response = await fetch(REQUEST_URI+'/chats',{
-        method: 'POST',
+
+      let chats = await (await fetch(REQUEST_URI+'/chats',{
+        method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'token':context.token
-        },
-        body: JSON.stringify({
-          user2:id
-        })
-      });
+        }})).json();
 
-      console.log(response.status)
-      parentNavigation.navigate('Chats',{startChat:true,user:props.user});
+      let alreadyExist = false;
+      let chatId;
+      for(let chat in chats){
+        if(chats[chat].user1 == id || chats[chat].user2== id){
+          console.log('EXISTE')
+          alreadyExist = true;
+          chatId=chats[chat].id;
+        }
+      }
+
+      if(!alreadyExist){
+        let response = await fetch(REQUEST_URI+'/chats',{
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'token':context.token
+          },
+          body: JSON.stringify({
+            user2:id
+          })
+        });
+        let data = await response.json();
+        chatId = data.id;
+      }
+      console.log(chatId)
+      parentNavigation.navigate('Chats',{startChat:true,user:props.user,chatId:chatId});
     }
 
 

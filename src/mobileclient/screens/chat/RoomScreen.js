@@ -7,12 +7,13 @@ export default function RoomScreen(props) {
 
     const context = useContext(AppContext);
     const {REQUEST_URI} = context.CONFIG;
-    const {parentNavigation} = props;
+    const {navigation,parentNavigation} = props;
     const {user,chatId} = props.route.params;
  
     const [messages, setMessages] = useState([]);
 
     const getMessages = async function(){
+      console.log(props.route)
       let response = await (await fetch(REQUEST_URI+'/chats/'+chatId+'/messages',{
         method: 'GET',
         headers: {
@@ -24,8 +25,6 @@ export default function RoomScreen(props) {
   
       for(let msg in response){
         let sender = await getUser(response[msg].sender)
-        console.log('SENDEEER')
-        console.log(sender)
         if(sender.id == context.user.id){
           newMessages.push({
             _id: response[msg].id,
@@ -63,6 +62,16 @@ export default function RoomScreen(props) {
           'token':context.token
         }})).json();
     }
+
+
+
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        getMessages()
+      });
+  
+      return unsubscribe;
+    }, [navigation]);
 
     useEffect(()=>{
         parentNavigation.setOptions({

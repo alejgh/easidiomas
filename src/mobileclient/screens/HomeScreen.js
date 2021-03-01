@@ -7,14 +7,6 @@ import { AppContext } from '../App';
 
 export default function Home(props) {
   
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      loadPosts('/posts');
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
 
   const{parentNavigation,navigation,filters} = props;
   const context = useContext(AppContext);
@@ -50,8 +42,7 @@ export default function Home(props) {
         language:data[post].language
       })
     }
-    console.log('EOOOOOOO')
-    console.log(newPosts[0])
+
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
@@ -75,6 +66,15 @@ export default function Home(props) {
         'token':context.token
       }})).json();
   }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadPosts('/posts');
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
 
   useEffect(()=>{
     loadPosts('/posts');

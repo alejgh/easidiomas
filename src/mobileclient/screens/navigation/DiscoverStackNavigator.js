@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState,useRef, useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FiltersScreen from '../discover/FiltersScreen';
 import DiscoverScreen from '../DiscoverScreen';
 import data from '../discover/languajes.json';
+import { AppContext } from '../../App';
 
 
 export const DiscoverContext = React.createContext();
@@ -17,13 +18,14 @@ export function navigate(name, params) {
 }
 
 
+
 export default function DiscoverStackNavigator({navigation}) {
 
     const [native,setNative] = useState(data[0]);
     const [learning1,setLearning1] = useState(data[1]);
     const [learning2,setLearning2] = useState(data[2]);
     const [minAge,setMinAge] = useState(0);
-    const [maxAge,setMaxAge] = useState(100); 
+    const [maxAge,setMaxAge] = useState(100);
 
     const Stack = createStackNavigator();
 
@@ -37,26 +39,20 @@ export default function DiscoverStackNavigator({navigation}) {
 
     function ApplyFiltersBtn() {
 
-        const apply = async function(){
-            // TODO 
-            // NEW SEARCH REQUEST
-            const filters = '?learning=en'
-            let response = await (await fetch(REQUEST_URI+url+filters,{
-                method: 'GET',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'token':context.token
-                }
-            })).json();
-            console.log(response)
-            navigate('Discover')
+
+        const apply = function(){
+            navigate('Discover',{filter:true})
         }
         return (
             <TouchableOpacity onPress={() => apply()} style={styles.applyFiltersBtn}>
                 <Text style={styles.applyFiltersBtnText}>Apply</Text>
             </TouchableOpacity>
         );
+    }
+
+
+    const getFilters = function(){
+        return '?speaks='+native.Code.toLowerCase()+'&wantsToLearn='+learning1.Code.toLowerCase()+','+learning2.Code.toLowerCase();
     }
 
 
@@ -68,6 +64,7 @@ export default function DiscoverStackNavigator({navigation}) {
             learning2:learning2,
             minAge:minAge,
             maxAge:maxAge,
+            filters: getFilters(),
             setNative:setNative,
             setLearning1:setLearning1,
             setLearning2:setLearning2,

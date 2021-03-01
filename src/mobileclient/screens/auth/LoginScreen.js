@@ -41,6 +41,7 @@ export default function LoginScreen({navigation}){
       // manejar logins failed
       if(tokenPermission== -1){
         console.log('Fail Login')
+        setLoading(false)
         return
       }
         

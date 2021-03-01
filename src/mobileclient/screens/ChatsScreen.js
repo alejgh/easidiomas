@@ -44,6 +44,14 @@ export default function ChatsScreen({route,navigation}) {
       }})).json();
   }
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getChats()
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   useEffect(()=>{
     getChats()
   },[])
