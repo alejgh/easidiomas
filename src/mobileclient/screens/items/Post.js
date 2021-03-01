@@ -38,7 +38,7 @@ export default function Post(props){
     const like = async function(){
       let newLikes = 0;
       if (liked){ 
-        newLikes=likes+1;
+        newLikes=likes-1;
         setLiked(false)
       }else{
         newLikes=likes+1;

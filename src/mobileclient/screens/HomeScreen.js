@@ -34,7 +34,6 @@ export default function Home(props) {
 
 
     let data = response.data;
-   //console.log(data)
     let newPosts = [];
     for(let post in data){
       let user = await getUser('/users/'+data[post].authorId);

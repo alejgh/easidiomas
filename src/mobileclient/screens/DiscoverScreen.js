@@ -32,19 +32,12 @@ export default function DiscoverScreen(props) {
       }
     })).json();
 
-
     let newUsers = [];
     for(let usr in response.users){
-      console.log('TODOOOOOO')
-      console.log(response.users[usr].role)
       if(response.users[usr].role!=1){
         newUsers.push(response.users[usr])
       }
     }
-    //setResults([...results,response.users]) -> I´m not sure why this is not working...
-
-    // TODO
-    // SACAR EL USUARIO QUE ES EL QUE ESTÁ LOGUEADO
 
     setResults(results.concat(newUsers))
     setLinks(response.links)
@@ -61,7 +54,6 @@ export default function DiscoverScreen(props) {
   
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log(route?.params?.filters)
       setFilters(route?.params?.filters);
       loadResults('/users');
     });
