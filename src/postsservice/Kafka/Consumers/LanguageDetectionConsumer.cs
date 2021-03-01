@@ -66,7 +66,7 @@ namespace PostsService.Kafka.Consumers
             }
 
             // call the statistics service with information about this post
-            var myBinding = new WSHttpBinding();
+            var myBinding = new BasicHttpBinding();
             var myEndpointAddress = new EndpointAddress(
                 _statisticsServiceAddress
             );
