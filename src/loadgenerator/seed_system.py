@@ -143,6 +143,8 @@ for user1_idx, user2_idx in user_chats:
 
 logger.debug(f"Chats: {chats}")
 
+logger.debug(f"Chats: {chats}")
+
 ####### messages ###########
 
 messages = [
