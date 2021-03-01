@@ -98,7 +98,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASS: ${POSTGRES_PASS}
       POSTGRES_DB: ${POSTGRES_DB}
-      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
 
   imagesservice:
     build: ../src/imagesservice/
@@ -180,7 +180,7 @@ services:
     expose:
       - "5000"
     environment:
-      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
       KAFKA_ENDPOINT: kafka:9092
       SERVICE_NAME: LANG_INDET_SERVICE
       LANGUAGE_DETECTION_TOPIC: languageidentification_service
@@ -191,6 +191,8 @@ services:
     container_name: translationsservice
     expose:
       - "5000"
+    environment: 
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
 
   apigateway:
     build: ../src/apigateway/
