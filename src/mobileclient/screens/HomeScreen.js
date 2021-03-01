@@ -23,6 +23,7 @@ export default function Home(props) {
     if(url.includes('?')){
       nexFilters = filters.replace('?','&') 
     }
+
     let response = await (await fetch(REQUEST_URI+url+nexFilters,{
         method: 'GET',
         headers: {
@@ -30,23 +31,29 @@ export default function Home(props) {
           'Content-Type': 'application/json',
           'token':context.token
         }})).json();
+
+
     let data = response.data;
+   //console.log(data)
     let newPosts = [];
     for(let post in data){
       let user = await getUser('/users/'+data[post].authorId);
-      newPosts.push({
-        id:data[post].id,
-        user:user,
-        content:data[post].content,
-        numLikes:data[post].likes,
-        language:data[post].language
-      })
+      if(user != null){
+        newPosts.push({
+          id:data[post].id,
+          user:user,
+          content:data[post].content,
+          numLikes:data[post].likes,
+          language:data[post].language
+        })
+      }
     }
 
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
-    setLoading(false)
+    if(loadAnimation)
+      setLoading(false)
   }
 
   const loadNext = function(){
@@ -57,13 +64,16 @@ export default function Home(props) {
 
 
   const getUser = async function(url){
-    return (await fetch(REQUEST_URI+url,{
+    let response = await fetch(REQUEST_URI+url,{
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'token':context.token
-      }})).json();
+      }});
+      if(response.status==404)
+        return null;
+      return response.json();
   }
 
   useEffect(() => {

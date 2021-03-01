@@ -21,13 +21,69 @@
 	{
 		"Name": "Korean",
 		"Value": "한국어",
-		"Code": "cASDDDDDDDDDDDDn",
+		"Code": "ko",
 		"Id": 4
+	},
+	{
+		"Name": "German",
+		"Value": "Deutsche",
+		"Code": "d",
+		"Id": 5
+	},
+	{
+		"Name": "French",
+		"Value": "Français",
+		"Code": "fr",
+		"Id": 6
+	},
+	{
+		"Name": "Italian",
+		"Value": "Italiano",
+		"Code": "it",
+		"Id": 7
+	},
+	{
+		"Name": "Dutch",
+		"Value": "Nederlands",
+		"Code": "nl",
+		"Id": 8
+	},
+	{
+		"Name": "Polish",
+		"Value": "Polskie",
+		"Code": "pl",
+		"Id": 9
+	},
+	{
+		"Name": "Portuguese",
+		"Value": "Português",
+		"Code": "pt",
+		"Id": 10
+	},
+	{
+		"Name": "Turkish",
+		"Value": "Türk",
+		"Code": "tr",
+		"Id": 11
+	},
+	{
+		"Name": "Russian",
+		"Value": "Pусский",
+		"Code": "ru",
+		"Id": 12
+	},
+	{
+		"Name": "Romanian",
+		"Value": "Română",
+		"Code": "ro",
+		"Id": 13
+	},
+	{
+		"Name": "Danish",
+		"Value": "dansk",
+		"Code": "da",
+		"Id": 14
 	}
-
 ]
-
-
-
 
 
