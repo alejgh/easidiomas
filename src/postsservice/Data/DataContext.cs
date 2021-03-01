@@ -38,7 +38,7 @@ namespace PostsService.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
-            SeedData(modelBuilder);
+            //SeedData(modelBuilder); Not needed now
         }
 
         public void DetachAllEntities()
