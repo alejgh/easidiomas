@@ -1,7 +1,6 @@
 import React, {useContext,useState} from 'react';
 import {AppContext} from '../../App';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 export default function LoginScreen({navigation}){
 
@@ -11,6 +10,7 @@ export default function LoginScreen({navigation}){
     const [usernameView,setUsernameView] = useState(view);
     const [password,setPassword] = useState('12345');
     const [passwordView,setPasswordView] = useState(view);
+    const [loading,setLoading] = useState(false);
 
     const signUp = function(){
         navigation.navigate("Sign Up",{errors:''});
@@ -20,9 +20,12 @@ export default function LoginScreen({navigation}){
       let hasErrors = updateErrors();
       if(hasErrors)
         return;
-        
+      
+      setLoading(true)
+
       let response = await (await fetch(REQUEST_URI+'/auth/token',{
         method: 'POST',
+        disableAllSecurity: true,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -30,18 +33,22 @@ export default function LoginScreen({navigation}){
         body: JSON.stringify({username:username,password:password})
       })).json();
 
+      console.log(response)
+
       let tokenPermission = response.tokenPermissions_;
       let token = response.tokenGenerated_
        // TODO
       // manejar logins failed
       if(tokenPermission== -1){
         console.log('Fail Login')
+        setLoading(false)
         return
       }
         
       context.setToken(token)
       let user = (await getUser(token)).users[0];
       context.setUser(user);
+      setLoading(false)
     }
 
 
@@ -95,13 +102,20 @@ export default function LoginScreen({navigation}){
             placeholderTextColor="#E1E8ED"
            />
         </View>
-        <TouchableOpacity style={styles.loginBtn} onPress={logIn}>
-          <Text style={styles.loginText}>LOGIN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={signUp}>
-          <Text style={styles.signupText}>Sign Up</Text>
-        </TouchableOpacity>
+        {loading ? 
+          <View style={styles.btnsContainer}>
+            <ActivityIndicator  size="large" color="#fff"/>
+          </View> : 
 
+          <View style={styles.btnsContainer}>
+            <TouchableOpacity style={styles.loginBtn} onPress={logIn}>
+              <Text style={styles.loginText}>LOG IN</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={signUp}>
+              <Text style={styles.signupText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+        }
   
       </View>
     );
@@ -158,6 +172,15 @@ const styles = StyleSheet.create({
   },
   errors:{
     color:'red'
+  },
+  btnsContainer:{
+    width:"100%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10
   }
 });
 

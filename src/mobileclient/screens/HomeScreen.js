@@ -1,5 +1,5 @@
 import React, { useState,useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, ActivityIndicator, View, FlatList } from 'react-native';
 import Post from './items/Post';
 import { FloatingAction } from "react-native-floating-action";
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -7,14 +7,18 @@ import { AppContext } from '../App';
 
 export default function Home(props) {
   
+
   const{parentNavigation,navigation,filters} = props;
   const context = useContext(AppContext);
   const {REQUEST_URI} = context.CONFIG;
 
   const [posts, setPosts] = useState([]);
   const [links,setLinks] = useState([]);
+  const [loading,setLoading] = useState(false);
 
-  const loadPosts = async function(url){
+  const loadPosts = async function(url,loadAnimation = true){
+    if(loadAnimation)
+      setLoading(true)
     let nexFilters = filters;
     if(url.includes('?')){
       nexFilters = filters.replace('?','&') 
@@ -34,18 +38,21 @@ export default function Home(props) {
         id:data[post].id,
         user:user,
         content:data[post].content,
-        numLikes:data[post].likes
+        numLikes:data[post].likes,
+        language:data[post].language
       })
     }
 
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
+    if(loadAnimation)
+      setLoading(false)
   }
 
   const loadNext = function(){
     if(links?.next){
-      loadPosts(links.next.replace('api/','/'))
+      loadPosts(links.next.replace('api/','/'),false)
     }
   }
 
@@ -59,6 +66,15 @@ export default function Home(props) {
         'token':context.token
       }})).json();
   }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadPosts('/posts');
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
 
   useEffect(()=>{
     loadPosts('/posts');
@@ -74,7 +90,9 @@ export default function Home(props) {
 
   return (
     <View style={styles.container}>
-
+    {loading ? 
+        <ActivityIndicator  size="large" color="#fff"/>
+        :
       <FlatList 
         numColumns={1}
         onEndReachedThreshold={0.01}
@@ -84,17 +102,17 @@ export default function Home(props) {
         keyExtractor={(item) => item.id} 
         data={posts} 
         renderItem={({ item }) => ( 
-            <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} numLikes={item.numLikes}/>
+            <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} language={item.language} numLikes={item.numLikes}/>
         )}
       />
-
+        }
       <FloatingAction
           color={'#1DA1F2'}
           animated={false}
           actions={actions}
           overrideWithAction
           onPressItem={name => {
-            navigation.navigate("New Post");
+            navigation.navigate("New Post",{loadPosts:loadPosts});
           }}
         />
 
