@@ -11,6 +11,7 @@ export default function LoginScreen({navigation}){
     const [password,setPassword] = useState('');
     const [passwordView,setPasswordView] = useState(view);
     const [loading,setLoading] = useState(false);
+    const [errors,setErrors] = useState('');
 
     const signUp = function(){
         navigation.navigate("Sign Up",{errors:''});
@@ -40,6 +41,7 @@ export default function LoginScreen({navigation}){
       // manejar logins failed
       if(tokenPermission== -1){
         console.log('Fail Login')
+        setErrors('Wrong combination')
         setLoading(false)
         return
       }
@@ -101,6 +103,7 @@ export default function LoginScreen({navigation}){
             placeholderTextColor="#E1E8ED"
            />
         </View>
+        <Text style={styles.errors}>{errors}</Text>
         {loading ? 
           <View style={styles.btnsContainer}>
             <ActivityIndicator  size="large" color="#fff"/>
@@ -180,6 +183,9 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     marginTop:40,
     marginBottom:10
+  },
+  errors:{
+    color:'red'
   }
 });
 

@@ -23,7 +23,6 @@ export default function DiscoverScreen(props) {
     if(first)
       setLoading(true)
 
-    console.log(REQUEST_URI+url)
     let response = await (await fetch(REQUEST_URI+url,{
       method: 'GET',
       headers: {
