@@ -68,7 +68,7 @@ namespace WebClient.Controllers
             {
                 TempData.Put("Notification", new NotificationInfo
                 {
-                    Message = "Post was deleted successfully",
+                    Message = "User was deleted successfully",
                     ClassName = "success"
                 });
             }
@@ -76,7 +76,7 @@ namespace WebClient.Controllers
             {
                 TempData.Put("Notification", new NotificationInfo
                 {
-                    Message = "There was an error deleting the post",
+                    Message = "There was an error deleting the user",
                     ClassName = "error"
                 });
             }
