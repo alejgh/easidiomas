@@ -11,11 +11,11 @@ import {
 
 export default function ProfileScreen(props) {
   
-    const {parentNavigation,navigation,isOwner} = props;
-    const {avatar,name,surname,username,learning,speaks} = props.user;
-    console.log(avatar)
     const context = useContext(AppContext);
-   
+    const {REQUEST_URI} = context.CONFIG;
+    const {parentNavigation,navigation,isOwner} = props;
+    const {id,avatar,name,surname,username,learning,speaks} = props.user;
+
     const editProfile = function(){
       navigation.navigate('Edit Profile');
     }
@@ -24,10 +24,44 @@ export default function ProfileScreen(props) {
       context.setUser(null);
     }
 
-    const sendMessage = function(){
-      parentNavigation.navigate('Chats',{startChat:true,user:props.user});
-      // TODO
-      // Crear conversación REQUEST
+    const sendMessage = async function(){
+
+
+      let chats = await (await fetch(REQUEST_URI+'/chats',{
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        }})).json();
+
+      let alreadyExist = false;
+      let chatId;
+      for(let chat in chats){
+        if(chats[chat].user1 == id || chats[chat].user2== id){
+          console.log('EXISTE')
+          alreadyExist = true;
+          chatId=chats[chat].id;
+        }
+      }
+
+      if(!alreadyExist){
+        let response = await fetch(REQUEST_URI+'/chats',{
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'token':context.token
+          },
+          body: JSON.stringify({
+            user2:id
+          })
+        });
+        let data = await response.json();
+        chatId = data.id;
+      }
+      console.log(chatId)
+      parentNavigation.navigate('Chats',{startChat:true,user:props.user,chatId:chatId});
     }
 
 
@@ -37,8 +71,7 @@ export default function ProfileScreen(props) {
           <Image style={styles.avatar} source={{uri:avatar.replace('https','http')}}/>
           <View style={styles.bodyContent}>
             <Text style={styles.nameLabel} >{name}{' '}{surname}</Text>
-            <Text style={styles.usernameLabel}>{username}</Text>
-            
+            <Text style={styles.usernameLabel}>{username}</Text> 
             <View style={styles.languajesContainer}>
               <View style={styles.learningContainer}>
                 <Text style={styles.learningLabel}>Native</Text>
@@ -52,9 +85,6 @@ export default function ProfileScreen(props) {
             {
             isOwner ?
               <View>
-                  <TouchableOpacity style={styles.buttonContainer} onPress={()=> editProfile()}>
-                      <Text style={styles.usernameLabel}>Edit Profile</Text>  
-                  </TouchableOpacity>      
                   <TouchableOpacity style={styles.buttonContainer} onPress={()=> logOut()}>
                       <Text style={styles.usernameLabel}>Log Out</Text>  
                   </TouchableOpacity>

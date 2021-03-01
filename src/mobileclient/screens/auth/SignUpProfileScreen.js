@@ -1,5 +1,5 @@
 import React, {useState,useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, TextInput, Image,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image,TouchableOpacity,ActivityIndicator } from 'react-native';
 import SignUpLanguajePicker from './SignUpLanguajePicker';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -19,22 +19,23 @@ export default function SignUpProfileScreen({route,navigation}){
     const [birthDate,setBirthdate] = useState('Birth Date *');
     const [birthDateView,setBirthDateView] = useState(view);
     const [showDate, setShowDate] = useState(false);
-    const [native,setNative] = useState('es');
+    const [native,setNative] = useState('');
     const [nativeView,setNativeView] = useState(langView);
-    const [learning1,setLearning1] = useState('en');
+    const [learning1,setLearning1] = useState('');
     const [leraning1View,setLeraning1View] = useState(langView);
-    const [learning2,setLearning2] = useState('cn');
+    const [learning2,setLearning2] = useState('');
     const [leraning2View,setLeraning2View] = useState(langView);
 
     const [image, setImage] = useState('https://www.bootdey.com/img/Content/avatar/avatar2.png');
     const [base64Image, setBase64Image] = useState('');
     const [errors,setErrors] = useState('');
+    const [loading,setLoading] = useState(false);
     
     const signUp = async function(){
       let errors = updateErrors();
-      console.log(errors)
+      
       if(!errors){
-        console.log('entra')
+        setLoading(true)
         let response = await fetch(REQUEST_URI+'/users',{
           method: 'post',
           headers: {
@@ -52,8 +53,7 @@ export default function SignUpProfileScreen({route,navigation}){
             learning:[learning1,learning2]})
         });
   
-        console.log('STATUS')
-        console.log(response.status)
+        setLoading(false)
         if(response.status == 201)
           navigation.navigate("Login");
         else
@@ -192,9 +192,15 @@ export default function SignUpProfileScreen({route,navigation}){
         </View>
 
         <Text style={styles.errors}>{errors}</Text>
-        <TouchableOpacity style={styles.signupBtn} onPress={signUp}>
-          <Text style={styles.signupText}>SIGN UP</Text>
-        </TouchableOpacity>
+
+        {loading ? 
+          <View style={styles.btnsContainer}>
+            <ActivityIndicator  size="large" color="#fff"/>
+          </View> : 
+          <TouchableOpacity style={styles.signupBtn} onPress={signUp}>
+            <Text style={styles.signupText}>SIGN UP</Text>
+          </TouchableOpacity>
+        }
 
       </View>
     );
@@ -260,6 +266,15 @@ const styles = StyleSheet.create({
   },
   dateText:{
     color:'white'
+  },
+  btnsContainer:{
+    width:"100%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10
   }
 });
 
