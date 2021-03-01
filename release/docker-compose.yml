@@ -21,7 +21,7 @@ services:
      - "9093"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_CREATE_TOPICS: "service_logs:1:1"
+      KAFKA_CREATE_TOPICS: "service_logs:1:1,posts:1:1,topics:1:1,lang_detection:1:1,offensive_text_detection:1:1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
@@ -70,6 +70,16 @@ services:
     environment:
       KAFKA_ENDPOINT: "kafka:9092"
       KAFKA_INPUT_TOPIC: "posts"
+      KAFKA_LOGGING_TOPIC: "service_logs"  
+
+  offensivetextdetectionservice:
+    build: ../src/offensivetextdetectionservice/
+    container_name: offensivetextdetectionservice
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_ENDPOINT: "kafka:9092"
+      KAFKA_INPUT_TOPIC: "posts"
       KAFKA_LOGGING_TOPIC: "service_logs"
 
   postsservice:
@@ -97,7 +107,7 @@ services:
     depends_on:
       - kafka
   
-  texttospeech:
+  texttospeechservice:
     build: ../src/texttospeechservice/
     container_name: texttospeechservice
     ports:
@@ -106,6 +116,8 @@ services:
       - kafka
     environment: 
       KAFKA_ENDPOINT: "kafka:9092"
+      KAFKA_ENDPOINT: "kafka:9092"
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
   
   usersservice:
     build: ../src/usersservice/
@@ -158,6 +170,27 @@ services:
     environment:
       REDIS_ADDR: redis
       REDIS_PORT: 6379
+  
+  languageidentificationservice:
+    build: ../src/languageidentificationservice/
+    container_name: languageidentificationservice
+    depends_on:
+      - kafka
+      - postsservice
+    expose:
+      - "5000"
+    environment:
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      KAFKA_ENDPOINT: kafka:9092
+      SERVICE_NAME: LANG_INDET_SERVICE
+      LANGUAGE_DETECTION_TOPIC: languageidentification_service
+      POSTS_TOPIC: posts
+
+  translationsservice:
+    build: ../src/translationsservice/
+    container_name: translationsservice
+    expose:
+      - "5000"
 
   apigateway:
     build: ../src/apigateway/
@@ -166,11 +199,12 @@ services:
       - authservice
       - statisticsservice
     ports:
+      - "8443:8443"
       - "5000:5000"
     expose:
+      - "8443"
       - "5000"
     environment:
-      SERVER_PORT: 5000
       AUTH_SERVICE_ADDRESS: authservice:5000
       USERS_SERVICE_HOST: usersservice
       USERS_SERVICE_PORT: 5000
@@ -179,18 +213,22 @@ services:
       POSTS_SERVICE_HOST: postsservice
       POSTS_SERVICE_PORT: 5000
       STATS_SERVICE_WDSL: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      TTS_SERVICE_HOST: texttospeechservice
+      TTS_SERVICE_PORT: 5000
+      TRANSLATIONS_SERVICE_HOST: translationsservice
+      TRANSLATIONS_SERVICE_PORT: 5000
 
 ############# Web Client ################
-#  webclient:
-#    build: ../src/webclient/
-#    container_name: webclient
-#    depends_on:
-#      - apigateway
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    environment:
-#      EASIDIOMAS_API_ENDPOINT: "http://apigateway:5000/api"
+  webclient:
+    build: ../src/webclient/
+    container_name: webclient
+    depends_on:
+      - apigateway
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      EASIDIOMAS_API_ENDPOINT: "https://apigateway:8443/api"
 
 
 ############ ELK ###############

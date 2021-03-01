@@ -21,6 +21,7 @@ class BaseConfig():
     SERVICE_KEY = _try_get_config_from_env('SERVICE_KEY', 'tts_service')
     LOCALE_MAPPINGS_FILE = _try_get_config_from_env('MAPPINGS_FILE', 'lang2locale.csv')
     DEPLOY_PORT = int(_try_get_config_from_env('DEPLOY_PORT', '5000'))
+    STATISTICS_SERVICE_ENDPOINT = _try_get_config_from_env('STATISTICS_SERVICE_ENDPOINT', 'http://localhost:5000/soapws/statistics?wsdl')
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True

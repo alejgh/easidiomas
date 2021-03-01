@@ -2,6 +2,7 @@
 """
 
 import base64
+import json
 import logging
 
 from flask import current_app as app
@@ -16,7 +17,7 @@ logger = logging.getLogger(app.config['SERVICE_KEY'])
 logger.setLevel(logging.DEBUG)
 
 gcloud_tts_client = GCloudTTSClient()
-#statistics_client = SoapClient()
+statistics_client = SoapClient(app.config['STATISTICS_SERVICE_ENDPOINT'])
 locale_manager = LocaleManager(app.config['LOCALE_MAPPINGS_FILE'])
 
 
@@ -35,6 +36,14 @@ def tts():
     """
     logger.debug("POST to TextsToSpeechs received")
     body_data = request.get_json()
+    if 'passport' in request.headers:
+        logger.debug("Passport found")
+        passport = json.loads(request.headers.get('passport'))
+        logger.debug(f"Passport: {passport}")
+        user_id = passport['userId_']
+    else:
+        user_id = "1"
+    logger.debug(f"User ID: {user_id}")
     logger.debug(f"Data: {body_data}")
 
     if 'language' not in body_data or 'text' not in body_data:
@@ -61,9 +70,7 @@ def tts():
         # A user can then use it with base64.b64decode(audio_str)
         logger.debug("Encoding audio file to base64 and decoding to string...")
         audio_str = base64.b64encode(audio).decode()
-
-        # TODO: call statistics service to update number of tts of user
-        #statistics_client.update_
+        statistics_client.call_method('registerTextToSpeechCreatedEvent', user_id)
 
         return jsonify({
             'locale': locale,
