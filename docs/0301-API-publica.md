@@ -26,3 +26,7 @@ Una responsabilidad muy importante de este servicio es inyectar en las cabeceras
    4. El servicio de API pública inyecta en las cabeceras de la petición del usuario el pasaporte y propaga la petición al serivio adecuado.
 5. El servicio adecuado puede acceder a todos los datos del usuario con el pasaporte de la cabecera sin tener que hacer ningún cómputo ni comunicación con otros serivicios.
 6. Se le envía la respuesta al usuario sin el pasaporte en la cabecera.
+
+## HTTPS
+Este servicio se ofrece como HTTPS para que los clientes lo consuman de una forma segura. Sin embargo, debido a que había algun problema con el cliente móvil para conectarse por HTTPS con un certificado autofirmado, fue necesario tambien ofrecer acceso por HTTP al servicio.
+Por lo tanto, al arrancar el servicio se ofrece a través de HTTPS (opción recomandad para los clientes si es posible), pero también se ofrece a HTTP en otro puerto con el fin de soportar legacy applications.

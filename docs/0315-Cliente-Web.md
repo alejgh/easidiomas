@@ -16,3 +16,16 @@ Para acceder a la funcionalidad del cliente web es necesario tener una cuenta de
 El cliente web se lanza tanto en http en el puerto 80, como en https a través del puerto 443.
 
 En el docker-compose ofrecido se lanza automáticamente todo y es posible acceder a este cliente a través de localhost.
+
+## Capturas de pantallas
+### Vista Login
+![](imgs/web/login.png)
+
+### Home
+![](imgs/web/home.png)
+
+### Gestión de usuarios
+![](imgs/web/users.png)
+
+### Gestión de posts
+![](imgs/web/posts.png)

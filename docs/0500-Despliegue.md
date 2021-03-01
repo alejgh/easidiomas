@@ -20,7 +20,13 @@ El cliente web implementado ofrece la funcionalidad de los administradores. Sien
 Para acceder al cliente web hay que acceder a [https://admin.easidiomas.wcr.es](https://admin.easidiomas.wcr.es). Con las credenciales `usuario:admin1, password:admin1`.
 
 ## Datos acceso al cliente móvil implementado
-// TO-DO PABLOOOOOOOO
+A continuacion se muestran algunos de los usuarios creados por defecto con los que se puede acceder al cliente móvil (formato "username" - "password"):
+* alejgh - 1234
+* carmenpl - 4321
+* thewillyhuman - 56789
+* mrmboy - 1234
+
+Para más información sobre como arrancar el cliente móvil, se puede consultar [la documentación de la app]("./0307-Cliente-movil.md")
 
 ## Posibles problemas y soluciones aportadas
 Un problema muy comun que podemos encontrarnos es que alguno de los puertos empledos esté ocupado. En este caso nos dirá que cuando lanzamos el contenedor X el puerto estaba ocupado y no se pudo realizar la acción. Esto afectaría a los contenedores que enlazan sus puertos internos con los públicos de la máquina en la que se despliega. En concreto son los contenedores de la API pública, del cliente web o de kafka. El resto de puertos están cerrados desde el exterior. Para solucionarlo tenemos dos opciones.
