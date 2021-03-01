@@ -61,7 +61,38 @@ Importante comprobar que en el pasaporte el usuario tenga permisos para ver los 
 404 - Not Found: El chat no existe
 401 - Unauthorized: Si un usuario intenta ver mensajes en un chat en el que no participa.
 
-### 3.- Añadir mensaje a un chat
+
+
+### 3.- Crear conversación
+__POST: /api/chats
+
+#### Ejemplo de entrada (body)
+El id del usuario autor del mensaje viene en el header. Habría que cogerlo y añadirlo al mensaje.
+```
+{
+    "user2": "<user2_id>"
+}
+```
+
+
+#### Resultado válido
+201 - Created
+En la cabecera -> link al recurso
+```
+   {
+       "id": 1,
+       "lastUpdated": <long_time_since_epoch>,
+       "messages": "<url_get_messages>" (/api/chats/1/messages),
+       "user1": "<id_user1>",
+       "user2": "<id_user2>"
+   }
+```
+
+#### Resultado inválido
+401 - BadReques: Si el campo del user2 está vacío.
+401 - Unauthorized: Si un usuario intenta crear un mensaje en un chat en el que no participa.
+
+### .- Añadir mensaje a un chat
 __POST: /api/chats/\<id\>/messages__
 
 #### Ejemplo de entrada (body)
