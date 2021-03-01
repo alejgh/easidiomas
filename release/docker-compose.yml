@@ -199,11 +199,11 @@ services:
       - authservice
       - statisticsservice
     ports:
-      - "5000:5000"
+      - "8443:8443"
     expose:
-      - "5000"
+      - "8443"
     environment:
-      SERVER_PORT: 5000
+      SERVER_SECURE_PORT: 8443
       AUTH_SERVICE_ADDRESS: authservice:5000
       USERS_SERVICE_HOST: usersservice
       USERS_SERVICE_PORT: 5000
