@@ -13,7 +13,7 @@ export default function ChatsStackNavigator({route,navigation}){
         
     useEffect(()=>{
         if(route?.params?.startChat){
-            chatNavigation?.current?.current?.navigate('Room',{user:route.params.user});
+            chatNavigation?.current?.current?.navigate('Room',{user:route.params.user,chatId:route.params.chatId});
         }
     })
 

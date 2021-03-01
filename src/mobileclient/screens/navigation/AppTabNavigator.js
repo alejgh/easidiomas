@@ -65,7 +65,12 @@ export default function AppTabNavigator({ navigation }) {
         }}
       >
           <Tab.Screen name="Home" component={HomeStackNavigator} />
-          <Tab.Screen name="Discover" component={DiscoverStackNavigator} />
+          <Tab.Screen name="Discover" component={DiscoverStackNavigator}  listeners={({ navigation, route }) => ({
+              tabPress: e => {
+                navigation.navigate('Discover', {filter:true});
+              },
+            })}/>
+         
           <Tab.Screen name="Chats" component={ChatsStackNavigator} />
           <Tab.Screen name="Profile" component={ProfileStackNavigator}  listeners={({ navigation, route }) => ({
               tabPress: e => {

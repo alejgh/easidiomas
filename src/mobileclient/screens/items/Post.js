@@ -17,9 +17,9 @@ export default function Post(props){
 
     const context = useContext(AppContext);
     const {REQUEST_URI} = context.CONFIG;
-    const {parentNavigation,content,numLikes,postId} = props
+    const {parentNavigation,language,content,numLikes,postId} = props
     const {id,name,username,avatar} = props.user;
-    const [photo,setPhoto] = useState({ uri: avatar});
+    const [photo,setPhoto] = useState({ uri: avatar.replace('https','http')});
     const [text,setText] = useState(content);
     const [originalText,setOriginalText] = useState(content);
     const [touched,setTouched] = useState(numLikes);
@@ -66,7 +66,23 @@ export default function Post(props){
     }
 
     const textToSpeech = async function(){
-      const audio = "";
+
+      let payload = JSON.stringify({
+        language:language,
+        text:content
+      })
+      let response = await fetch(REQUEST_URI+'/TextsToSpeechs',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        },
+        body: payload
+      });
+
+      console.log(response.status)
+      const audio = (await response.json()).result;
       if(!isPlaying){
         let uri = "data:audio/mpeg;base64,"+audio;
         await player.unloadAsync();
@@ -80,12 +96,32 @@ export default function Post(props){
       }
     }
 
-    const translate = function(){
+    const translate = async function(){
+
+      let payload = JSON.stringify({
+        sourceLanguage:language,
+        targetLanguage:context.user.speaks,
+        text:content
+      })
+
+      let response = await fetch(REQUEST_URI+'/translations',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token':context.token
+        },
+        body: payload
+      });
+
+      console.log(response.status)
+      const translation = (await response.json()).translation;
+
       if(translationLabel == 'Original'){
         setText(originalText)
         setTranslationLabel('Translate')
       }else{
-        setText('Traducción')
+        setText(translation)
         setTranslationLabel('Original')
       }
       
@@ -93,25 +129,7 @@ export default function Post(props){
 
     
     const navigateToProfile = function(){
-      //TODO
-      /*
-      return (await fetch(REQUEST_URI+url,{
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'token':context.token
-      }})).json();*/
-      fetch(REQ+id)
-      .then((response) => response.json())
-      .then((data) =>{
-        let isOwner = data.id==context.user.id ? true :false;
-        console.log(data)
-        console.log(isOwner)
-        parentNavigation.navigate("Profile",{user:data,isOwner:isOwner});
-      } )
-      .catch((error) => console.error(error))
-     
+      parentNavigation.navigate("Profile",{user:props.user,isOwner:false});
     }
 
     return(

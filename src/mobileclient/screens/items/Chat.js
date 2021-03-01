@@ -11,13 +11,13 @@ import {
 
 export default function Chat(props){
 
-    const {navigation,sreen} = props;
+    const {navigation,sreen,chatId} = props;
     const {name,username,avatar} = props.user;
-    const [photo,setPhoto] = useState({ uri: avatar});
+    const [photo,setPhoto] = useState({ uri: avatar?.replace('https','http')});
     const [time,setTime] = useState('1hr');
 
     const navigateToScreen = function(){
-        navigation.navigate(sreen,{user:props.user,isOwner:false})
+        navigation.navigate(sreen,{chatId:chatId,user:props.user,isOwner:false})
     }
 
 
