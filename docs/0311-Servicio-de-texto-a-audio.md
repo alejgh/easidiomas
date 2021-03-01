@@ -5,7 +5,7 @@
 |**Nombre del Servicio:**|texttospeechservice|
 |**Responsabilidad:**|Convertir texto a audio|
 |**Lenguaje de Programación**|Python|
-|**Servicios que Consume:**|Google Cloud TTSS|
+|**Servicios que Consume:**|Google Cloud TTSS y Servicio de Estadísticas para actualizar el número de traducciones de un usuario|
 |**Servicios que Ofrece:**|N/A|
 |**Bases de datos:**|N/A|
 
