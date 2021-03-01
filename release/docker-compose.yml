@@ -240,6 +240,7 @@ services:
       - apigateway
     environment:
       API_GATEWAY_ENDPOINT: "https://apigateway:8443/api"
+      SLEEP_TIME: "30"
 
 
 

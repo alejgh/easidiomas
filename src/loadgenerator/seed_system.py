@@ -8,9 +8,12 @@ logging.getLogger().addHandler(logging.StreamHandler())
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
+SLEEP_TIME = int(os.environ.get('SLEEP_TIME')) or 180
+
 # Wait for services to be ready
 logger.debug("Waiting for services to be ready!")
-time.sleep(180)
+logger.debug(f"Sleeping for {SLEEP_TIME} seconds...")
+time.sleep(SLEEP_TIME)
 logger.debug("Starting to populate system")
 
 API_GATEWAY_ENDPOINT = os.environ.get('API_GATEWAY_ENDPOINT') or 'https://156.35.82.22:8443/api'
@@ -179,3 +182,13 @@ for msg, chat_idx, author_idx in zip(messages, messages_chat, messages_author):
         json=msg, headers=headers, verify=False)
     logger.debug(f"Response code: {r_msg.status_code}")
     logger.debug(f"Response: {r_msg.text}")
+
+while True:
+    logger.debug("Doing get to users")
+    token = do_login(users[0])
+    headers = {'token': token}
+    r = requests.get(API_GATEWAY_ENDPOINT + "/users", headers=headers, verify=False)
+    logger.debug(f"Response code: {r.status_code}")
+    logger.debug(f"Response: {r.text}")
+    logger.debug(f"Sleeping")
+    time.sleep(600)
