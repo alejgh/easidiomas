@@ -9,7 +9,27 @@
 |**Servicios que Ofrece:**|-|
 |**Bases de datos:**|-|
 
-# Funcionamiento
+## Funcionalidades
+
+|||
+|-|-|
+|**Categoría:**|**Funcionalidad**|
+|Login|Los usuarios no administradores se pueden loguear en la aplicación|
+|SignUp|Los usuarios no identificados se pueden registrar en la aplicación|
+|Post|Visualización de posts en todos los idiomas|
+||Visualización de posts en los idiomas que está aprendiendo el usuario|
+||Publicar un post|
+||Dar like a un post|
+|Discover|Visualización de usuarios de la aplicación|
+|Chats|Visualización de los chats del usuario|
+||Crear un nuevo chat|
+||Visualizar mensajes de un chat|
+||Crear un nuevo mensaje en un chat|
+|Perfil|Consultar perfil del usuario logueado|
+||Consultar perfil del usuario logueado|
+||Consultar el perfil de un usuario|
+
+## Funcionamiento
 Para poder acceder al cliente movil en primer lugar es necesario tener instalada la aplicación ["Expo Go"](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=es&gl=US) en nuestro dispositivo movil (en Iphone debería poderse tamibén aunque no se ha probado). A continuación, realizar un "npm install" sobre la raiz del directorio [mobileclient](../src/mobileclient). Una vez se hayan instalado todas las dependencias, ejecutar el comando "npm start".
 
 Cuando se encuentre deplegado podremos observar un código QR en nuestra consola como se muestra abajo.
