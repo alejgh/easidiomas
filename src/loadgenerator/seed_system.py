@@ -121,10 +121,13 @@ posts = [
     },
     {
         'content': "С тех пор как я приехал жить в Испанию, я много слышу слово «сплю»."
+    },
+    {
+        'content': "Kwa kuwa nimekuja kuishi Uhispania nasikia neno lala sana."
     }
 ]
 
-post_authors = [0, 2, 3, 1, 0, 1, 3, 3]
+post_authors = [0, 2, 3, 1, 0, 1, 3, 3, 3]
 
 for user_idx, post in zip(post_authors, posts):
     u = users[user_idx]
