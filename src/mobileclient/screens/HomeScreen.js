@@ -46,8 +46,7 @@ export default function Home(props) {
     //setPosts([...posts,newPosts]) -> I´m not sure why this is not working...
     setPosts(posts.concat(newPosts))
     setLinks(response.links)
-    if(loadAnimation)
-      setLoading(false)
+    setLoading(false)
   }
 
   const loadNext = function(){

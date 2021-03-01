@@ -10,10 +10,7 @@
 <h2>Users registered</h2>
 <p>Total: @Model.RegisteredUsers.Total</p>
 <h3>Languages being learned</h3>
-@foreach (var entry in Model.RegisteredUsers.learning.Entry)
-{
-    <p>@entry.Key : @entry.Value</p>
-}
+
 
 <h3>Native languages</h3>
 @foreach (var entry in Model.RegisteredUsers.nnative.Entry)

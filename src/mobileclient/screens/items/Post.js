@@ -29,6 +29,7 @@ export default function Post(props){
     const [translationLabel,setTranslationLabel] = useState('Translate');
     const [player,setPlayer] = useState(new Audio.Sound());
     const [isPlaying,setIsPlaying] = useState(false);
+    const [showBtns,setShowBtns] = useState(context.user.speaks == language ? false:true);
 
     const postPressed = function(pressed = false){
       setTouched(pressed)
@@ -61,8 +62,6 @@ export default function Post(props){
         },
         body: payload
       });
-
-      console.log(response.status)
     }
 
     const textToSpeech = async function(){
@@ -81,7 +80,6 @@ export default function Post(props){
         body: payload
       });
 
-      console.log(response.status)
       const audio = (await response.json()).result;
       if(!isPlaying){
         let uri = "data:audio/mpeg;base64,"+audio;
@@ -97,6 +95,7 @@ export default function Post(props){
     }
 
     const translate = async function(){
+
 
       let payload = JSON.stringify({
         sourceLanguage:language,
@@ -165,12 +164,29 @@ export default function Post(props){
                 }
                 <Text style={[styles.likeButtonIcon, {color: liked ? "rgb(224, 36, 94)" : "rgb(136, 153, 166)",fontWeight: liked ? "bold" : "300",}]}>{likes}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> textToSpeech()}>
-                  <Text style={styles.textAction}>Text to Speech</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=> translate()}>
-                  <Text style={styles.textAction}>{translationLabel}</Text>
-                </TouchableOpacity>
+
+                {
+                  showBtns ?
+
+                     <TouchableOpacity onPress={()=> textToSpeech()}>
+                      <Text style={styles.textAction}>Text to Speech</Text>
+                    </TouchableOpacity>
+                    :
+                  <View></View>
+                }
+
+              {
+                  showBtns ?
+
+                     <TouchableOpacity onPress={()=> translate()}>
+                      <Text style={styles.textAction}>Translate</Text>
+                    </TouchableOpacity>
+                    :
+                  <View></View>
+                }
+ 
+           
+               
                 
               </View>
               

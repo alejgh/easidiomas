@@ -4,9 +4,9 @@ import CustomPickerPodal from './CustomPickerModal';
 import {DiscoverContext} from '../navigation/DiscoverStackNavigator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function FiltersScreen() {
+export default function FiltersScreen(props) {
 
-    const {native,setNative,learning1,setLearning1,learning2,setLearning2,minAge,maxAge,setMinAge,setMaxAge} = useContext(DiscoverContext);
+    const {native,setNative,learning1,setLearning1,learning2,setLearning2,minAge,maxAge,setMinAge,setMaxAge} = props;
 
     const decrementMinAge = function(){
       if(minAge>0)

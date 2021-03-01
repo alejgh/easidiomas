@@ -8,6 +8,9 @@ export const AppContext = React.createContext();
 
 export default function App() {
 
+  console.disableYellowBox = true;
+  //LogBox.ignoreAllLogs(true)
+
   const [user,setUser] = useState(null); //Poner a null
   const [token,setToken] = useState(null); 
 

@@ -192,7 +192,7 @@
           var valueType = value && Util.isElement(value) ? 'element' : toType(value);
 
           if (!new RegExp(expectedTypes).test(valueType)) {
-            throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
+            throw new Error(componentName?.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
           }
         }
       }
@@ -801,7 +801,7 @@
       }
 
       var start = function start(event) {
-        if (_this3._pointerEvent && PointerType[event.originalEvent.pointerType.toUpperCase()]) {
+        if (_this3._pointerEvent && PointerType[event.originalEvent.pointerType?.toUpperCase()]) {
           _this3.touchStartX = event.originalEvent.clientX;
         } else if (!_this3._pointerEvent) {
           _this3.touchStartX = event.originalEvent.touches[0].clientX;
@@ -818,7 +818,7 @@
       };
 
       var end = function end(event) {
-        if (_this3._pointerEvent && PointerType[event.originalEvent.pointerType.toUpperCase()]) {
+        if (_this3._pointerEvent && PointerType[event.originalEvent.pointerType?.toUpperCase()]) {
           _this3.touchDeltaX = event.originalEvent.clientX - _this3.touchStartX;
         }
 
@@ -1303,7 +1303,7 @@
         $(_this._element).trigger(Event$3.SHOWN);
       };
 
-      var capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
+      var capitalizedDimension = dimension[0]?.toUpperCase() + dimension.slice(1);
       var scrollSize = "scroll" + capitalizedDimension;
       var transitionDuration = Util.getTransitionDurationFromElement(this._element);
       $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
@@ -2471,7 +2471,7 @@
    */
   function getSupportedPropertyName(property) {
     var prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
-    var upperProp = property.charAt(0).toUpperCase() + property.slice(1);
+    var upperProp = property.charAt(0)?.toUpperCase() + property.slice(1);
 
     for (var i = 0; i < prefixes.length; i++) {
       var prefix = prefixes[i];
@@ -5744,7 +5744,7 @@
     };
 
     _proto._getAttachment = function _getAttachment(placement) {
-      return AttachmentMap$1[placement.toUpperCase()];
+      return AttachmentMap$1[placement?.toUpperCase()];
     };
 
     _proto._setListeners = function _setListeners() {

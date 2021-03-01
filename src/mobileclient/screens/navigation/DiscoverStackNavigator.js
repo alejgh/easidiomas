@@ -7,10 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FiltersScreen from '../discover/FiltersScreen';
 import DiscoverScreen from '../DiscoverScreen';
 import data from '../discover/languajes.json';
-import { AppContext } from '../../App';
 
-
-export const DiscoverContext = React.createContext();
 export const navigationRef = React.createRef();
 
 export function navigate(name, params) {
@@ -18,30 +15,22 @@ export function navigate(name, params) {
 }
 
 
-
 export default function DiscoverStackNavigator({navigation}) {
 
-    const [native,setNative] = useState(data[0]);
-    const [learning1,setLearning1] = useState(data[1]);
-    const [learning2,setLearning2] = useState(data[2]);
+    const [native,setNative] = useState('');
+    const [learning1,setLearning1] = useState('');
+    const [learning2,setLearning2] = useState('');
     const [minAge,setMinAge] = useState(0);
     const [maxAge,setMaxAge] = useState(100);
 
+
     const Stack = createStackNavigator();
 
-    function FiltersBtn() {
-        return (
-            <TouchableOpacity onPress={() => navigate('Discover Options')}>
-                <Ionicons name={'settings-outline'} size={20} color={'white'} style={styles.configBtn}/>
-            </TouchableOpacity>
-        );
-    }
-
-    function ApplyFiltersBtn() {
 
 
+    function ApplyFiltersBtn(props) {
         const apply = function(){
-            navigate('Discover',{filter:true})
+            navigate('Discover',{filters:getFilters()})
         }
         return (
             <TouchableOpacity onPress={() => apply()} style={styles.applyFiltersBtn}>
@@ -52,24 +41,24 @@ export default function DiscoverStackNavigator({navigation}) {
 
 
     const getFilters = function(){
-        return '?speaks='+native.Code.toLowerCase()+'&wantsToLearn='+learning1.Code.toLowerCase()+','+learning2.Code.toLowerCase();
+        let nativeFilter = native?.Code?.toUpperCase();
+        let learning1Filter = learning1?.Code?.toUpperCase();
+        let learning2Filter = learning2?.Code?.toUpperCase();
+        if(!nativeFilter)
+            nativeFilter = '';
+        if(!learning1Filter)
+            learning1Filter = '';
+        if(!learning2Filter)
+            learning2Filter = '';
+
+        //TODO 
+        //AGEEEEE
+
+        return '?speaks='+nativeFilter+'&wantsToLearn='+learning1Filter+','+learning2Filter;
     }
 
 
   return (
-    <DiscoverContext.Provider value={
-        {
-            native:native,
-            learning1,learning1,
-            learning2:learning2,
-            minAge:minAge,
-            maxAge:maxAge,
-            filters: getFilters(),
-            setNative:setNative,
-            setLearning1:setLearning1,
-            setLearning2:setLearning2,
-            setMinAge:setMinAge,
-            setMaxAge:setMaxAge}}>
         <View style={styles.container}>
             <NavigationContainer independent  initialRouteName="Discover" ref={navigationRef}>
                 <Stack.Navigator screenOptions={{
@@ -84,23 +73,42 @@ export default function DiscoverStackNavigator({navigation}) {
                         fontWeight: 'bold',
                     }
                 }}>                
-                    <Stack.Screen name="Discover"options={{
-                        headerRight: () => (
-                            <FiltersBtn/>
-                        )
-                    }}>
-                        {props=> <DiscoverScreen {...props} parentNavigation={navigation}/>
+                    <Stack.Screen name="Discover">
+                        {props=> <DiscoverScreen {...props} parentNavigation={navigation} 
+                        native={native} 
+                        setNative={setNative}
+                        learning1={learning1}
+                        setLearning1={setLearning1}
+                        learning2={learning2}
+                        setLearning2={setLearning2}
+                        minAge={minAge}
+                        maxAge={maxAge}
+                        setMinAge={setMinAge}
+                        setMaxAge={setMaxAge}
+                        getFilters={getFilters}/>
                     }
                     </Stack.Screen>
-                    <Stack.Screen name="Discover Options" component={FiltersScreen} options={{
+                    <Stack.Screen name="Discover Options"  options={{
                         headerRight: () => (
-                            <ApplyFiltersBtn/>
+                            <ApplyFiltersBtn  />
                         )
-                    }}/>
+                    }}>
+                          {props=> <FiltersScreen {...props}  
+                                            native={native} 
+                                            setNative={setNative}
+                                            learning1={learning1}
+                                            setLearning1={setLearning1}
+                                            learning2={learning2}
+                                            setLearning2={setLearning2}
+                                            minAge={minAge}
+                                            maxAge={maxAge}
+                                            setMinAge={setMinAge}
+                                            setMaxAge={setMaxAge} />
+                    }
+                    </Stack.Screen>
                 </Stack.Navigator>
             </NavigationContainer>
         </View>
-    </DiscoverContext.Provider>
   );
 }
 

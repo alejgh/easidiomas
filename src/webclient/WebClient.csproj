@@ -14,7 +14,6 @@
     <Folder Include="Util\" />
     <Folder Include="Views\Posts\" />
     <Folder Include="Views\Users\" />
-    <Folder Include="Views\Statistics\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="RestSharp" Version="106.11.7" />
