@@ -115,7 +115,7 @@ posts = [
     }
 ]
 
-post_authors = [0, 2, 3, 1]
+post_authors = [0, 2, 3, 1, 1]
 
 for user_idx, post in zip(post_authors, posts):
     u = users[user_idx]
@@ -141,6 +141,8 @@ for user1_idx, user2_idx in user_chats:
     logger.debug(f"Response: {r_chat.text}")
     chats.append(json.loads(r.text)['id'])
 
+logger.debug(f"Chats: {chats}")
+
 ####### messages ###########
 
 messages = [
@@ -155,7 +157,7 @@ messages = [
     },
     {
         "text": "Hola, podemos practicar un poco el inglés?"
-    },
+    }
 ]
 
 # chat that each message belongs to
@@ -170,6 +172,8 @@ for msg, chat_idx, author_idx in zip(messages, messages_chat, messages_author):
     token = do_login(users[author_idx])
     logger.debug(f"Creating new message between users {user1['id']} and {user2['id']}")
     headers = {'token': token}
+    logger.debug(f"Endpoint: {API_GATEWAY_ENDPOINT + '/chats/' + str(chat) + '/messages'}")
     r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + str(chat) + "/messages",
         json=msg, headers=headers, verify=False)
     logger.debug(f"Response code: {r_chat.status_code}")
+    logger.debug(f"Response: {r_chat.text}")
