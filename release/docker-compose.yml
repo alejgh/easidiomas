@@ -34,18 +34,18 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASS}
       PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
+    #volumes:
+    #  - postgres:/data/postgres
     expose:
       - "5432"
 
   neo4j:
     image: neo4j
     container_name: neo4j
-    volumes:
-      - type: volume
-        source: neo4j
-        target: /data
+    #volumes:
+    #  - type: volume
+    #    source: neo4j
+    #    target: /data
     expose:
       - "7474"
       - "7687"
@@ -241,9 +241,9 @@ services:
         source: ./config/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
-      - type: volume
-        source: elasticsearch
-        target: /usr/share/elasticsearch/data
+      #- type: volume
+      #  source: elasticsearch
+      #  target: /usr/share/elasticsearch/data
     expose:
       - "9200"
       - "9300"
@@ -290,7 +290,7 @@ services:
       - elasticsearch
 
 
-volumes:
-  elasticsearch:
-  postgres:
-  neo4j:
+#volumes:
+#  elasticsearch:
+#  postgres:
+#  neo4j:

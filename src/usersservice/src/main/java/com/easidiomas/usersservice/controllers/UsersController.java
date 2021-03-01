@@ -3,7 +3,6 @@ package com.easidiomas.usersservice.controllers;
 import com.easidiomas.auth.Authservice;
 import com.easidiomas.usersservice.clients.imagesservice.IImageManager;
 import com.easidiomas.usersservice.clients.imagesservice.IImageManagerService;
-import com.easidiomas.usersservice.clients.imagesservice.ImageProcessingException_Exception;
 import com.easidiomas.usersservice.clients.statisticsservice.IStatisticsService;
 import com.easidiomas.usersservice.clients.statisticsservice.IStatisticsServiceService;
 import com.easidiomas.usersservice.filters.*;
@@ -11,13 +10,11 @@ import com.easidiomas.usersservice.model.Links;
 import com.easidiomas.usersservice.model.ResultPageWrapper;
 import com.easidiomas.usersservice.model.User;
 import com.easidiomas.usersservice.model.UserInfo;
-import com.easidiomas.usersservice.persistence.DataGenerator;
 import com.easidiomas.usersservice.persistence.UsersRepository;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,15 +46,24 @@ public class UsersController {
 
     private Pipeline filters;
 
-    @Autowired
-    public UsersRepository repository;
+    public final UsersRepository repository;
 
-    @GetMapping(value = "api/users/generateData")
-    public ResponseEntity generateData() throws MalformedURLException {
+    public UsersController(@Autowired UsersRepository repository) {
+        this.repository = repository;
 
-        new DataGenerator().loadSomeData(repository, 100, 50);
+        // Generate a default admin
+        User admin = new User();
+        admin.setRole(1);
+        admin.setName("Admin");
+        admin.setSurname("1");
+        admin.setUsername("admin1");
+        admin.setPassword("admin1");
+        admin.setBirthDate(new Date().toInstant().getEpochSecond());
+        admin.setSpeaks("es");
+        admin.setLearning(new String[] {"en"});
+        admin.setAvatarUrl("https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg");
 
-        return ResponseEntity.ok().build();
+        this.repository.save(admin);
     }
 
     // GET: /api/users
