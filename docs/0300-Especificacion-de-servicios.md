@@ -31,3 +31,27 @@ A continuación se hace un desglose de los servicios que componen esta aplicaci�
 |Servicio|Justificación|Utilización|Problemas|Para quién se ofrece|
 |--------|-------------|-----------|---------|--------------------|
 | API Gateway | Ofrece un punto de entrada a los clientes del sistema. Permite una gestión centralizada de la autenticación y un mayor control sobre las peticiones entrantes en el sistema | Ofrece un enpoint REST para que utilicen los usuarios | - | Clientes del sistema (cliente web y móvil) |
+
+## Descripción de la API Pública
+| Endpoint | Método |Descripción|
+|----------|--------|-----------|
+|`/api/auth/tokens`|POST|Generación de tokens.|
+|||||||
+|`/api/users?filters`|GET|Listar usuarios.|
+|`/api/users`|POST|Crear usuarios.|
+|`/api/users/{id}`|GET|Acceder a un usuario específico.|
+|`/api/users/{id}`|PUT|Actualizar los datos de un usuario.|
+|`/api/users/{id}`|DELETE|Eliminar un usuario.|
+|||||||
+|`/api/chats`|GET|Muestra los chats del usuario que realizó la petición.|
+|`/api/chats`|POST|Crea un chat.|
+|`/api/chats/{id}`|GET|Muestra un chat en concreto|
+|`/api/chats/{id}/messages`|GET|Devuelve los mensajes de un chat.|
+|`/api/chats/{id}/messages`|POST|Crea un mensaje en un chat.|
+|||||||
+|`/api/statistics`|GET|Devulve las estadísticas del sistema.|
+|||||||
+|`/api/translations`|POST|Traduce un texto al idioma deseado.|
+|||||||
+|`/api/textstospeechs`|POST|Pasa unb texto a voz.|
+|`/api/health`|GET|Indica si la aplicación está activa.|

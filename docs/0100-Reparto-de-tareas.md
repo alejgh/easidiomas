@@ -1,4 +1,5 @@
 # Reparto de Tareas
+Para llevar a cabo el proyecto las tareas se separaron en servicios independientes. De esta forma, todos podíamos trabajar en nuestros servicios sin grandes dependencias del trabajo de otro.
 
 |Tarea|Miembro Responsable|
 |-----|:-------------------|
@@ -11,7 +12,7 @@
 | Users Service |  Guillermo |
 | Images Service |  Alejandro |
 | Chats Service |  Pablo |
-| Translation Service |  Pablo |
+| Translation Service |  Guillermo |
 |Text To Speech Service | Alejandro  |
 | Statistics Service | Guillermo  |
 | Offensive Text Detection Service| Alejandro |

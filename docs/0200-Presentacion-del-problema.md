@@ -41,3 +41,7 @@ Actualmente estamos trabajando en conseguir que easidiomas ofrezca las siguiente
 * Normalizar las imágenes de los usuarios.
 
 ## Elección de Tecnologías
+
+Para la elección de tecnologías intentamos amoldarnos a lo que ofrece cada tecnología. Por ejemplo, REST lo reservamos más para tareas CRUD y SOAP para acciones. Esto puede verse con el servicio de usuarios, donde las acciones a realizar son básicamente un CRUD. Y, con el servicio de estadísticas donde lo que realizamos es acciones sobre el estado.
+
+Además, y a modo didáctico se ha incluido la comunicación gRPC entre el sistema de API pública y el sistema de autenticación. Se ha hecho aquí ya que este servicio era el más sencillo donde se podía meter sin tener que propagar el cambio por el resto del sistema. Además, gRPC clama ser mucho más rápido que otras tacnologías como SOAP o REST. Por lo tanto este punto es también el que mejor encaja en su descripción.
