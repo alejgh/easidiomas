@@ -63,7 +63,7 @@ public class UsersServiceController extends EasidiomasAPIController {
     public ResponseEntity update(HttpServletRequest request, @PathVariable String id) throws IOException, URISyntaxException {
         super.logRequest(request, LOGGER);
         super.logRedirect(LOGGER, USERS_SERVICE_HOST, USERS_SERVICE_PORT);
-        return this.doRedirect(request, "/api/users" + id);
+        return this.doRedirect(request, "/api/users/" + id);
     }
 
     private ResponseEntity<String> doRedirect(HttpServletRequest request, String path) throws URISyntaxException, IOException {
