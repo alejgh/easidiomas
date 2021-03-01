@@ -232,6 +232,16 @@ services:
     environment:
       EASIDIOMAS_API_ENDPOINT: "https://apigateway:8443/api"
 
+######### Load Generator ########
+  loadgenerator:
+    build: ../src/loadgenerator
+    container_name: loadgenerator
+    depends_on:
+      - apigateway
+    environments:
+      API_GATEWAY_ENDPOINT: "https://apigateway:8443/api"
+
+
 
 ############ ELK ###############
 

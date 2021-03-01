@@ -14,7 +14,7 @@ time.sleep(300)
 logger.debug("Starting to populate system")
 
 API_GATEWAY_ENDPOINT = os.environ.get('API_GATEWAY_ENDPOINT') or 'https://156.35.82.22:8443/api'
-
+logger.debug(f"Api endpoint: {API_GATEWAY_ENDPOINT}")
 
 def do_login(user):
     logger.debug(f"Login for user: {user['username']}")
