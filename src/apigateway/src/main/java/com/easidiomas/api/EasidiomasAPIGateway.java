@@ -15,24 +15,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import javax.servlet.Filter;
+import javax.swing.*;
 import java.util.Collections;
 
 @SpringBootApplication
 public class EasidiomasAPIGateway {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EasidiomasAPIGateway.class);
-    public static final int PORT = Integer.parseInt(System.getProperty("server.port", "8443"));
+    public static final int SECURE_PORT = Integer.parseInt(System.getProperty("server.port", "8443"));
+    public static final int PORT = Integer.parseInt(System.getProperty("server.http.port", "5000"));
 
     //HTTP port
     @Value("${server.http.port}")
     private int httpPort;
 
     public static void main(String... args) {
-        LOGGER.info("Service starting on port " + PORT);
-        SpringApplication app = new SpringApplication(EasidiomasAPIGateway.class);
-        app.setDefaultProperties(Collections.singletonMap("server.port", PORT));
-        app.run(args);
-        LOGGER.info("Service started on port " + PORT);
+        LOGGER.info("Service starting on port [" + PORT + "] and port [" + SECURE_PORT + "]");
+        SpringApplication.run(EasidiomasAPIGateway.class, args);
+        //SpringApplication app = new SpringApplication(EasidiomasAPIGateway.class);
+        //app.setDefaultProperties(Collections.singletonMap("server.port", PORT));
+        //app.run(args);
+        LOGGER.info("Service starting on port [" + PORT + "] and port [" + SECURE_PORT + "]");
     }
 
     /**
