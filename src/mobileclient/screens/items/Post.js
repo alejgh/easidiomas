@@ -147,7 +147,7 @@ export default function Post(props){
               <View style={styles.info}>
                 <View style={styles.userDetails}>
                   <Text style={styles.userName}>{name}
-                    <Text style={styles.userHandleAndTime}>{username} · {time}</Text>
+                    <Text style={styles.userHandleAndTime}>{'@'+username} · {time}</Text>
                   </Text>
                 </View>
               <View style={styles.postTextContainer}>
