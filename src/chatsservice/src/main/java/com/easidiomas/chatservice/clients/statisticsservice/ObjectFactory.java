@@ -10,7 +10,7 @@ import javax.xml.namespace.QName;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the com.easidiomas.chatsservice.clients.statisticsservice package. 
+ * generated in the com.easidiomas.chatservice.clients.statisticsservice package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -40,7 +40,7 @@ public class ObjectFactory {
     private final static QName _RegisterUserCreatedEventResponse_QNAME = new QName("http://service.statisticsservice.easidiomas.com/", "registerUserCreatedEventResponse");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.easidiomas.chatsservice.clients.statisticsservice
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.easidiomas.chatservice.clients.statisticsservice
      * 
      */
     public ObjectFactory() {

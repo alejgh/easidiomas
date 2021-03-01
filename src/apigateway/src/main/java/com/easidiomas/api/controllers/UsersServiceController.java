@@ -52,14 +52,14 @@ public class UsersServiceController extends EasidiomasAPIController {
         return this.doRedirect(request, "/api/users");
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity remove(HttpServletRequest request, @PathVariable String id) throws IOException, URISyntaxException {
         super.logRequest(request, LOGGER);
         super.logRedirect(LOGGER, USERS_SERVICE_HOST, USERS_SERVICE_PORT);
         return this.doRedirect(request, "/api/users/" + id);
     }
 
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity update(HttpServletRequest request, @PathVariable String id) throws IOException, URISyntaxException {
         super.logRequest(request, LOGGER);
         super.logRedirect(LOGGER, USERS_SERVICE_HOST, USERS_SERVICE_PORT);

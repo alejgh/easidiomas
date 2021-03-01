@@ -29,8 +29,8 @@ public interface IStatisticsService {
      * @param arg0
      */
     @WebMethod
-    @RequestWrapper(localName = "registerTranslationCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterTranslationCreatedEvent")
-    @ResponseWrapper(localName = "registerTranslationCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterTranslationCreatedEventResponse")
+    @RequestWrapper(localName = "registerTranslationCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterTranslationCreatedEvent")
+    @ResponseWrapper(localName = "registerTranslationCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterTranslationCreatedEventResponse")
     public void registerTranslationCreatedEvent(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0);
@@ -41,8 +41,8 @@ public interface IStatisticsService {
      * @param arg0
      */
     @WebMethod
-    @RequestWrapper(localName = "registerUserCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterUserCreatedEvent")
-    @ResponseWrapper(localName = "registerUserCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterUserCreatedEventResponse")
+    @RequestWrapper(localName = "registerUserCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterUserCreatedEvent")
+    @ResponseWrapper(localName = "registerUserCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterUserCreatedEventResponse")
     public void registerUserCreatedEvent(
         @WebParam(name = "arg0", targetNamespace = "")
         List<String> arg0,
@@ -54,8 +54,8 @@ public interface IStatisticsService {
      * @param arg0
      */
     @WebMethod
-    @RequestWrapper(localName = "registerTextToSpeechCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterTextToSpeechCreatedEvent")
-    @ResponseWrapper(localName = "registerTextToSpeechCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterTextToSpeechCreatedEventResponse")
+    @RequestWrapper(localName = "registerTextToSpeechCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterTextToSpeechCreatedEvent")
+    @ResponseWrapper(localName = "registerTextToSpeechCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterTextToSpeechCreatedEventResponse")
     public void registerTextToSpeechCreatedEvent(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0);
@@ -66,8 +66,8 @@ public interface IStatisticsService {
      * @param arg0
      */
     @WebMethod
-    @RequestWrapper(localName = "registerPostCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterPostCreatedEvent")
-    @ResponseWrapper(localName = "registerPostCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterPostCreatedEventResponse")
+    @RequestWrapper(localName = "registerPostCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterPostCreatedEvent")
+    @ResponseWrapper(localName = "registerPostCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterPostCreatedEventResponse")
     public void registerPostCreatedEvent(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0,
@@ -77,32 +77,32 @@ public interface IStatisticsService {
     /**
      * 
      * @return
-     *     returns com.easidiomas.chatsservice.clients.statisticsservice.SystemStatistics
+     *     returns com.easidiomas.chatservice.clients.statisticsservice.SystemStatistics
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getSystemStatistics", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.GetSystemStatistics")
-    @ResponseWrapper(localName = "getSystemStatisticsResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.GetSystemStatisticsResponse")
+    @RequestWrapper(localName = "getSystemStatistics", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.GetSystemStatistics")
+    @ResponseWrapper(localName = "getSystemStatisticsResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.GetSystemStatisticsResponse")
     public SystemStatistics getSystemStatistics();
 
     /**
      * 
      */
     @WebMethod
-    @RequestWrapper(localName = "registerChatCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterChatCreatedEvent")
-    @ResponseWrapper(localName = "registerChatCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.RegisterChatCreatedEventResponse")
+    @RequestWrapper(localName = "registerChatCreatedEvent", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterChatCreatedEvent")
+    @ResponseWrapper(localName = "registerChatCreatedEventResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.RegisterChatCreatedEventResponse")
     public void registerChatCreatedEvent();
 
     /**
      * 
      * @param arg0
      * @return
-     *     returns com.easidiomas.chatsservice.clients.statisticsservice.UserStatistics
+     *     returns com.easidiomas.chatservice.clients.statisticsservice.UserStatistics
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getUserStatistics", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.GetUserStatistics")
-    @ResponseWrapper(localName = "getUserStatisticsResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatsservice.clients.statisticsservice.GetUserStatisticsResponse")
+    @RequestWrapper(localName = "getUserStatistics", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.GetUserStatistics")
+    @ResponseWrapper(localName = "getUserStatisticsResponse", targetNamespace = "http://service.statisticsservice.easidiomas.com/", className = "com.easidiomas.chatservice.clients.statisticsservice.GetUserStatisticsResponse")
     public UserStatistics getUserStatistics(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0);
