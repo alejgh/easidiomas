@@ -238,7 +238,7 @@ services:
     container_name: loadgenerator
     depends_on:
       - apigateway
-    environments:
+    environment:
       API_GATEWAY_ENDPOINT: "https://apigateway:8443/api"
 
 
