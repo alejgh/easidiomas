@@ -102,7 +102,7 @@ export default function Home(props) {
         keyExtractor={(item) => item.id} 
         data={posts} 
         renderItem={({ item }) => ( 
-            <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} languaje={item.language} numLikes={item.numLikes}/>
+            <Post key={item.id} postId={item.id} parentNavigation={parentNavigation} user={item.user} content={item.content} language={item.language} numLikes={item.numLikes}/>
         )}
       />
         }

@@ -67,6 +67,10 @@ export default function Post(props){
 
     const textToSpeech = async function(){
 
+      let payload = JSON.stringify({
+        language:language,
+        text:content
+      })
       let response = await fetch(REQUEST_URI+'/TextsToSpeechs',{
         method: 'POST',
         headers: {
@@ -74,14 +78,11 @@ export default function Post(props){
           'Content-Type': 'application/json',
           'token':context.token
         },
-        body: JSON.stringify({
-          language:language,
-          text:content
-        })
+        body: payload
       });
 
       console.log(response.status)
-      const audio = (await response.json()).audio;
+      const audio = (await response.json()).result;
       if(!isPlaying){
         let uri = "data:audio/mpeg;base64,"+audio;
         await player.unloadAsync();
@@ -97,8 +98,12 @@ export default function Post(props){
 
     const translate = async function(){
 
-      //TODO
-      //REQUEST
+      let payload = JSON.stringify({
+        sourceLanguage:language,
+        targetLanguage:context.user.speaks,
+        text:content
+      })
+
       let response = await fetch(REQUEST_URI+'/translations',{
         method: 'POST',
         headers: {
@@ -106,13 +111,8 @@ export default function Post(props){
           'Content-Type': 'application/json',
           'token':context.token
         },
-        body: JSON.stringify({
-          sourceLanguaje:language,
-          targetLanguaje:context.user.speaks,
-          text:content
-        })
+        body: payload
       });
-
 
       console.log(response.status)
       const translation = (await response.json()).translation;
