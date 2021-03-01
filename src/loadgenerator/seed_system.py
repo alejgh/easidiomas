@@ -1,11 +1,17 @@
 import logging
 import json
 import os
+import time
 import requests
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
+
+# Wait for services to be ready
+logger.debug("Waiting for services to be ready!")
+time.sleep(300)
+logger.debug("Starting to populate system")
 
 API_GATEWAY_ENDPOINT = os.environ.get('API_GATEWAY_ENDPOINT') or 'https://156.35.82.22:8443/api'
 
@@ -99,7 +105,10 @@ posts = [
         'content': "Desde que he ido a vivir a España escucho mucho la palabra siesta.\nCreo que es..."
     },
     {
-        'content': ""
+        'content': """Today is March 1 in Korea, so its March 1 Movement Day (삼일절). Tapgol Park (where the photos below were taken) is one of the most well known symbols of the resistance against the Japanese occupation of Korea. (1/2)
+        대한독립만세!!! 
+        #삼일절     
+        #대한독립만세"""
     }
 ]
 
