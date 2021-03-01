@@ -1,12 +1,16 @@
 package com.easidiomas.api;
 
 import com.easidiomas.api.filters.SecurityFilter;
+import org.apache.catalina.connector.Connector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -18,6 +22,10 @@ public class EasidiomasAPIGateway {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EasidiomasAPIGateway.class);
     public static final int PORT = Integer.parseInt(System.getProperty("server.port", "8443"));
+
+    //HTTP port
+    @Value("${server.http.port}")
+    private int httpPort;
 
     public static void main(String... args) {
         LOGGER.info("Service starting on port " + PORT);
@@ -45,6 +53,20 @@ public class EasidiomasAPIGateway {
     @Bean(name = "securityFilter")
     public Filter securityFilter() {
         return new SecurityFilter();
+    }
+
+    // Let's configure additional connector to enable support for both HTTP and HTTPS
+    @Bean
+    public ServletWebServerFactory servletContainer() {
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        tomcat.addAdditionalTomcatConnectors(createStandardConnector());
+        return tomcat;
+    }
+
+    private Connector createStandardConnector() {
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setPort(httpPort);
+        return connector;
     }
 
 }
