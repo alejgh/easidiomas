@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -65,9 +66,13 @@ namespace PostsService.Kafka.Consumers
             }
 
             // call the statistics service with information about this post
-            //StatisticsServiceClient.EndpointConfiguration config = new StatisticsServiceClient.EndpointConfiguration();
-            //StatisticsServiceClient client = new StatisticsServiceClient(config, _statisticsServiceAddress);
-            //await client.registerPostCreatedEventAsync(postId.ToString(), language);
+            var myBinding = new BasicHttpBinding();
+            var myEndpointAddress = new EndpointAddress(
+                _statisticsServiceAddress
+            );
+
+            StatisticsServiceClient client = new StatisticsServiceClient(myBinding, myEndpointAddress);
+            await client.registerPostCreatedEventAsync(postId.ToString(), language);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)

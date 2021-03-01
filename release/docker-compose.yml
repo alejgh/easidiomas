@@ -34,18 +34,18 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASS}
       PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
+    #volumes:
+    #  - postgres:/data/postgres
     expose:
       - "5432"
 
   neo4j:
     image: neo4j
     container_name: neo4j
-    volumes:
-      - type: volume
-        source: neo4j
-        target: /data
+    #volumes:
+    #  - type: volume
+    #    source: neo4j
+    #    target: /data
     expose:
       - "7474"
       - "7687"
@@ -98,7 +98,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASS: ${POSTGRES_PASS}
       POSTGRES_DB: ${POSTGRES_DB}
-      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
 
   imagesservice:
     build: ../src/imagesservice/
@@ -180,7 +180,7 @@ services:
     expose:
       - "5000"
     environment:
-      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics?wsdl"
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
       KAFKA_ENDPOINT: kafka:9092
       SERVICE_NAME: LANG_INDET_SERVICE
       LANGUAGE_DETECTION_TOPIC: languageidentification_service
@@ -191,6 +191,8 @@ services:
     container_name: translationsservice
     expose:
       - "5000"
+    environment: 
+      STATISTICS_SERVICE_ENDPOINT: "http://statisticsservice:5000/soapws/statistics"
 
   apigateway:
     build: ../src/apigateway/
@@ -230,6 +232,17 @@ services:
     environment:
       EASIDIOMAS_API_ENDPOINT: "https://apigateway:8443/api"
 
+######### Load Generator ########
+  loadgenerator:
+    build: ../src/loadgenerator
+    container_name: loadgenerator
+    depends_on:
+      - apigateway
+    environment:
+      API_GATEWAY_ENDPOINT: "https://apigateway:8443/api"
+      SLEEP_TIME: "90"
+
+
 
 ############ ELK ###############
 
@@ -241,9 +254,9 @@ services:
         source: ./config/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
-      - type: volume
-        source: elasticsearch
-        target: /usr/share/elasticsearch/data
+      #- type: volume
+      #  source: elasticsearch
+      #  target: /usr/share/elasticsearch/data
     expose:
       - "9200"
       - "9300"
@@ -290,7 +303,7 @@ services:
       - elasticsearch
 
 
-volumes:
-  elasticsearch:
-  postgres:
-  neo4j:
+#volumes:
+#  elasticsearch:
+#  postgres:
+#  neo4j:

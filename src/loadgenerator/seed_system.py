@@ -1,14 +1,23 @@
 import logging
 import json
 import os
+import time
 import requests
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-API_GATEWAY_ENDPOINT = os.environ.get('API_GATEWAY_ENDPOINT') or 'https://156.35.82.22:8443/api'
+SLEEP_TIME = int(os.environ.get('SLEEP_TIME')) or 180
 
+# Wait for services to be ready
+logger.debug("Waiting for services to be ready!")
+logger.debug(f"Sleeping for {SLEEP_TIME} seconds...")
+time.sleep(SLEEP_TIME)
+logger.debug("Starting to populate system")
+
+API_GATEWAY_ENDPOINT = os.environ.get('API_GATEWAY_ENDPOINT') or 'https://156.35.82.22:8443/api'
+logger.debug(f"Api endpoint: {API_GATEWAY_ENDPOINT}")
 
 def do_login(user):
     logger.debug(f"Login for user: {user['username']}")
@@ -99,11 +108,17 @@ posts = [
         'content': "Desde que he ido a vivir a España escucho mucho la palabra siesta.\nCreo que es..."
     },
     {
-        'content': ""
+        'content': """Today is March 1 in Korea, so its March 1 Movement Day (삼일절). Tapgol Park (where the photos below were taken) is one of the most well known symbols of the resistance against the Japanese occupation of Korea. (1/2)
+        대한독립만세!!! 
+        #삼일절     
+        #대한독립만세"""
+    },
+    {
+        'content': "fuck you"
     }
 ]
 
-post_authors = [0, 2, 3, 1]
+post_authors = [0, 2, 3, 1, 0, 1]
 
 for user_idx, post in zip(post_authors, posts):
     u = users[user_idx]
@@ -127,7 +142,11 @@ for user1_idx, user2_idx in user_chats:
     r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/", json={'user2': user2['id']}, headers=headers, verify=False)
     logger.debug(f"Response code: {r_chat.status_code}")
     logger.debug(f"Response: {r_chat.text}")
-    chats.append(json.loads(r.text)['id'])
+    chats.append(json.loads(r_chat.text)['id'])
+
+logger.debug(f"Chats: {chats}")
+
+logger.debug(f"Chats: {chats}")
 
 ####### messages ###########
 
@@ -143,7 +162,7 @@ messages = [
     },
     {
         "text": "Hola, podemos practicar un poco el inglés?"
-    },
+    }
 ]
 
 # chat that each message belongs to
@@ -158,6 +177,18 @@ for msg, chat_idx, author_idx in zip(messages, messages_chat, messages_author):
     token = do_login(users[author_idx])
     logger.debug(f"Creating new message between users {user1['id']} and {user2['id']}")
     headers = {'token': token}
-    r_chat = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + str(chat['id']) + "/messages",
+    logger.debug(f"Endpoint: {API_GATEWAY_ENDPOINT + '/chats/' + str(chat) + '/messages'}")
+    r_msg = requests.post(API_GATEWAY_ENDPOINT + "/chats/" + str(chat) + "/messages",
         json=msg, headers=headers, verify=False)
-    logger.debug(f"Response code: {r_chat.status_code}")
+    logger.debug(f"Response code: {r_msg.status_code}")
+    logger.debug(f"Response: {r_msg.text}")
+
+while True:
+    logger.debug("Doing get to users")
+    token = do_login(users[0])
+    headers = {'token': token}
+    r = requests.get(API_GATEWAY_ENDPOINT + "/users", headers=headers, verify=False)
+    logger.debug(f"Response code: {r.status_code}")
+    logger.debug(f"Response: {r.text}")
+    logger.debug(f"Sleeping")
+    time.sleep(600)
