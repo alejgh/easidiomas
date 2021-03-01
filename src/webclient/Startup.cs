@@ -21,6 +21,9 @@ namespace WebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+                (sender, certificate, chain, sslPolicyErrors) => true;
+
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
